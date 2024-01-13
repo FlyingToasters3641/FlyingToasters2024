@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.TimedRobot;
 import org.littletonrobotics.junction.LoggedRobot;
 
 /**
@@ -24,38 +23,50 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 0;
-    public static final int kRearLeftDriveMotorPort = 2;
-    public static final int kFrontRightDriveMotorPort = 4;
-    public static final int kRearRightDriveMotorPort = 6;
 
-    public static final int kFrontLeftTurningMotorPort = 1;
-    public static final int kRearLeftTurningMotorPort = 3;
-    public static final int kFrontRightTurningMotorPort = 5;
-    public static final int kRearRightTurningMotorPort = 7;
+    //TODO: ENCODER PORTS ARE MESSED UP FIX THEM LATER
 
-    public static final int[] kFrontLeftTurningEncoderPorts = new int[] {0, 1};
-    public static final int[] kRearLeftTurningEncoderPorts = new int[] {2, 3};
-    public static final int[] kFrontRightTurningEncoderPorts = new int[] {4, 5};
-    public static final int[] kRearRightTurningEncoderPorts = new int[] {6, 7};
+    //Front Left 
 
-    public static final boolean kFrontLeftTurningEncoderReversed = false;
-    public static final boolean kRearLeftTurningEncoderReversed = true;
-    public static final boolean kFrontRightTurningEncoderReversed = false;
-    public static final boolean kRearRightTurningEncoderReversed = true;
-
-    public static final int[] kFrontLeftDriveEncoderPorts = new int[] {8, 9};
-    public static final int[] kRearLeftDriveEncoderPorts = new int[] {10, 11};
-    public static final int[] kFrontRightDriveEncoderPorts = new int[] {12, 13};
-    public static final int[] kRearRightDriveEncoderPorts = new int[] {14, 15};
-
+    public static final int kFrontLeftDriveMotorId = 30;
+    public static final int kFrontLeftSteerMotorId = 32;
+    public static final int kFrontLeftDriveEncoderPorts = 0; 
+    public static final int kFrontLeftSteerEncoderPorts = 0;
     public static final boolean kFrontLeftDriveEncoderReversed = false;
-    public static final boolean kRearLeftDriveEncoderReversed = true;
+    public static final boolean kFrontLeftSteerEncoderReversed = false;
+    
+
+    //Front Right
+    public static final int kFrontRightDriveMotorId = 36;
+    public static final int kFrontRightSteerMotorId = 33;
+    public static final int kFrontRightDriveEncoderPorts = 0;
+    public static final int kFrontRightSteerEncoderPorts = 0;
     public static final boolean kFrontRightDriveEncoderReversed = false;
+    public static final boolean kFrontRightSteerEncoderReversed = false;
+    
+    //Rear Left
+    public static final int kRearLeftDriveMotorId = 42;
+    public static final int kRearLeftSteerMotorId = 34;
+    public static final int kRearLeftDriveEncoderPorts = 0;
+    public static final int kRearLeftSteerEncoderPorts = 0;
+    public static final boolean kRearLeftDriveEncoderReversed = true;
+    public static final boolean kRearLeftSteerEncoderReversed = true;
+
+
+    //Rear Right
+    public static final int kRearRightDriveMotorId = 37;
+    public static final int kRearRightSteerMotorId = 35;
+    public static final int kRearRightDriveEncoderPorts = 0;
+    public static final int kRearRightSteerEncoderPorts = 0;
     public static final boolean kRearRightDriveEncoderReversed = true;
+    public static final boolean kRearRightSteerEncoderReversed = true;
+
+
+
+ 
 
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
-    //public static final double kDrivePeriod = LoggedRobot.kDrivePeriod;
+    public static final double kDefaultPeriod = 0.02;
 
     public static final double kTrackWidth = 0.5;
     // Distance between centers of right and left wheels on robot
@@ -91,11 +102,11 @@ public final class Constants {
         // Assumes the encoders are directly mounted on the wheel shafts
         (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
 
-    public static final double kTurningEncoderDistancePerPulse =
+    public static final double kSteerEncoderDistancePerPulse =
         // Assumes the encoders are on a 1:1 reduction with the module shaft.
         (2 * Math.PI) / (double) kEncoderCPR;
 
-    public static final double kPModuleTurningController = 1;
+    public static final double kPModuleSteerController = 1;
 
     public static final double kPModuleDriveController = 1;
   }
