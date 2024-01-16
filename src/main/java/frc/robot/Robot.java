@@ -66,18 +66,20 @@ public class Robot extends LoggedRobot {
     }
 
   if (isReal()) {
-    Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
   } else {
-    setUseTiming(false); // Run as fast as possible
+    Logger.addDataReceiver(new NT4Publisher());
+     setUseTiming(false); // Run as fast as possible
     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
     Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-    Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+    Logger.addDataReceiver(new WPILOGWriter("")); // Save outputs to a new log
+
   }
 
 // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
-Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+  Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
  
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -159,7 +161,11 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+    int number = 1;
+    Logger.recordOutput("WHY", number);
+  }
 
   @Override
   public void testInit() {

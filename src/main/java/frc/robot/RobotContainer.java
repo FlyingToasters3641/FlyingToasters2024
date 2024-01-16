@@ -15,6 +15,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.List;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -53,6 +55,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    Logger.recordOutput("LeftX", m_driverController.getLeftX());
 
 
     m_robotDrive.setDefaultCommand(
