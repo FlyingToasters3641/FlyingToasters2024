@@ -66,7 +66,7 @@ public class Robot extends LoggedRobot {
     }
 
   if (isReal()) {
-    Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
   } else {
@@ -159,7 +159,11 @@ Logger.start(); // Start logging! No more data receivers, replay sources, or met
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    int number = 1;
+
+    Logger.recordOutput("WHY", number);
+  }
 
   @Override
   public void testInit() {
