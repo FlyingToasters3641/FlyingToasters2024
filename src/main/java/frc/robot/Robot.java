@@ -71,21 +71,18 @@ public class Robot extends LoggedRobot {
     new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
   } else {
     Logger.addDataReceiver(new NT4Publisher());
-     setUseTiming(false); // Run as fast as possible
     String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
     Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-    Logger.addDataReceiver(new WPILOGWriter("")); // Save outputs to a new log
 
   }
 
-// Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
-  Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+// Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
  
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //checkDriverStationUpdate();
+    // checkDriverStationUpdate();
   }
 
   /**
@@ -97,27 +94,28 @@ public class Robot extends LoggedRobot {
    */
    @Override
   public void robotPeriodic() {
-    drivetrain.periodic();
-    CommandScheduler.getInstance().run(); 
-    if(UseLimelight) {    
-      var lastResult = LimelightHelpers.getLatestResults("limelight").targetingResults;
+    Logger.recordOutput("hi", 2);
+  //   drivetrain.periodic();
+  CommandScheduler.getInstance().run(); 
+  //   if(UseLimelight) {    
+  //     var lastResult = LimelightHelpers.getLatestResults("limelight").targetingResults;
 
-      Pose2d llPose = lastResult.getBotPose2d_wpiBlue();
+  //     Pose2d llPose = lastResult.getBotPose2d_wpiBlue();
 
-      // if (lastResult.valid) {
-      //   m_robotContainer.drivetrain.addVisionMeasurement(llPose, Timer.getFPGATimestamp());
-      // }
-    }
-    var visionEst = vision.getEstimatedGlobalPose();
-    visionEst.ifPresent(
-            est -> {
-                var estPose = est.estimatedPose.toPose2d();
-                // Change our trust in the measurement based on the tags we can see
-                var estStdDevs = vision.getEstimationStdDevs(estPose);
+  //     // if (lastResult.valid) {
+  //     //   m_robotContainer.drivetrain.addVisionMeasurement(llPose, Timer.getFPGATimestamp());
+  //     // }
+  //   }
+  //   var visionEst = vision.getEstimatedGlobalPose();
+  //   visionEst.ifPresent(
+  //           est -> {
+  //               var estPose = est.estimatedPose.toPose2d();
+  //               // Change our trust in the measurement based on the tags we can see
+  //               var estStdDevs = vision.getEstimationStdDevs(estPose);
 
                 //drivetrain.addVisionMeasurement(
                 //        est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-            });
+           // });
 
         //drivetrain.log();
         //TODO: ADD THIS LOGGING

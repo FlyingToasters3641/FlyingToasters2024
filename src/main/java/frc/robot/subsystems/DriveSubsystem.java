@@ -139,6 +139,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+
+    Logger.recordOutput("frontLeftPosition", m_frontLeft.getPosition());
   }
 
   /**
