@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -55,7 +56,7 @@ public class SwerveModule {
       int krearleftsteerencoderports,
       boolean driveEncoderReversed,
       boolean steerEncoderReversed) {
-    m_driveMotor = new TalonFX(driveMotorChannel);
+    m_driveMotor = new TalonFX(driveMotorChannel, DriveConstants.CANbusName);
     m_steerMotor = new CANSparkMax(steerMotorChannel, MotorType.kBrushless); //TODO: BRUSHED OR BRUSHLESS?
 
     m_driveEncoder = new Encoder(krearleftdriveencoderports, krearleftdriveencoderports);

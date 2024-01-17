@@ -61,10 +61,11 @@ public final class Constants {
     public static final boolean kRearRightDriveEncoderReversed = true;
     public static final boolean kRearRightSteerEncoderReversed = true;
 
-
-
- 
-
+    
+    //Canbus Name and PigeonIDs
+    public static final String CANbusName = "Lucas";
+    public static final int Pigeon2ID = 0;
+   
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDefaultPeriod = 0.02;
 
