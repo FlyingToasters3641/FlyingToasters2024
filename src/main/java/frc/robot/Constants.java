@@ -43,8 +43,9 @@ public final class Constants {
 
     public static final int kFrontLeftDriveMotorId = 30;
     public static final int kFrontLeftSteerMotorId = 32;
-    public static final int kFrontLeftDriveEncoderPorts = 0; 
+    public static final int kFrontLeftEncoder = 0;
     public static final int kFrontLeftSteerEncoderPorts = 0;
+    
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftSteerEncoderReversed = false;
     
@@ -52,7 +53,7 @@ public final class Constants {
     //Front Right
     public static final int kFrontRightDriveMotorId = 36;
     public static final int kFrontRightSteerMotorId = 33;
-    public static final int kFrontRightDriveEncoderPorts = 0;
+    public static final int kFrontRightEncoder = 0;
     public static final int kFrontRightSteerEncoderPorts = 0;
     public static final boolean kFrontRightDriveEncoderReversed = false;
     public static final boolean kFrontRightSteerEncoderReversed = false;
@@ -60,7 +61,7 @@ public final class Constants {
     //Rear Left
     public static final int kRearLeftDriveMotorId = 42;
     public static final int kRearLeftSteerMotorId = 34;
-    public static final int kRearLeftDriveEncoderPorts = 0;
+    public static final int kRearLeftEncoder = 0;
     public static final int kRearLeftSteerEncoderPorts = 0;
     public static final boolean kRearLeftDriveEncoderReversed = true;
     public static final boolean kRearLeftSteerEncoderReversed = true;
@@ -69,7 +70,7 @@ public final class Constants {
     //Rear Right
     public static final int kRearRightDriveMotorId = 37;
     public static final int kRearRightSteerMotorId = 35;
-    public static final int kRearRightDriveEncoderPorts = 0;
+    public static final int kRearRightEncoder = 0;
     public static final int kRearRightSteerEncoderPorts = 0;
     public static final boolean kRearRightDriveEncoderReversed = true;
     public static final boolean kRearRightSteerEncoderReversed = true;

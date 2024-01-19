@@ -75,37 +75,26 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveModule(
           DriveConstants.kFrontLeftDriveMotorId,
           DriveConstants.kFrontLeftSteerMotorId,
-          DriveConstants.kFrontLeftDriveEncoderPorts,
-          DriveConstants.kFrontLeftSteerEncoderPorts,
-          DriveConstants.kFrontLeftDriveEncoderReversed,
-          DriveConstants.kFrontLeftSteerEncoderReversed);
+          DriveConstants.kFrontLeftSteerEncoderPorts
+          );
 
   private final SwerveModule m_rearLeft =
       new SwerveModule(
           DriveConstants.kRearLeftDriveMotorId,
           DriveConstants.kRearLeftSteerMotorId,
-          DriveConstants.kRearLeftDriveEncoderPorts,
-          DriveConstants.kRearLeftSteerEncoderPorts,
-          DriveConstants.kRearLeftDriveEncoderReversed,
-          DriveConstants.kRearLeftSteerEncoderReversed);
+          DriveConstants.kRearLeftSteerEncoderPorts);
 
   private final SwerveModule m_frontRight =
       new SwerveModule(
           DriveConstants.kFrontRightDriveMotorId,
           DriveConstants.kFrontRightSteerMotorId,
-          DriveConstants.kFrontRightDriveEncoderPorts,
-          DriveConstants.kFrontRightSteerEncoderPorts,
-          DriveConstants.kFrontRightDriveEncoderReversed,
-          DriveConstants.kFrontRightSteerEncoderReversed);
+          DriveConstants.kFrontRightSteerEncoderPorts);
 
   private final SwerveModule m_rearRight =
       new SwerveModule(
           DriveConstants.kRearRightDriveMotorId,
           DriveConstants.kRearRightSteerMotorId,
-          DriveConstants.kRearRightDriveEncoderPorts,
-          DriveConstants.kRearRightSteerEncoderPorts,
-          DriveConstants.kRearRightDriveEncoderReversed,
-          DriveConstants.kRearRightSteerEncoderReversed);
+          DriveConstants.kRearRightSteerEncoderPorts);
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(DriveConstants.Pigeon2ID, DriveConstants.CANbusName);
@@ -117,10 +106,10 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kDriveKinematics,
           m_gyro.getRotation2d(),
           new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
+            m_frontLeft.getPositionRefresh(false),
+            m_frontRight.getPositionRefresh(false),
+            m_rearLeft.getPositionRefresh(false),
+            m_rearRight.getPositionRefresh(false)
           });
 
   /** Creates a new DriveSubsystem. */
@@ -134,13 +123,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
+          m_frontLeft.getPositionRefresh(false),
+          m_frontRight.getPositionRefresh(false),
+          m_rearLeft.getPositionRefresh(false),
+          m_rearRight.getPositionRefresh(false)
         });
 
-    Logger.recordOutput("frontLeftPosition", m_frontLeft.getPosition());
+    Logger.recordOutput("frontLeftPosition", m_frontLeft.getPositionRefresh(false));
   }
 
   /**
@@ -161,10 +150,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
+          m_frontLeft.getPositionRefresh(false),
+          m_frontRight.getPositionRefresh(false),
+          m_rearLeft.getPositionRefresh(false),
+          m_rearRight.getPositionRefresh(false)
         },
         pose);
   }
@@ -215,10 +204,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
-    m_frontLeft.resetEncoders();
-    m_rearLeft.resetEncoders();
-    m_frontRight.resetEncoders();
-    m_rearRight.resetEncoders();
+    m_frontLeft.getPositionRefresh(true);
+    m_rearLeft.getPositionRefresh(true);
+    m_frontRight.getPositionRefresh(true);
+    m_rearRight.getPositionRefresh(true);
   }
 
   /** Zeroes the heading of the robot. */
@@ -245,6 +234,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // public static final CommandSwerveDrivetrain DriveTrain = new CommandSwerveDrivetrain(DrivetrainConstants, FrontLeft,
-  //           FrontRight, BackLeft, BackRight);
+  //           FrontRight, BackL veft, BackRight);
 
 }
