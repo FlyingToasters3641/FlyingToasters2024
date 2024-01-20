@@ -34,7 +34,7 @@ public class Robot extends LoggedRobot {
 
   public Logger logger;
 
-  private DriveSubsystem drivetrain;
+  private DriveSubsystem m_drivetrain;
 
   private Vision vision;
 
@@ -152,6 +152,13 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    // m_robotContainer.m_driverController.setDefaultCommand(new FieldOrientedDriveCommand(m_robotContainer.m_drivetrain, m_robotContainer.m_poseEstimator,
+    //                     () -> m_robotContainer.m_poseEstimator.getCurrentPose().getRotation(),
+    //                     () -> m_robotContainer.m_driverController.getLeftX(),
+    //                     () -> m_robotContainer.m_driverController.getLeftY(),
+    //                     () -> m_robotContainer.m_driverController.getRightX()));
+
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

@@ -40,9 +40,12 @@ public class SwerveModule {
   private StatusSignal<Double> m_steerPosition;
   private StatusSignal<Double> m_steerVelocity;
 
+  private double m_steerOffset;
+
+
   private BaseStatusSignal[] m_signals;
-private final double motorEncoderPositionCoefficient = 0;
-private final double motorVelocityCoefficient = 0;
+private double motorEncoderPositionCoefficient = 0;
+private double motorVelocityCoefficient = 0;
   private PositionVoltage m_angleSetter = new PositionVoltage(0);
    private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
   private double m_driveRotationsPerMeter = 0;
@@ -69,16 +72,21 @@ private final double motorVelocityCoefficient = 0;
    * @param kfrontleftdriveencoderports The channels of the drive encoder.
    * @param steerEncoderChannels The channels of the turning encoder.
    */
+
   public SwerveModule(
       int driveMotorChannel,
       int steerMotorChannel,
-      int steerEncoderChannels) {
+      int steerEncoderChannels,
+      double steerEncoderOffset
+      ) {
     m_driveMotor = new TalonFX(driveMotorChannel, DriveConstants.CANbusName);
     m_steerMotor = new TalonFX(steerMotorChannel, DriveConstants.CANbusName);//new CANSparkMax(steerMotorChannel, MotorType.kBrushless); //TODO: BRUSHED OR BRUSHLESS?
 
 
 
     m_steerEncoder = new CANcoder(steerMotorChannel, DriveConstants.CANbusName);
+
+    m_steerOffset = steerEncoderOffset;
 
     m_drivePosition = m_driveMotor.getPosition();
     m_driveVelocity = m_driveMotor.getVelocity();
@@ -92,6 +100,9 @@ private final double motorVelocityCoefficient = 0;
     m_signals[2] = m_steerPosition;
     m_signals[3] = m_steerVelocity;
 SwerveModuleConstants m_SwerveModuleConstants = new SwerveModuleConstants();
+
+motorEncoderPositionCoefficient = 2.0 * Math.PI / DriveConstants.kDriveGearRatio;
+motorVelocityCoefficient = Math.PI * DriveConstants.kDriveGearRatio * DriveConstants.kWheelRadiusInches * 10.0;
       /* Calculate the ratio of drive motor rotation to meter on ground */
     double rotationsPerWheelRotation = m_SwerveModuleConstants.DriveMotorGearRatio;
     double metersPerWheelRotation = 2 * Math.PI * Units.inchesToMeters(m_SwerveModuleConstants.WheelRadius);
@@ -125,14 +136,14 @@ SwerveModuleConstants m_SwerveModuleConstants = new SwerveModuleConstants();
     return m_internalState;
   }
 
-  public void apply(SwerveModuleState state) {
-    var optimized = SwerveModuleState.optimize(state, m_internalState.angle);
+// public void apply(SwerveModuleState state) {
+//     var optimized = SwerveModuleState.optimize(state, m_internalState.angle);
 
-    double angleToSetDeg = optimized.angle.getRotations();
-    m_steerMotor.setControl(m_angleSetter.withPosition(angleToSetDeg));
-    double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
-    m_driveMotor.setControl(m_velocitySetter.withVelocity(velocityToSet));
-  }
+//     double angleToSetDeg = optimized.angle.getRotations();
+//     m_steerMotor.setControl(m_angleSetter.withPosition(angleToSetDeg));
+//     double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
+//     m_driveMotor.setControl(m_velocitySetter.withVelocity(velocityToSet));
+//   }
 
 
   /**
@@ -174,7 +185,7 @@ SwerveModuleConstants m_SwerveModuleConstants = new SwerveModuleConstants();
   public Rotation2d getSteerAngle() {
     double motorAngleRadians = m_steerMotor.getPosition().getValue() * motorEncoderPositionCoefficient;
     motorAngleRadians %= 2.0 * Math.PI;
-    if (motorAngleRadians < 0.0) {
+    if (motorAngleRadians < m_steerOffset) {
       motorAngleRadians += 2.0 * Math.PI;
     }
 

@@ -9,6 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.littletonrobotics.junction.LoggedRobot;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -39,6 +41,8 @@ public final class Constants {
 
     //TODO: ENCODER PORTS ARE MESSED UP FIX THEM LATER
 
+    //TODO: fix these offsets
+
     //Front Left 
 
     public static final int kFrontLeftDriveMotorId = 30;
@@ -49,6 +53,8 @@ public final class Constants {
     public static final boolean kFrontLeftDriveEncoderReversed = false;
     public static final boolean kFrontLeftSteerEncoderReversed = false;
     
+    public static final double kFrontLeftEncoderOffset = -0.3095703125;
+    
 
     //Front Right
     public static final int kFrontRightDriveMotorId = 36;
@@ -57,6 +63,9 @@ public final class Constants {
     public static final int kFrontRightSteerEncoderPorts = 0;
     public static final boolean kFrontRightDriveEncoderReversed = false;
     public static final boolean kFrontRightSteerEncoderReversed = false;
+
+    
+    public static final double kFrontRightEncoderOffset = -0.3095703125;
     
     //Rear Left
     public static final int kRearLeftDriveMotorId = 42;
@@ -66,6 +75,8 @@ public final class Constants {
     public static final boolean kRearLeftDriveEncoderReversed = true;
     public static final boolean kRearLeftSteerEncoderReversed = true;
 
+    
+    public static final double kRearLeftEncoderOffset = -0.3095703125;
 
     //Rear Right
     public static final int kRearRightDriveMotorId = 37;
@@ -75,11 +86,20 @@ public final class Constants {
     public static final boolean kRearRightDriveEncoderReversed = true;
     public static final boolean kRearRightSteerEncoderReversed = true;
 
+    public static final double kRearRightEncoderOffset = -0.3095703125;
     
+
     //Canbus Name and PigeonIDs
     public static final String CANbusName = "Lucas";
     public static final int Pigeon2ID = 0;
-   
+        // Offsets
+
+        public double steerOffset = 0.0;
+        public double cancoderOffset = 0.0;
+
+
+    public static final double kDriveGearRatio = 0;
+    public static final double kWheelRadiusInches = 2;
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDefaultPeriod = 0.02;
 
@@ -105,6 +125,8 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
     public static final double kMaxSpeedMetersPerSecond = 3;
+    
+    
   }
 
   public static final class ModuleConstants {
