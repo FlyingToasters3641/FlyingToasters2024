@@ -67,17 +67,16 @@ public class Robot extends LoggedRobot {
 
   if (isReal()) {
     Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
-    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables // Enables power distribution logging
   } else {
     Logger.addDataReceiver(new NT4Publisher());
-    String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-    Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));// Read replay log
 
   }
 
 // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
+    Logger.start();
  
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.

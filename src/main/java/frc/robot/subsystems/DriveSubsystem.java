@@ -148,6 +148,15 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearLeft.getState(),
         m_rearRight.getState()
     });
+
+    SwerveModuleState[] states = new SwerveModuleState[] {
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState()
+    };
+
+    Logger.recordOutput("SwerveModuleStatesAdvantageKit", states);
     Logger.recordOutput("frontLeftPosition", m_frontLeft.getPositionRefresh(false));
   }
 
@@ -200,6 +209,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+    
+    Logger.recordOutput("Drivetrain/SwerveModuleStates", swerveModuleStates);
   }
 
   /**
@@ -217,8 +228,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
 
-    Logger.recordOutput("Drivetrain/SwerveStates", desiredStates);
-    Logger.recordOutput("Drivetrain/SwerveStatesAngle", desiredStates[0].angle.getDegrees());
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
