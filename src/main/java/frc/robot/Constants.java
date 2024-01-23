@@ -9,7 +9,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.littletonrobotics.junction.LoggedRobot;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -125,6 +127,12 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
     public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final String DriveMotorId = null;
+    public static final boolean DriveMotorInverted = false;
+    public static final double SlipCurrent = 0;
+    public static final Slot0Configs DriveMotorGains = null;
+	  public static final double SpeedAt12VoltsMps = 0;
+    public static final ClosedLoopOutputType DriveMotorClosedLoopOutput = null;
     
     
   }
@@ -146,6 +154,8 @@ public final class Constants {
     public static final double kPModuleSteerController = 1;
 
     public static final double kPModuleDriveController = 1;
+    public static final double DriveMotorGearRatio = 0;
+    public static final double WheelRadius = 0;
   }
 
   public static final class OIConstants {

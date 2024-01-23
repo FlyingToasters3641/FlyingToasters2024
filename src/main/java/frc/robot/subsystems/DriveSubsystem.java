@@ -14,6 +14,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
@@ -205,10 +207,10 @@ public class DriveSubsystem extends SubsystemBase {
             DriveConstants.kDefaultPeriod));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+    m_frontLeft.setDesiredState(swerveModuleStates[0], DriveRequestType.Velocity);
+    m_frontRight.setDesiredState(swerveModuleStates[1], DriveRequestType.Velocity);
+    m_rearLeft.setDesiredState(swerveModuleStates[2], DriveRequestType.Velocity);
+    m_rearRight.setDesiredState(swerveModuleStates[3], DriveRequestType.Velocity);
     
     Logger.recordOutput("Drivetrain/SwerveModuleStates", swerveModuleStates);
   }
@@ -223,10 +225,10 @@ public class DriveSubsystem extends SubsystemBase {
         desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
     
 
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_rearLeft.setDesiredState(desiredStates[2]);
-    m_rearRight.setDesiredState(desiredStates[3]);
+    m_frontLeft.setDesiredState(desiredStates[0], DriveRequestType.Velocity);
+    m_frontRight.setDesiredState(desiredStates[1], DriveRequestType.Velocity);
+    m_rearLeft.setDesiredState(desiredStates[2], DriveRequestType.Velocity);
+    m_rearRight.setDesiredState(desiredStates[3], DriveRequestType.Velocity);
 
   }
 
