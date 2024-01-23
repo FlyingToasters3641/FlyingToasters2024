@@ -34,7 +34,7 @@ public class Robot extends LoggedRobot {
 
   public Logger logger;
 
-  private DriveSubsystem drivetrain;
+  private DriveSubsystem m_drivetrain;
 
   private Vision vision;
 
@@ -67,17 +67,16 @@ public class Robot extends LoggedRobot {
 
   if (isReal()) {
     Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
-    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables // Enables power distribution logging
   } else {
     Logger.addDataReceiver(new NT4Publisher());
-    String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-    Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));// Read replay log
 
   }
 
 // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
+    Logger.start();
  
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -152,6 +151,13 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    // m_robotContainer.m_driverController.setDefaultCommand(new FieldOrientedDriveCommand(m_robotContainer.m_drivetrain, m_robotContainer.m_poseEstimator,
+    //                     () -> m_robotContainer.m_poseEstimator.getCurrentPose().getRotation(),
+    //                     () -> m_robotContainer.m_driverController.getLeftX(),
+    //                     () -> m_robotContainer.m_driverController.getLeftY(),
+    //                     () -> m_robotContainer.m_driverController.getRightX()));
+
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
