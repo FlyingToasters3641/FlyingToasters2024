@@ -104,7 +104,7 @@ public final class Constants {
     public static final double kWheelRadiusInches = 2;
     // If you call DriveSubsystem.drive() with a different period make sure to update this.
     public static final double kDefaultPeriod = 0.02;
-
+    public static final double kDriveRadius = 0.0;
     public static final double kTrackWidth = 0.5;
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = 0.7;

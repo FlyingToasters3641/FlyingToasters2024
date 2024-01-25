@@ -250,40 +250,4 @@ public class SwerveModule {
     return new Rotation2d(motorAngleRadians);
   }
 
-  /**
-     * Gets the state of this module and passes it back as a
-     * SwerveModulePosition object with latency compensated values.
-     *
-     * @param refresh True if the signals should be refreshed
-     * @return SwerveModulePosition containing this module's state.
-     */
-    public SwerveModulePosition getPosition(boolean refresh) {
-      if (refresh) {
-          /* Refresh all signals */
-          m_drivePosition.refresh();
-          m_driveVelocity.refresh();
-      }
-
-      /* Now latency-compensate our signals */
-      double drive_rot = BaseStatusSignal.getLatencyCompensatedValue(m_drivePosition, m_driveVelocity);
-      double angle_rot = m_steerMotor.getEncoder().getPosition();
-
-      /*
-       * Back out the drive rotations based on angle rotations due to coupling between
-       * azimuth and steer
-       */
-      drive_rot -= angle_rot * m_couplingRatioDriveRotorToCANcoder;
-
-      /* And push them into a SwerveModulePosition object to return */
-      m_internalState.distanceMeters = drive_rot / m_driveRotationsPerMeter;
-      /* Angle is already in terms of steer rotations */
-      m_internalState.angle = Rotation2d.fromRotations(angle_rot);
-
-      return m_internalState;
-  }
-
-  // public SwerveModulePosition getPosition() {
-  // return new SwerveModulePosition(
-  // m_driveMotor.getPosition, getSteerAngle());
-  // }
 }
