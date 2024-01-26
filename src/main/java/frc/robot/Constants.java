@@ -141,21 +141,10 @@ public final class Constants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;
 
-    public static final int kEncoderCPR = 1024;
-    public static final double kWheelDiameterMeters = 0.15;
-    public static final double kDriveEncoderDistancePerPulse =
-        // Assumes the encoders are directly mounted on the wheel shafts
-        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+    public static final double kPModuleSteerController = 1.0;
 
-    public static final double kSteerEncoderDistancePerPulse =
-        // Assumes the encoders are on a 1:1 reduction with the module shaft.
-        (2 * Math.PI) / (double) kEncoderCPR;
-
-    public static final double kPModuleSteerController = 1;
-
-    public static final double kPModuleDriveController = 1;
-    public static final double DriveMotorGearRatio = 0;
-    public static final double WheelRadius = 0;
+    public static final double DriveMotorGearRatio = 4.40;
+    public static final double WheelRadius = 1.5; //inches
   }
 
   public static final class OIConstants {
