@@ -24,6 +24,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 public class SwerveModule implements ModuleIO {
   // Can bus 
@@ -50,8 +51,9 @@ public class SwerveModule implements ModuleIO {
   
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
+  private final Queue<Double> turnPositionQueue;
 
-  private final boolean isTurnMotorInverted = true;
+  private final boolean isTurnMotorInverted = false;
   private final Rotation2d absoluteEncoderOffset;
 
   
@@ -62,32 +64,32 @@ public class SwerveModule implements ModuleIO {
         driveTalon = new TalonFX(13, CANbusName);
         turnSparkMax = new CANSparkMax(20, MotorType.kBrushless);
         cancoder = new CANcoder(17, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(-0.477783); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.013428)); // MUST BE CALIBRATED
         break;
       case 1: // Front Right
         driveTalon = new TalonFX(10, CANbusName);
         turnSparkMax = new CANSparkMax(21, MotorType.kBrushless);
         cancoder = new CANcoder(15, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(-0.3537605); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(0.150879)); // MUST BE CALIBRATED
         break;
       case 2: // Rear Left
         driveTalon = new TalonFX(11, CANbusName);
         turnSparkMax = new CANSparkMax(22, MotorType.kBrushless);
         cancoder = new CANcoder(16, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(-0.328125); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.163818)); // MUST BE CALIBRATED
         break;
       case 3: // Rear Right
         driveTalon = new TalonFX(12, CANbusName);
         turnSparkMax = new CANSparkMax(19, MotorType.kBrushless);
         cancoder = new CANcoder(18, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(-0.188721); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.207031)); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
     }
 
     // Initialize TalonFX Config
-    timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
+    timestampQueue = SparkMaxOdometryThread.getInstance().makeTimestampQueue();
 
     var driveConfig = new TalonFXConfiguration();
     driveConfig.CurrentLimits.StatorCurrentLimit = 40.0;
@@ -110,7 +112,12 @@ public class SwerveModule implements ModuleIO {
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
 
-    turnSparkMax.burnFlash();
+    turnSparkMax.setCANTimeout(0);
+
+    turnSparkMax.setPeriodicFramePeriod(
+        PeriodicFrame.kStatus2, (int) (1000.0 / Module.ODOMETRY_FREQUENCY));
+
+    
 
     // Initialize CANCoder Config
     cancoder.getConfigurator().apply(new CANcoderConfiguration());
@@ -123,7 +130,9 @@ public class SwerveModule implements ModuleIO {
     driveCurrent = driveTalon.getStatorCurrent();
 
     drivePositionQueue =
-        PhoenixOdometryThread.getInstance().registerSignal(driveTalon, driveTalon.getPosition());
+        SparkMaxOdometryThread.getInstance().registerSignal(() -> driveTalon.getPosition().getValue());
+    turnPositionQueue =
+        SparkMaxOdometryThread.getInstance().registerSignal(turnRelativeEncoder::getPosition);
     BaseStatusSignal.setUpdateFrequencyForAll(
       Module.ODOMETRY_FREQUENCY, drivePosition); // Required for odometry, use faster rate
     BaseStatusSignal.setUpdateFrequencyForAll(
@@ -133,6 +142,8 @@ public class SwerveModule implements ModuleIO {
         driveCurrent,
         turnAbsolutePosition);
     driveTalon.optimizeBusUtilization();
+
+    turnSparkMax.burnFlash();
   }
 
   @Override
@@ -164,8 +175,14 @@ public class SwerveModule implements ModuleIO {
         drivePositionQueue.stream()
             .mapToDouble((Double value) -> Units.rotationsToRadians(value) / DRIVE_GEAR_RATIO)
             .toArray();
+    inputs.odometryTurnPositions =
+      turnPositionQueue.stream()
+          .map((Double value) -> Rotation2d.fromRotations(value / TURN_GEAR_RATIO))
+          .toArray(Rotation2d[]::new);
+        
     timestampQueue.clear();
     drivePositionQueue.clear();
+    turnPositionQueue.clear();
   }
 
   @Override

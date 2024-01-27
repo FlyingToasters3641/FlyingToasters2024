@@ -52,7 +52,7 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         m_robotDrive =
             new DriveSubsystem(
-                new GyroIOPigeon2(),
+                new GyroIOPigeon2(true),
                 new SwerveModule(0),
                 new SwerveModule(1),
                 new SwerveModule(2),
@@ -113,8 +113,8 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
         DriveCommands.joystickDrive(
             m_robotDrive,
-            () -> -m_driverController.getLeftY(),
-            () -> -m_driverController.getLeftX(),
+            () -> m_driverController.getLeftY(),
+            () -> m_driverController.getLeftX(),
             () -> -m_driverController.getRightX()));
     m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
     m_driverController
@@ -127,6 +127,7 @@ public class RobotContainer {
                     m_robotDrive)
                 .ignoringDisable(true));
   }
+
     
   public Command getAutonomousCommand() {
         return autoChooser.get();
