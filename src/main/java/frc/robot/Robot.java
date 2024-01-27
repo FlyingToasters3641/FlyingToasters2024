@@ -11,15 +11,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
-
-import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,15 +24,6 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
-  public Logger logger;
-
-  private DriveSubsystem m_drivetrain;
-
-  private Vision vision;
-
-  
-  private final boolean UseLimelight = false;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -65,14 +49,27 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-  if (isReal()) {
-    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
-    Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables // Enables power distribution logging
-  } else {
-    Logger.addDataReceiver(new NT4Publisher());
-    Logger.addDataReceiver(new WPILOGWriter("/media/sda1/"));// Read replay log
+  // Set up data receivers & replay source
+    switch (Constants.currentMode) {
+      case REAL:
+        // Running on a real robot, log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
 
-  }
+      case SIM:
+        // Running a physics simulator, log to NT
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case REPLAY:
+        // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
 
 // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
@@ -93,32 +90,7 @@ public class Robot extends LoggedRobot {
    */
    @Override
   public void robotPeriodic() {
-    Logger.recordOutput("hi", 2);
-  //   drivetrain.periodic();
-  CommandScheduler.getInstance().run(); 
-  //   if(UseLimelight) {    
-  //     var lastResult = LimelightHelpers.getLatestResults("limelight").targetingResults;
-
-  //     Pose2d llPose = lastResult.getBotPose2d_wpiBlue();
-
-  //     // if (lastResult.valid) {
-  //     //   m_robotContainer.drivetrain.addVisionMeasurement(llPose, Timer.getFPGATimestamp());
-  //     // }
-  //   }
-  //   var visionEst = vision.getEstimatedGlobalPose();
-  //   visionEst.ifPresent(
-  //           est -> {
-  //               var estPose = est.estimatedPose.toPose2d();
-  //               // Change our trust in the measurement based on the tags we can see
-  //               var estStdDevs = vision.getEstimationStdDevs(estPose);
-
-                //drivetrain.addVisionMeasurement(
-                //        est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-           // });
-
-        //drivetrain.log();
-        //TODO: ADD THIS LOGGING
-
+    CommandScheduler.getInstance().run(); 
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -147,17 +119,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    // m_robotContainer.m_driverController.setDefaultCommand(new FieldOrientedDriveCommand(m_robotContainer.m_drivetrain, m_robotContainer.m_poseEstimator,
-    //                     () -> m_robotContainer.m_poseEstimator.getCurrentPose().getRotation(),
-    //                     () -> m_robotContainer.m_driverController.getLeftX(),
-    //                     () -> m_robotContainer.m_driverController.getLeftY(),
-    //                     () -> m_robotContainer.m_driverController.getRightX()));
-
-
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
