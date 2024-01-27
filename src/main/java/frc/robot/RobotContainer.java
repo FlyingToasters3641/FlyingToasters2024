@@ -79,7 +79,7 @@ public class RobotContainer {
                                 m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond,
                                 m_driverController.getRightX()
                                         * ModuleConstants.kMaxModuleAngularSpeedRadiansPerSecond,
-                                false),
+                                true),
                         m_robotDrive));
     }
 

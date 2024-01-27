@@ -87,7 +87,7 @@ public class SwerveModule {
     m_driveMotor = new TalonFX(driveMotorChannel, DriveConstants.CANbusName);
     m_steerMotor = new CANSparkMax(steerMotorChannel, MotorType.kBrushless); 
 
-    m_steerEncoder = new CANcoder(steerMotorChannel, DriveConstants.CANbusName);
+    m_steerEncoder = new CANcoder(steerEncoderChannels, DriveConstants.CANbusName);
 
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
 
@@ -116,8 +116,8 @@ public class SwerveModule {
     m_signals[0] = m_drivePosition;
     m_signals[1] = m_driveVelocity;
 
-    m_velocityTorqueSetter.UpdateFreqHz = 0;
-    m_voltageOpenLoopSetter.UpdateFreqHz = 0;
+    m_velocityTorqueSetter.UpdateFreqHz = 50;
+    m_voltageOpenLoopSetter.UpdateFreqHz = 100;
 
     motorEncoderPositionCoefficient = 2.0 * Math.PI / DriveConstants.kDriveGearRatio;
     motorVelocityCoefficient = Math.PI * DriveConstants.kDriveGearRatio * DriveConstants.kWheelRadiusInches * 10.0;
