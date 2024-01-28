@@ -16,8 +16,12 @@ import frc.robot.subsystems.drive.SwerveModule;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.RotationTarget;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -130,6 +134,16 @@ public class RobotContainer {
 
     
   public Command getAutonomousCommand() {
-        return autoChooser.get();
+        
+     PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+     Translation2d startPoint = path.getPoint(0).position;
+    //  RotationTarget startRotStart = path.getPoint(0).rotationTarget;
+    //  Rotation2d startRot = startRotStart.getTarget();
+    //  if (startRot == null){
+    //   startRot = new Rotation2d(0.0);
+    //  }
+     Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
+     m_robotDrive.setPose(start);  
+   return AutoBuilder.followPath(path);
   }
 }
