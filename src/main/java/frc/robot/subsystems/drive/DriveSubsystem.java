@@ -81,7 +81,6 @@ public class DriveSubsystem extends SubsystemBase {
     modules[3] = new Module(brModuleIO, 3);
 
     // Start threads (no-op for each if no signals have been created)
-    PhoenixOdometryThread.getInstance().start();
     SparkMaxOdometryThread.getInstance().start();
 
     // Configure AutoBuilder for PathPlanner

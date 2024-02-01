@@ -106,16 +106,11 @@ public class SwerveModule implements ModuleIO {
     turnSparkMax.setInverted(isTurnMotorInverted);
     turnSparkMax.setSmartCurrentLimit(30);
     turnSparkMax.enableVoltageCompensation(12.0);
-    turnSparkMax.setCANTimeout(0);
 
     turnRelativeEncoder.setPosition(0.0);
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
 
-    turnSparkMax.setCANTimeout(0);
-
-    turnSparkMax.setPeriodicFramePeriod(
-        PeriodicFrame.kStatus2, (int) (1000.0 / Module.ODOMETRY_FREQUENCY));
 
     
 
@@ -128,6 +123,7 @@ public class SwerveModule implements ModuleIO {
     driveVelocity = driveTalon.getVelocity();
     driveAppliedVolts = driveTalon.getMotorVoltage();
     driveCurrent = driveTalon.getStatorCurrent();
+    
 
     drivePositionQueue =
         SparkMaxOdometryThread.getInstance().registerSignal(() -> driveTalon.getPosition().getValue());
