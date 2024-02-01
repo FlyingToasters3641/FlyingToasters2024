@@ -7,7 +7,7 @@ public interface IntakeIO {
     public static class IntakeIOInputs {
         public double frontIntakeAppliedVolts = 0.0;
 
-        public double rearIntkaeAppliedVolts = 0.0;
+        public double rearIntkakeAppliedVolts = 0.0;
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
