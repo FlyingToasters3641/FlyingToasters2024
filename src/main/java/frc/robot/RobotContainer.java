@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import frc.robot.subsystems.elevator.*;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -41,6 +43,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
     // Subsystems
     private final DriveSubsystem m_robotDrive;
+    private final ElevatorIO m_ElevatorIO = new ElevatorIO() {};
+    private final Elevator m_elevator = new Elevator(m_ElevatorIO);
     
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
