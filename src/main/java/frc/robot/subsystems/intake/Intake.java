@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +18,7 @@ public class Intake extends SubsystemBase{
     private final SimpleMotorFeedforward intakeFeedforward;
     private final PIDController frontFeedback;
     private final PIDController rearFeedback;
-
+    IntakeIOTalonFX IntakeTalonFX = new IntakeIOTalonFX();
     public Intake(IntakeIO io) {
         this.io = io;
    switch (Constants.currentMode) {
@@ -51,29 +52,67 @@ public class Intake extends SubsystemBase{
       io.updateInputs(inputs);
     }
 
-    //     public boolean currentSpike() {
-    //         return (frontTalonFX.getOutputCurrent() > 2.0);
-    //     }
+       
 
-    //     public Command stopFrontRollers() {
-    //     return runOnce(() -> {
-    //         IntakeIOTalonFX.frontTalonFX.set();
-    //     });
-    // }
-
+        public Command stopFrontRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(0.0);
+        });
+    }
+      public Command startFrontRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(1);
+        });
+    }
+       public Command reverseFrontRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(-1);
+        });
+    }
+    
+        public Command stopRearRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(0);
+        });}
+       public Command startRearRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(1);
+        });}
+       public Command reverseRearRollers() {
+        return runOnce(() -> {
+            IntakeTalonFX.frontTalonFX.set(-1);
+        });}
+    
+    
     // public Command startFrontRollers() {
     //     return runOnce(() -> {
-    //         frontTalonFX.set(0.375);
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(1.0));
+    //     });
+    // } 
+    //     public Command stopFrontRollers() {
+    //     return runOnce(() -> {
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(1.0);
     //     });
     // }
-
     // public Command reverseFrontRollers() {
     //     return runOnce(() -> {
-    //         frontTalonFX.set(-0.375);
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(-1.0));
+    //     });
+    // }
+     //   public Command startRearRollers() {
+    //     return runOnce(() -> {
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(0));
+    //     });
+    // }
+        //   public Command stopRearRollers() {
+    //     return runOnce(() -> {
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(0));
+    //     });
+    // }
+        //   public Command reverseRearRollers() {
+    //     return runOnce(() -> {
+    //         IntakeTalonFX.frontTalonFX.setControl(new DutyCycleOut(0));
     //     });
     // }
 
-
-
-    
 }
