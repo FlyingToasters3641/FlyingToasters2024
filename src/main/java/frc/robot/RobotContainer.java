@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -13,6 +14,8 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.SwerveModule;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -43,13 +46,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
     // Subsystems
     private final DriveSubsystem m_robotDrive;
-    private final Intake m_intake = new Intake(null);
+    private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
+    private final Intake m_intake = new Intake(m_IntakeIO);
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
-    Trigger leftTriggerO = m_operatorController.leftTrigger();
+    Trigger leftTriggerO = m_driverController.leftTrigger();
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
         //Hardware or SIM?
@@ -132,7 +136,7 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-                leftTriggerO.onTrue(m_intake.startFrontRollers()).onFalse(m_intake.stopFrontRollers());
+    leftTriggerO.whileTrue(IntakeCommands.startFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
   }
             
     
