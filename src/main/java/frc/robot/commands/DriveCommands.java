@@ -74,4 +74,8 @@ public class DriveCommands {
         },
         drive);
   }
+  
+    public static Command DriveXStop(DriveSubsystem drive) {
+        return Commands.run(() -> {drive.stopWithX();});
+    }
 }

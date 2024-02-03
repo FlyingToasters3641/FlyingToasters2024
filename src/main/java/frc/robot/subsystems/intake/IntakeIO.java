@@ -18,4 +18,6 @@ public interface IntakeIO {
 
     public default void setBrakeMode(boolean frontBrake, boolean rearBrake) {}
 
+    public default void setFrontSpeed(double speed){}
+
 }

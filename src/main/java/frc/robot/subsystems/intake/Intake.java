@@ -1,5 +1,7 @@
 package frc.robot.subsystems.intake;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -44,6 +46,10 @@ public class Intake extends SubsystemBase{
     }
     public void stopFrontRollers(){
         io.setFrontVoltage(0);
+    }
+
+    public void runFrontRollers(DoubleSupplier axis){
+        io.setFrontSpeed(axis.getAsDouble());
     }
         
 }

@@ -22,4 +22,8 @@ public class IntakeIOTalonFX implements IntakeIO {
         frontTalonFX.setVoltage(Volts);
     }
 
+    @Override
+    public void setFrontSpeed(double speed){
+        frontTalonFX.set(speed);
+    }
 }

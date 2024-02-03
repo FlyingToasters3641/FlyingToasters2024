@@ -136,8 +136,8 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-    m_driverController.leftTrigger().whileTrue(IntakeCommands.startFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
-    m_driverController.rightTrigger().whileTrue(IntakeCommands.reverseFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
+    m_driverController.rightTrigger().whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis()));
+
   }
             
     
