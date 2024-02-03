@@ -184,7 +184,7 @@ public class SwerveModule implements ModuleIO {
 
   @Override
   public void setDriveVoltage(double volts) {
-    driveTalon.setControl(new VoltageOut(volts));
+    driveTalon.setControl(new VoltageOut(volts, true, false, false, false));
   }
 
   @Override
