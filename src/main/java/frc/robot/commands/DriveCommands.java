@@ -51,7 +51,7 @@ public class DriveCommands {
 
           // Square values
           linearMagnitude = linearMagnitude * linearMagnitude;
-          omega = Math.copySign(omega * omega, omega);
+          omega = Math.copySign(omega * omega * omega * omega, omega);
 
           // Calcaulate new linear velocity
           Translation2d linearVelocity =
@@ -74,4 +74,8 @@ public class DriveCommands {
         },
         drive);
   }
+  
+    public static Command DriveXStop(DriveSubsystem drive) {
+        return Commands.run(() -> {drive.stopWithX();});
+    }
 }

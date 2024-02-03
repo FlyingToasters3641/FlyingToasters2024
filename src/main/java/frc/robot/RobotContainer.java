@@ -6,12 +6,16 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.IntakeCommands;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -27,6 +31,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
@@ -41,13 +46,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
     // Subsystems
     private final DriveSubsystem m_robotDrive;
-    
+    private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
+    private final Intake m_intake = new Intake(m_IntakeIO);
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
-
+  
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
         //Hardware or SIM?
@@ -127,11 +133,13 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         m_robotDrive.setPose(
-                            new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d(180))),
+                            new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-  }
+    m_driverController.rightTrigger().whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis()));
 
+  }
+            
     
   public Command getAutonomousCommand() {
         
