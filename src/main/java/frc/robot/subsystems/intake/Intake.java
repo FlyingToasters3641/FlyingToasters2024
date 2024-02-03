@@ -17,8 +17,8 @@ public class Intake extends SubsystemBase{
     private boolean isRearRunning = false;
     private final SimpleMotorFeedforward intakeFeedforward;
     private final PIDController frontFeedback;
-    private final PIDController rearFeedback;
-    IntakeIOTalonFX IntakeTalonFX = new IntakeIOTalonFX();*/
+    private final PIDController rearFeedback;*/
+    IntakeIOTalonFX IntakeTalonFX = new IntakeIOTalonFX();
     public Intake(IntakeIO io) {
         this.io = io;
         io.setBrakeMode(false, false);
@@ -38,6 +38,10 @@ public class Intake extends SubsystemBase{
         io.setFrontVoltage(12.0);
     }
 
+    public void reverseFrontRollers(){
+        io.setFrontVoltage(12.0);
+        IntakeTalonFX.frontTalonFX.setInverted(false); 
+    }
     public void stopFrontRollers(){
         io.setFrontVoltage(0);
     }

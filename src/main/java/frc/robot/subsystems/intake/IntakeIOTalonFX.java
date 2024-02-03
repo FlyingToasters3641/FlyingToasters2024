@@ -10,7 +10,7 @@ public class IntakeIOTalonFX implements IntakeIO {
     public static double frontTalonVoltage;
 
     public IntakeIOTalonFX() {
-        frontTalonFX.setInverted(true);
+       frontTalonFX.setInverted(true);
     }
 
     @Override

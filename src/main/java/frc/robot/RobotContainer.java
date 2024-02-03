@@ -53,7 +53,7 @@ public class RobotContainer {
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
-    Trigger leftTriggerO = m_driverController.leftTrigger();
+  
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
         //Hardware or SIM?
@@ -136,7 +136,8 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-    leftTriggerO.whileTrue(IntakeCommands.startFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
+    m_driverController.leftTrigger().whileTrue(IntakeCommands.startFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
+    m_driverController.rightTrigger().whileTrue(IntakeCommands.reverseFrontRollers(m_intake)).onFalse(IntakeCommands.stopFrontRollers(m_intake));
   }
             
     

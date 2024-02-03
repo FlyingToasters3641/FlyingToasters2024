@@ -17,5 +17,9 @@ public class IntakeCommands {
         return Commands.run(() -> 
             {m_intake.stopFrontRollers();}
             );}
+              public static Command reverseFrontRollers(Intake m_intake) {
+        return Commands.run(() -> 
+            {m_intake.reverseFrontRollers();}
+            );}
     
 }
