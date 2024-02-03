@@ -127,7 +127,7 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         m_robotDrive.setPose(
-                            new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d(180))),
                     m_robotDrive)
                 .ignoringDisable(true));
   }
