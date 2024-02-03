@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import frc.robot.subsystems.elevator.*;
 
 public class Elevator extends SubsystemBase {
@@ -33,7 +35,6 @@ public class Elevator extends SubsystemBase {
     leaderMotor = ElevatorIOTalonFX.leaderTalonFX;
     followerMotor = ElevatorIOTalonFX.followTalonFX;
 
-    
   }
 
   @Override
@@ -44,9 +45,21 @@ public class Elevator extends SubsystemBase {
   public void simulationPeriodic() {
   }
 
-   public void elevatorPosition(DoubleSupplier position){
+  public void setElevatorPosition(DoubleSupplier position) {
     io.setPosition(position.getAsDouble());
+    Logger.recordOutput("ElevatorPosition", position.getAsDouble());
   }
+
+  // public double getElevatorPosition() {
+  //   return 
+  // }
+
+  public double elevatorAbsoluteEncoderPosition(){
+    return ElevatorTalonFX.leaderEncoder.getAbsolutePosition().getValue();
+  }
+
+  
+
 }
 
 enum ElevatorPos {
@@ -86,5 +99,4 @@ enum ElevatorPos {
     return isFront;
   }
 
- 
 }
