@@ -18,4 +18,6 @@ public interface ElevatorIO {
 
     public default void setBrakeMode(boolean leaderBrake, boolean followerBrake) {}
 
+    public default void setPosition(double position) {}
+
 }
