@@ -35,17 +35,14 @@ public class Intake extends SubsystemBase{
 
       io.updateInputs(inputs);
 
-      io.setFrontVoltage(inputs.frontIntakeAppliedVolts);
     }
-    public void reverseFrontRollers(DoubleSupplier axis){
-        IntakeTalonFX.frontTalonFX.setInverted(false); 
+    public void reverseFrontRollers(DoubleSupplier axis){ 
         io.setFrontSpeed(axis.getAsDouble());
     }
     public void runFrontRollers(DoubleSupplier axis){
         io.setFrontSpeed(axis.getAsDouble());
     }
       public void reverseRearRollers(DoubleSupplier axis){
-        IntakeTalonFX.frontTalonFX.setInverted(false); 
         io.setRearSpeed(axis.getAsDouble());
     }
     public void runRearRollers(DoubleSupplier axis){
@@ -53,5 +50,15 @@ public class Intake extends SubsystemBase{
     }
     public boolean frontCurrentSpike() {
         return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue() > 2.0);
+    }
+
+    public void stopFront() {
+        io.stopFront();
+    }
+
+
+
+    public void stopRear() {
+        io.stopRear();
     }
 }

@@ -22,5 +22,14 @@ public class IntakeCommands {
       public static Command reverseRearSpeed(Intake m_intake, DoubleSupplier axis){
         return Commands.run(() -> {m_intake.reverseRearRollers(axis);});
     }
+
+    public static Command stopFront(Intake m_intake){
+      return Commands.run(() -> {m_intake.stopFront();});
+    }
+    
+
+    public static Command stopRear(Intake m_intake){
+      return Commands.run(() -> {m_intake.stopRear();});
+    }
     
 }
