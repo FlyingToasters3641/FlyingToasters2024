@@ -19,6 +19,9 @@ public class LEDSubsystem extends SubsystemBase {
     private int ledStatus; //Which colors should be on or off
     private int[] ledIndex = { 8, 68, 128 }; //Shows where colors start, CHANGE LATER
     private boolean ledDisable;
+    private String startLedColor;
+    private boolean startLed;
+    private int startLedCount;
 
     
        public LEDSubsystem (){
@@ -29,6 +32,7 @@ public class LEDSubsystem extends SubsystemBase {
         ledTimer.start();
         ledStatusSwitch = false;
         ledBlink = 1;
+        startLed = false;
         ledStatus = 0;
         ledDisable = true;
         ledTimer.start();
@@ -49,12 +53,45 @@ public class LEDSubsystem extends SubsystemBase {
     // flowing/moving colors
      ledTimer.advanceIfElapsed(.2); {
         //Moves colors by 2 every .2 seconds
-         setColor("Pink", ledIndex[2], 60);//pink CHANGE COUNT AND COLORS LATER
-         setColor("Purple",ledIndex[4], 60);//purple CHANGE COUNT AND COLORS LATER
-         setColor("Blue",ledIndex[6], 60);//blue CHANGE COUNT AND COLORS LATER
-        ledIndex[2]++;
-        ledIndex[4]++;
-        ledIndex[6]++;
+         setColor("Pink", ledIndex[0], 60);//pink CHANGE COUNT AND COLORS LATER
+         setColor("Purple",ledIndex[1], 60);//purple CHANGE COUNT AND COLORS LATER
+         setColor("Blue",ledIndex[2], 60);//blue CHANGE COUNT AND COLORS LATER
+        ledIndex[0]+= 2;
+        ledIndex[1]+= 2;
+        ledIndex[2]+= 2;
+         // Allows for the LED to loop around the strips
+         if (startLed == true) {
+            setColor(startLedColor, 8, startLedCount);
+            startLedCount++;
+            if (startLedCount >= 60) {
+                startLedCount = 0;
+                startLed = false;
+            }
+        }
+        if (startLed == false) {
+            for (int i = 0; i < 4; i++) {
+                if (ledIndex[i] >= 116) {
+                    if (i % 3 == 0) {
+                        startLedColor = "Pink";
+                    }
+                    if (i % 3 == 1) {
+                        startLedColor = "Blue";
+                    }
+                     if (i % 3 == 2) {
+                        startLedColor = "Purple";
+                    }
+                    startLed = true;
+                }
+            }
+        }
+
+        // Sets the position back to the LED start
+        for (int i = 0; i < 4; i++) {
+            if (ledIndex[i] > 180) {
+                ledIndex[i] = 8;
+            }
+
+        }
     }
     break;
     case 1:
@@ -72,6 +109,7 @@ public class LEDSubsystem extends SubsystemBase {
                 }
 
                 if (ledStatusSwitch) {
+
                     setColor("green", 8, 100);//CHANGE NUMBER LATER
                 }
                 if (ledStatusSwitch) {
