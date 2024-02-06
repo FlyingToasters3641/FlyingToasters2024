@@ -26,6 +26,8 @@ public class Elevator extends SubsystemBase {
 
   ElevatorIOTalonFX ElevatorTalonFX = new ElevatorIOTalonFX();
 
+  private double m_position;
+
   private Follower followerControl;
 
   public Elevator(ElevatorIO io) {
@@ -34,6 +36,8 @@ public class Elevator extends SubsystemBase {
 
     leaderMotor = ElevatorIOTalonFX.leaderTalonFX;
     followerMotor = ElevatorIOTalonFX.followTalonFX;
+
+    m_position = 0;
 
   }
 
@@ -48,11 +52,18 @@ public class Elevator extends SubsystemBase {
   public void setElevatorPosition(DoubleSupplier position) {
     io.setPosition(position.getAsDouble());
     Logger.recordOutput("ElevatorPosition", position.getAsDouble());
+    m_position = position.getAsDouble();
   }
 
-  // public double getElevatorPosition() {
-  //   return 
-  // }
+  public void setElevatorPosition(double position) {
+    io.setPosition(position);
+    Logger.recordOutput("ElevatorPosition", position);
+    m_position = position;
+  }
+
+  public double getElevatorPosition() {
+    return m_position;
+  }
 
   public double elevatorAbsoluteEncoderPosition(){
     return ElevatorTalonFX.leaderEncoder.getAbsolutePosition().getValue();
@@ -62,41 +73,4 @@ public class Elevator extends SubsystemBase {
 
 }
 
-enum ElevatorPos {
 
-  STORED_POSITION(0, 0, false, false),
-  AMP_POSITION(0, 0, false, false), // -34
-  CHAIN_POSITION(0, 0, true, false), // -23
-  TRAP_POSITION(0, 0, true, false), // 131
-  PLAYER_STATION_POSITION(0, 0, false, false),
-  SPEAKER_POSITION(0, 0, false, false); // 148
-
-  private double elevatorPosition;
-  private double wristAngle;
-  private boolean runLauncher;
-  private boolean isFront;
-
-  private ElevatorPos(double elevatorPosition, double wristAngle, boolean runLauncher, boolean isFront) {
-    this.elevatorPosition = elevatorPosition;
-    this.wristAngle = wristAngle;
-    this.runLauncher = runLauncher;
-    this.isFront = isFront;
-  }
-
-  public double getElevatorPosition() {
-    return elevatorPosition;
-  }
-
-  public double getWristAngle() {
-    return wristAngle;
-  }
-
-  public boolean getRunLauncher() {
-    return runLauncher;
-  }
-
-  public boolean getIsFront() {
-    return isFront;
-  }
-
-}

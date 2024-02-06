@@ -48,6 +48,8 @@ public class RobotContainer {
     
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
     
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -134,6 +136,8 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
+    
+
   }
 
     
