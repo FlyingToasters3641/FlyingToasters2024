@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,8 +17,8 @@ public class Intake extends SubsystemBase{
     private IntakeIO io;
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     /* 
-    private boolean isFrontRunning = false;
-    private boolean isRearRunning = false;
+    private static boolean isFrontRunning = false;
+    private static boolean isRearRunning = false;
     private final SimpleMotorFeedforward intakeFeedforward;
     private final PIDController frontFeedback;
     private final PIDController rearFeedback;*/
@@ -33,23 +35,30 @@ public class Intake extends SubsystemBase{
 
       io.updateInputs(inputs);
 
-      io.setFrontVoltage(inputs.frontIntakeAppliedVolts);
     }
-
-    public void startFrontRollers(){
-        io.setFrontVoltage(12.0);
+    public void reverseFrontRollers(DoubleSupplier axis){ 
+        io.setFrontSpeed(axis.getAsDouble());
     }
-
-    public void reverseFrontRollers(){
-        io.setFrontVoltage(12.0);
-        IntakeTalonFX.frontTalonFX.setInverted(false); 
-    }
-    public void stopFrontRollers(){
-        io.setFrontVoltage(0);
-    }
-
     public void runFrontRollers(DoubleSupplier axis){
         io.setFrontSpeed(axis.getAsDouble());
     }
-        
+      public void reverseRearRollers(DoubleSupplier axis){
+        io.setRearSpeed(axis.getAsDouble());
+    }
+    public void runRearRollers(DoubleSupplier axis){
+        io.setRearSpeed(axis.getAsDouble());
+    }
+    public boolean frontCurrentSpike() {
+        return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue() > 2.0);
+    }
+
+    public void stopFront() {
+        io.stopFront();
+    }
+
+
+
+    public void stopRear() {
+        io.stopRear();
+    }
 }

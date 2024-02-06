@@ -26,4 +26,19 @@ public class IntakeIOTalonFX implements IntakeIO {
     public void setFrontSpeed(double speed){
         frontTalonFX.set(speed);
     }
+
+    @Override
+    public void setRearSpeed(double speed){
+        rearTalonFX.set(speed);
+    }
+
+    @Override
+    public void stopFront(){
+        frontTalonFX.set(0.0);;
+    }
+
+    @Override
+    public void stopRear(){
+        rearTalonFX.set(0.0);
+    }
 }
