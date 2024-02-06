@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.LauncherCommands;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -30,6 +31,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.subsystems.elevator.*;
+import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.launcher.LauncherIO;
+import frc.robot.subsystems.launcher.LauncherIOTalonFX;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -45,9 +49,12 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive;
     private final ElevatorIO m_ElevatorIO = new ElevatorIO() {};
     private final Elevator m_elevator = new Elevator(m_ElevatorIO);
+    private final LauncherIO m_LauncherIO = new LauncherIOTalonFX();
+    private final Launcher m_launcher = new Launcher(m_LauncherIO);
     
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
     
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -134,7 +141,10 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
+                m_operatorController.rightTrigger().whileTrue(LauncherCommands.runTopFlywheelSpeed(m_launcher, () -> m_driverController.getRightTriggerAxis()));
+                m_driverController.leftTrigger().whileTrue(LauncherCommands.runBottomFlywheelSpeed(m_launcher, () -> m_driverController.getLeftTriggerAxis()));               
   }
+  
 
     
   public Command getAutonomousCommand() {

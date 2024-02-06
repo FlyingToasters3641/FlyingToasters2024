@@ -40,4 +40,12 @@ public class Launcher extends SubsystemBase {
    public void wristPosition(DoubleSupplier position){
     io.setPosition(position.getAsDouble());
   }
+
+  public void topFlywheelspeed(DoubleSupplier speed) {
+    io.setTopFlywheelRollers(speed.getAsDouble());
+  }
+  
+  public void bottomFlywheelspeed(DoubleSupplier speed) {
+    io.setBottomFlywheelRollers(speed.getAsDouble());
+  }
 }

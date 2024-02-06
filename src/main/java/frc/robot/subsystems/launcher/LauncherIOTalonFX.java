@@ -56,10 +56,21 @@ public class LauncherIOTalonFX implements LauncherIO {
         topFlywheelTalonFX.setControl(new VelocityVoltage(volts, acceleration, true, feedforward, 0, false, false, false));
     }
 
+    @Override 
+    public void setTopFlywheelRollers(double volts) {
+        topFlywheelTalonFX.set(volts);
+    }
+
     @Override
     public void setBottomFlywheelVoltage(double volts, double acceleration, double feedforward) {
         bottomFlywheelTalonFX.setControl(new VelocityVoltage(volts, acceleration, true, feedforward, 0, false, false, false));
     }
+    
+    @Override 
+    public void setBottomFlywheelRollers(double volts) {
+        topFlywheelTalonFX.set(volts);
+    }
+
 
     @Override
     public void setFeederVoltage(double volts) {

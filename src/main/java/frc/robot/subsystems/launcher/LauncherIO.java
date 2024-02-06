@@ -18,7 +18,11 @@ public interface LauncherIO {
 
     public default void setTopFlywheelVoltage(double volts, double acceleration, double feedforward) {}
 
+    public default void setTopFlywheelRollers(double speed) {}
+
     public default void setBottomFlywheelVoltage(double volts, double acceleration, double feedforward) {}
+
+    public default void setBottomFlywheelRollers(double speeds) {}
     
     public default void setFeederVoltage(double volts) {}
 
