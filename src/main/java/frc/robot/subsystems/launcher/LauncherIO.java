@@ -30,5 +30,9 @@ public interface LauncherIO {
 
     public default void setPosition(double position) {}
 
+    public default void stopFlywheelTop() {}
+
+    public default void stopBottomFlywheel() {}
+
 }
 

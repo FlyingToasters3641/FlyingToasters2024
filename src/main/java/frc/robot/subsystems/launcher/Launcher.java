@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 
-import frc.robot.subsystems.elevator.*;
-
 public class Launcher extends SubsystemBase {
 
   private LauncherIO io;
@@ -31,6 +29,7 @@ public class Launcher extends SubsystemBase {
 
   @Override
   public void periodic() {
+    io.updateInputs(inputs);
   }
 
   @Override
@@ -47,5 +46,11 @@ public class Launcher extends SubsystemBase {
   
   public void bottomFlywheelspeed(DoubleSupplier speed) {
     io.setBottomFlywheelRollers(speed.getAsDouble());
+  }
+
+  public void stopBottomFlywheel() {
+  }
+
+  public void stopTopFlywheel() {
   }
 }

@@ -18,4 +18,12 @@ public class LauncherCommands {
     public static Command runBottomFlywheelSpeed(Launcher m_launcher, DoubleSupplier axis){
         return Commands.run(() -> {m_launcher.bottomFlywheelspeed(axis);});
     }
+
+    public static Command stopFlywheelBottom(Launcher m_Launcher){
+        return Commands.run(() -> {m_Launcher.stopBottomFlywheel();});
+    }
+
+    public static Command stopFlywheelTop(Launcher m_Launcher){
+        return Commands.run(() -> {m_Launcher.stopTopFlywheel();});
+    }
 }

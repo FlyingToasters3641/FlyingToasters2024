@@ -11,32 +11,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class LauncherIOTalonFX implements LauncherIO {
     private static final String CANbusName = "Lucas";
-    public static final TalonFX topFlywheelTalonFX = new TalonFX(1, CANbusName);
-    public static final TalonFX bottomFlywheelTalonFX = new TalonFX(2, CANbusName);
-    public static final TalonFX feederTalonFX = new TalonFX(3, CANbusName);
-    public static final TalonFX wristTalonFX = new TalonFX(4, CANbusName);
+    public static final TalonFX topFlywheelTalonFX = new TalonFX(31, CANbusName);
+    public static final TalonFX bottomFlywheelTalonFX = new TalonFX(32, CANbusName);
 
-    public static final CANcoder leaderEncoder = new CANcoder(3, CANbusName);
 
 
     public LauncherIOTalonFX() {
-
-        var talonFXConfigs = new TalonFXConfiguration();
-
-        var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kS = 0.25;
-        slot0Configs.kV = 0.12;
-        slot0Configs.kA = 0.01;
-        slot0Configs.kP = 4.8;
-        slot0Configs.kI = 0;
-        slot0Configs.kD = 0.1;
-
-        var motionMagicConfigs = talonFXConfigs.MotionMagic;
-
-        motionMagicConfigs.MotionMagicAcceleration = 400;
-        motionMagicConfigs.MotionMagicJerk = 4000;
-
-        wristTalonFX.getConfigurator().apply(talonFXConfigs);
+        bottomFlywheelTalonFX.setInverted(true);
+        topFlywheelTalonFX.setInverted(true);
     }
 
     @Override
@@ -48,7 +30,6 @@ public class LauncherIOTalonFX implements LauncherIO {
     public void setPosition(double position) {
         final MotionMagicVoltage m_request = new MotionMagicVoltage(0);
 
-        wristTalonFX.setControl(m_request);
     }
 
     @Override
@@ -68,7 +49,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     
     @Override 
     public void setBottomFlywheelRollers(double volts) {
-        topFlywheelTalonFX.set(volts);
+        bottomFlywheelTalonFX.set(volts);
     }
 
 
@@ -77,5 +58,13 @@ public class LauncherIOTalonFX implements LauncherIO {
         bottomFlywheelTalonFX.setControl(new VelocityVoltage(volts));
     }
 
+    @Override
+    public void stopFlywheelTop(){
+        topFlywheelTalonFX.set(0.0);
+    }
 
+    @Override
+    public void stopBottomFlywheel(){
+        bottomFlywheelTalonFX.set(0.0);
+    }
 }

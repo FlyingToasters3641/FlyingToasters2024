@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherIO;
 import frc.robot.subsystems.launcher.LauncherIOTalonFX;
@@ -47,8 +46,6 @@ import frc.robot.subsystems.launcher.LauncherIOTalonFX;
 public class RobotContainer {
     // Subsystems
     private final DriveSubsystem m_robotDrive;
-    private final ElevatorIO m_ElevatorIO = new ElevatorIO() {};
-    private final Elevator m_elevator = new Elevator(m_ElevatorIO);
     private final LauncherIO m_LauncherIO = new LauncherIOTalonFX();
     private final Launcher m_launcher = new Launcher(m_LauncherIO);
     
@@ -141,8 +138,8 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-                m_operatorController.rightTrigger().whileTrue(LauncherCommands.runTopFlywheelSpeed(m_launcher, () -> m_driverController.getRightTriggerAxis()));
-                m_driverController.leftTrigger().whileTrue(LauncherCommands.runBottomFlywheelSpeed(m_launcher, () -> m_driverController.getLeftTriggerAxis()));               
+                m_driverController.rightTrigger().whileTrue(LauncherCommands.runTopFlywheelSpeed(m_launcher, () -> m_driverController.getRightTriggerAxis())).onFalse(LauncherCommands.stopFlywheelTop(m_launcher));
+                m_driverController.leftTrigger().whileTrue(LauncherCommands.runBottomFlywheelSpeed(m_launcher, () -> m_driverController.getLeftTriggerAxis())).onFalse(LauncherCommands.stopFlywheelBottom(m_launcher));               
   }
   
 
