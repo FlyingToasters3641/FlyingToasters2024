@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -48,6 +50,7 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive;
     private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
     private final Intake m_intake = new Intake(m_IntakeIO);
+     private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -138,7 +141,24 @@ public class RobotContainer {
                 .ignoringDisable(true));
     m_driverController.rightTrigger().whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis())).onFalse(IntakeCommands.stopFront(m_intake));
     m_driverController.leftTrigger().whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis())).onFalse(IntakeCommands.stopRear(m_intake));        
-   
+   m_operatorController
+                .rightBumper()
+                .onTrue(
+                        new InstantCommand(() -> {
+                            m_LEDSubsystem.ledSwitch(2);
+                        })
+                )
+                .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
+        
+        m_operatorController
+                .leftBumper()
+                .onTrue(
+                        new InstantCommand(() -> {
+                            m_LEDSubsystem.ledSwitch(0);
+                        })
+                )
+                .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
+
   }
      
   public Command getAutonomousCommand() {
