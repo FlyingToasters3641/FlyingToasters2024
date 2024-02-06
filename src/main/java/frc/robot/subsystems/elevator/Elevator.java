@@ -62,11 +62,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getElevatorPosition() {
-    return m_position;
+    return io.getPosition();
   }
 
   public double elevatorAbsoluteEncoderPosition(){
-    return ElevatorTalonFX.leaderEncoder.getAbsolutePosition().getValue();
+    return io.getAbsolutePosition();
   }
 
   

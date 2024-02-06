@@ -20,4 +20,8 @@ public interface ElevatorIO {
 
     public default void setPosition(double position) {}
 
+    public default double getPosition() {return 0;}
+
+    public default double getAbsolutePosition() {return 0;}
+
 }

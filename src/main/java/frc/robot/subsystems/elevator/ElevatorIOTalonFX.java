@@ -15,6 +15,9 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     private Follower followerControl;
 
+    
+    private double m_position;
+
     public ElevatorIOTalonFX() {
         followerControl = new Follower(0, false);
         followTalonFX.setControl(followerControl);
@@ -54,5 +57,16 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         final MotionMagicVoltage m_request = new MotionMagicVoltage(position);
         
         leaderTalonFX.setControl(m_request);
+        m_position = position;
+    }
+
+    @Override
+    public double getPosition(){
+        return m_position;
+    }
+
+    @Override
+    public double getAbsolutePosition(){
+        return leaderEncoder.getAbsolutePosition().getValue();
     }
 }
