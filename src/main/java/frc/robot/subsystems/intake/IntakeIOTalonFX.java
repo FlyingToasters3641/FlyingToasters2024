@@ -34,11 +34,16 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     @Override
     public void stopFront(){
-        frontTalonFX.set(0.0);;
+        frontTalonFX.set(0.0);
     }
 
     @Override
     public void stopRear(){
         rearTalonFX.set(0.0);
+    }
+
+    @Override
+    public void startFront() {
+        frontTalonFX.set(0.5);
     }
 }

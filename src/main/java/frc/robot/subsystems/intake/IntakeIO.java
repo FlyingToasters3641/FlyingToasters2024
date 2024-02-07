@@ -22,6 +22,8 @@ public interface IntakeIO {
     
     public default void setRearSpeed(double speed){}
 
+    public default void startFront() {}
+
     public default void stopFront(){}
 
     public default void stopRear(){}

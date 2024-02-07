@@ -23,6 +23,10 @@ public class IntakeCommands {
         return Commands.run(() -> {m_intake.reverseRearRollers(axis);});
     }
 
+    public static Command startFront(Intake m_intake) {
+      return Commands.runOnce(() -> {m_intake.startFront();});
+    }
+
     public static Command stopFront(Intake m_intake){
       return Commands.run(() -> {m_intake.stopFront();});
     }

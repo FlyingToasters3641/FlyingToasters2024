@@ -18,9 +18,13 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 
@@ -32,6 +36,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -56,9 +61,19 @@ public class RobotContainer {
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
+
+    
   
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
+
+        //NamedCommands.registerCommand("StartIntake", IntakeCommands.startFront(m_intake).andThen(new WaitCommand(.5)));
+        NamedCommands.registerCommand("StopIntake", IntakeCommands.stopFront(m_intake));
+
+        NamedCommands.registerCommand("StartIntake",IntakeCommands.startFront(m_intake).andThen(new WaitCommand(.5)));
+
+        
+
         //Hardware or SIM?
         switch (Constants.currentMode) {
         case REAL:
@@ -93,6 +108,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         break;
+
     }
 
 

@@ -56,6 +56,10 @@ public class Intake extends SubsystemBase{
         io.stopFront();
     }
 
+    public void startFront() {
+        io.startFront();
+    }
+
 
 
     public void stopRear() {

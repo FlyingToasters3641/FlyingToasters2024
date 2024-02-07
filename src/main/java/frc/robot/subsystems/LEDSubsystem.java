@@ -69,7 +69,7 @@ public class LEDSubsystem extends SubsystemBase {
             }
         }
         if (startLed == false) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < ledIndex.length; i++) {
                 if (ledIndex[i] >= 116) {
                     if (i % 3 == 0) {
                         startLedColor = "Pink";
@@ -86,7 +86,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
 
         // Sets the position back to the LED start
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < ledIndex.length; i++) {
             if (ledIndex[i] > 180) {
                 ledIndex[i] = 8;
             }
