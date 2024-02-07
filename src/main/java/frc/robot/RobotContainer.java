@@ -22,8 +22,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.RotationTarget;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -33,7 +31,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
@@ -123,55 +120,55 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_robotDrive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            m_robotDrive,
-            () -> m_driverController.getLeftY(),
-            () -> m_driverController.getLeftX(),
-            () -> -m_driverController.getRightX()));
-    m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
-    m_driverController
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        m_robotDrive.setPose(
-                            new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
-                    m_robotDrive)
-                .ignoringDisable(true));
-    m_driverController.rightTrigger().whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis())).onFalse(IntakeCommands.stopFront(m_intake));
-    m_driverController.leftTrigger().whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis())).onFalse(IntakeCommands.stopRear(m_intake));        
-   m_operatorController
-                .rightBumper()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            m_LEDSubsystem.ledSwitch(2);
-                        })
-                )
-                .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
-        
-        m_operatorController
-                .leftBumper()
-                .onTrue(
-                        new InstantCommand(() -> {
-                            m_LEDSubsystem.ledSwitch(0);
-                        })
-                )
-                .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
+      m_robotDrive.setDefaultCommand(
+              DriveCommands.joystickDrive(
+                      m_robotDrive,
+                      () -> m_driverController.getLeftY(),
+                      () -> m_driverController.getLeftX(),
+                      () -> -m_driverController.getRightX()));
+      m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
+      m_driverController
+              .b()
+              .onTrue(
+                      Commands.runOnce(
+                              () -> m_robotDrive.setPose(
+                                      new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
+                              m_robotDrive)
+                              .ignoringDisable(true));
+      m_driverController.rightTrigger()
+              .whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis()))
+              .onFalse(IntakeCommands.stopFront(m_intake));
+      m_driverController.leftTrigger()
+              .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
+              .onFalse(IntakeCommands.stopRear(m_intake));
+      m_operatorController
+              .rightBumper()
+              .onTrue(
+                      new InstantCommand(() -> {
+                          m_LEDSubsystem.ledSwitch(2);
+                      }))
+              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
+
+      m_operatorController
+              .leftBumper()
+              .onTrue(
+                      new InstantCommand(() -> {
+                          m_LEDSubsystem.ledSwitch(0);
+                      }))
+              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
 
   }
      
   public Command getAutonomousCommand() {
-        
-     PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
-     Translation2d startPoint = path.getPoint(0).position;
-    //  RotationTarget startRotStart = path.getPoint(0).rotationTarget;
-    //  Rotation2d startRot = startRotStart.getTarget();
-    //  if (startRot == null){
-    //   startRot = new Rotation2d(0.0);
-    //  }
-     Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
-     m_robotDrive.setPose(start);  
-   return AutoBuilder.followPath(path);
+      PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+      Translation2d startPoint = path.getPoint(0).position;
+      // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
+      // Rotation2d startRot = startRotStart.getTarget();
+      // if (startRot == null){
+      // startRot = new Rotation2d(0.0);
+      // }
+      Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
+      m_robotDrive.setPose(start);
+      return AutoBuilder.followPath(path);
   }
 }
