@@ -148,26 +148,11 @@ public class RobotContainer {
                               m_robotDrive)
                               .ignoringDisable(true));
       m_driverController.rightTrigger()
-              .whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis()))
-              .onFalse(IntakeCommands.stopFront(m_intake));
+              .onTrue(LauncherCommands.runFlywheelSpeed(m_launcher))
+              .onFalse(LauncherCommands.stopFlywheel(m_launcher));
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
               .onFalse(IntakeCommands.stopRear(m_intake));
-      m_operatorController
-              .rightBumper()
-              .onTrue(
-                      new InstantCommand(() -> {
-                          m_LEDSubsystem.ledSwitch(2);
-                      }))
-              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
-
-      m_operatorController
-              .leftBumper()
-              .onTrue(
-                      new InstantCommand(() -> {
-                          m_LEDSubsystem.ledSwitch(0);
-                      }))
-              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
 
   }
      

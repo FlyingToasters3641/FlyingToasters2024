@@ -34,5 +34,7 @@ public interface LauncherIO {
 
     public default void stopBottomFlywheel() {}
 
+    public default void setFlywheelVelocity(double rpm) {}
+
 }
 

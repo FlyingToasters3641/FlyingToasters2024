@@ -19,8 +19,6 @@ public class Launcher extends SubsystemBase {
 
   LauncherIOTalonFX LauncherTalonFX = new LauncherIOTalonFX();
 
-  private Follower followerControl;
-
   public Launcher(LauncherIO io) {
     this.io = io;
     io.setBrakeMode(false, false, false, false);
@@ -56,5 +54,9 @@ public class Launcher extends SubsystemBase {
 
   public void setFeederVoltage(double speed) {
     io.setFeederVoltage(speed);
+  }
+
+  public void setFlywheelVelocity(double rpm) {
+    io.setFlywheelVelocity(rpm);
   }
 }

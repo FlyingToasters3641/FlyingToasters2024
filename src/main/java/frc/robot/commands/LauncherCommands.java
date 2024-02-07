@@ -11,10 +11,9 @@ public class LauncherCommands {
     private LauncherCommands() {}
     
     
-    public static Command runFlywheelSpeed(Launcher m_launcher, DoubleSupplier axis){
-        return Commands.run(() -> {
-            m_launcher.topFlywheelspeed(axis); 
-            m_launcher.bottomFlywheelspeed(axis);
+    public static Command runFlywheelSpeed(Launcher m_launcher){
+        return Commands.runOnce(() -> {
+            m_launcher.setFlywheelVelocity(10000);
         });
     }
 
@@ -35,7 +34,8 @@ public class LauncherCommands {
     }
 
     public static Command stopFlywheel(Launcher m_Launcher){
-        return Commands.run(() -> {m_Launcher.stopTopFlywheel();
-                                   m_Launcher.stopBottomFlywheel();});
+        return Commands.runOnce(() -> {
+            m_Launcher.setFlywheelVelocity(0);
+        });
     }
 }
