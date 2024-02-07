@@ -13,12 +13,14 @@ public class LauncherIOTalonFX implements LauncherIO {
     private static final String CANbusName = "Lucas";
     public static final TalonFX topFlywheelTalonFX = new TalonFX(31, CANbusName);
     public static final TalonFX bottomFlywheelTalonFX = new TalonFX(32, CANbusName);
+    public static final TalonFX launcherRoller = new TalonFX(33, CANbusName);
 
 
 
     public LauncherIOTalonFX() {
         bottomFlywheelTalonFX.setInverted(true);
         topFlywheelTalonFX.setInverted(true);
+        launcherRoller.setInverted(true);
     }
 
     @Override
@@ -54,8 +56,8 @@ public class LauncherIOTalonFX implements LauncherIO {
 
 
     @Override
-    public void setFeederVoltage(double volts) {
-        bottomFlywheelTalonFX.setControl(new VelocityVoltage(volts));
+    public void setFeederVoltage(double speed) {
+        launcherRoller.set(speed);
     }
 
     @Override

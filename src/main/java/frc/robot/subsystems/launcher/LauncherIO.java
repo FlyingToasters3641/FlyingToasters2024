@@ -24,7 +24,7 @@ public interface LauncherIO {
 
     public default void setBottomFlywheelRollers(double speeds) {}
     
-    public default void setFeederVoltage(double volts) {}
+    public default void setFeederVoltage(double speed) {}
 
     public default void setBrakeMode(boolean topFlywheelBrake, boolean bottomFlywheelBrake, boolean feederBrake, boolean wristBrake) {}
 

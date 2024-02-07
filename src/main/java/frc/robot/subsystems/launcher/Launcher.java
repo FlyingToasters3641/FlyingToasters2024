@@ -53,4 +53,8 @@ public class Launcher extends SubsystemBase {
 
   public void stopTopFlywheel() {
   }
+
+  public void setFeederVoltage(double speed) {
+    io.setFeederVoltage(speed);
+  }
 }

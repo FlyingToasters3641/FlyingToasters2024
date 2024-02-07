@@ -20,6 +20,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.RotationTarget;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -138,8 +139,8 @@ public class RobotContainer {
                             new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                     m_robotDrive)
                 .ignoringDisable(true));
-                m_driverController.rightTrigger().whileTrue(LauncherCommands.runTopFlywheelSpeed(m_launcher, () -> m_driverController.getRightTriggerAxis())).onFalse(LauncherCommands.stopFlywheelTop(m_launcher));
-                m_driverController.leftTrigger().whileTrue(LauncherCommands.runBottomFlywheelSpeed(m_launcher, () -> m_driverController.getLeftTriggerAxis())).onFalse(LauncherCommands.stopFlywheelBottom(m_launcher));               
+                m_driverController.rightTrigger().whileTrue(LauncherCommands.runFlywheelSpeed(m_launcher, () -> m_driverController.getRightTriggerAxis())).whileFalse(LauncherCommands.stopFlywheel(m_launcher));
+                m_driverController.leftTrigger().whileTrue(LauncherCommands.runRoller(m_launcher)).whileFalse(LauncherCommands.stopRoller(m_launcher));         
   }
   
 
