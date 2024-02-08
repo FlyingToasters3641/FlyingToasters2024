@@ -179,7 +179,8 @@ public class RobotContainer {
      
   public Command getAutonomousCommand() {
         
-     PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+     //PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+     PathPlannerPath path = PathPlannerPath.fromPathFile("MeasurePath");
      Translation2d startPoint = path.getPoint(0).position;
     //  RotationTarget startRotStart = path.getPoint(0).rotationTarget;
     //  Rotation2d startRot = startRotStart.getTarget();
