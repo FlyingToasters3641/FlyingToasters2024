@@ -2,6 +2,9 @@ package frc.robot.subsystems.launcher;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+
 public interface LauncherIO {
     @AutoLog
     public static class LauncherIOInputs {
@@ -33,6 +36,10 @@ public interface LauncherIO {
     public default void stopFlywheelTop() {}
 
     public default void stopBottomFlywheel() {}
+
+    public default Translation2d calcTrajectory(Translation2d robotTrajectory, Translation2d shooterTrajectory){
+        return null;
+    }
 
 }
 
