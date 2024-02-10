@@ -3,7 +3,8 @@ package frc.robot.subsystems.launcher;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
+
+import edu.wpi.first.math.geometry.Translation3d;
 
 public interface LauncherIO {
     @AutoLog
@@ -37,7 +38,7 @@ public interface LauncherIO {
 
     public default void stopBottomFlywheel() {}
 
-    public default Translation2d calcTrajectory(Translation2d robotTrajectory, Translation2d shooterTrajectory){
+    public default Translation3d calcTrajectory(Translation3d robotTrajectory, Translation3d shooterTrajectory){
         return null;
     }
 

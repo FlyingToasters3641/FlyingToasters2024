@@ -11,7 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 
 public class LauncherIOTalonFX implements LauncherIO {
@@ -75,16 +75,9 @@ public class LauncherIOTalonFX implements LauncherIO {
         bottomFlywheelTalonFX.set(0.0);
     }
    @Override
-    public Translation2d calcTrajectory(Translation2d robotTrajectory, Translation2d shooterTrajectory){
-       Translation2d calcTraj = new Translation2d(robotTrajectory.getX()-shooterTrajectory.getX(), robotTrajectory.getY()-shooterTrajectory.getY());
-       double magnitude = Math.sqrt(Math.pow(calcTraj.getX(), 2)+Math.pow(calcTraj.getY(), 2));
-       double angle = Math.atan(magnitude)*Math.PI/180;
-       if (calcTraj.getX() < 0 ) {
-            angle+=180;
-       }
-        Rotation2d direction = new Rotation2d(angle);  
-        Translation2d bob = new Translation2d(angle, direction);
-        return bob;
+    public Translation3d calcTrajectory(Translation3d robotTrajectory, Translation3d shooterTrajectory){
+       Translation3d calcTraj = new Translation3d(robotTrajectory.getX()-shooterTrajectory.getX(), robotTrajectory.getY()-shooterTrajectory.getY(), robotTrajectory.getZ() -shooterTrajectory.getZ() );
+        return calcTraj;
     }
 
 }

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -58,7 +59,7 @@ public class Launcher extends SubsystemBase {
   public void setFeederVoltage(double speed) {
     io.setFeederVoltage(speed);
   }
- public Translation2d calcTrajectory(Translation2d robotTrajectory, Translation2d shooterTrajectory) {
+ public Translation3d calcTrajectory(Translation3d robotTrajectory, Translation3d shooterTrajectory) {
     return io.calcTrajectory(robotTrajectory, shooterTrajectory);
   }
   
