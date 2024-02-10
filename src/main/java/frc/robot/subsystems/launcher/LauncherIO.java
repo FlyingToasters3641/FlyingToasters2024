@@ -12,27 +12,21 @@ public interface LauncherIO {
         public double feederAppliedVolts = 0.0;
 
         public double wristAppliedVolts = 0.0;
+                
+        public double launcherAngleRads = 0.0;
     }
 
     public default void updateInputs(LauncherIOInputs inputs) {}
-
-    public default void setTopFlywheelVoltage(double volts, double acceleration, double feedforward) {}
-
-    public default void setTopFlywheelRollers(double speed) {}
-
-    public default void setBottomFlywheelVoltage(double volts, double acceleration, double feedforward) {}
-
-    public default void setBottomFlywheelRollers(double speeds) {}
     
     public default void setFeederVoltage(double speed) {}
 
     public default void setBrakeMode(boolean topFlywheelBrake, boolean bottomFlywheelBrake, boolean feederBrake, boolean wristBrake) {}
 
-    public default void setPosition(double position) {}
+    public default void setAngleSetpoint(double angle) {}
 
-    public default void stopFlywheelTop() {}
+    public default void setAngle(double angle) {}
 
-    public default void stopBottomFlywheel() {}
+    public default void stop() {}
 
     public default void setFlywheelVelocity(double rpm) {}
 

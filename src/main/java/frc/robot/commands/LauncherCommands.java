@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.launcher.Launcher;
@@ -25,17 +23,10 @@ public class LauncherCommands {
         return Commands.run(() -> {m_launcher.setFeederVoltage(0.0);});
     }
 
-    public static Command runBottomFlywheelSpeed(Launcher m_launcher, DoubleSupplier axis){
-        return Commands.run(() -> {m_launcher.bottomFlywheelspeed(axis);});
-    }
 
-    public static Command stopFlywheelBottom(Launcher m_Launcher){
-        return Commands.run(() -> {m_Launcher.stopBottomFlywheel();});
-    }
-
-    public static Command stopFlywheel(Launcher m_Launcher){
+    public static Command stopLauncher(Launcher m_Launcher){
         return Commands.runOnce(() -> {
-            m_Launcher.setFlywheelVelocity(0);
+            m_Launcher.stop();
         });
     }
 }

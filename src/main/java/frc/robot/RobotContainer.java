@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.LauncherCommands;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
@@ -23,9 +22,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.RotationTarget;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -33,7 +30,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -53,14 +49,13 @@ import frc.robot.subsystems.launcher.LauncherIOTalonFX;
 public class RobotContainer {
     // Subsystems
     private final DriveSubsystem m_robotDrive;
-    private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
-    private final Intake m_intake = new Intake(m_IntakeIO);
-     private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
+    private final Intake m_intake;
+    private final Launcher m_launcher;
+    //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    private final LauncherIO m_LauncherIO = new LauncherIOTalonFX();
-    private final Launcher m_launcher = new Launcher(m_LauncherIO);
+
+
     
     
     // Dashboard inputs
@@ -79,6 +74,8 @@ public class RobotContainer {
                 new SwerveModule(1),
                 new SwerveModule(2),
                 new SwerveModule(3));
+        m_intake = new Intake(new IntakeIOTalonFX());   
+        m_launcher = new Launcher(new LauncherIOTalonFX());     
         break;
 
       case SIM:
@@ -90,6 +87,8 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        m_intake = new Intake(new IntakeIO() {});
+        m_launcher = new Launcher(new LauncherIO() {});
         break;
 
       default:
@@ -101,6 +100,8 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(new IntakeIO() {});
+        m_launcher = new Launcher(new LauncherIO() {});
         break;
     }
 
@@ -149,7 +150,7 @@ public class RobotContainer {
                               .ignoringDisable(true));
       m_driverController.rightTrigger()
               .onTrue(LauncherCommands.runFlywheelSpeed(m_launcher))
-              .onFalse(LauncherCommands.stopFlywheel(m_launcher));
+              .onFalse(LauncherCommands.stopLauncher(m_launcher));
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
               .onFalse(IntakeCommands.stopRear(m_intake));

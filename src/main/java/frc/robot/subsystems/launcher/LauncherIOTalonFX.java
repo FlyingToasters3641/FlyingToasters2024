@@ -1,14 +1,17 @@
 package frc.robot.subsystems.launcher;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
 
 public class LauncherIOTalonFX implements LauncherIO {
     private static final String CANbusName = "Lucas";
@@ -19,11 +22,11 @@ public class LauncherIOTalonFX implements LauncherIO {
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
 
     /* Start at velocity 0, no feed forward, use slot 0 */
-    private final VelocityTorqueCurrentFOC m_torqueVelocity = new VelocityTorqueCurrentFOC(0, 0, 0, 0, false, false, false);
+    private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
 
-    public static final double PIVOT_RATIO = 22.5;//12/48 -> 16/24 -> 12/45
-    public static final double SENSOR_RATIO = 6.0;//12/48 -> 16/24
-    private final double absoluteEncoderOffset = 0.0;//need to calibrate!
+    public static final double PIVOT_RATIO = 22.5;// 12/48 -> 16/24 -> 12/45
+    public static final double SENSOR_RATIO = 6.0;// 12/48 -> 16/24
+    private final double absoluteEncoderOffset = 0.0;// need to calibrate!
 
     public LauncherIOTalonFX() {
         bottomFlywheelTalonFX.setInverted(true);
@@ -54,6 +57,11 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Slot0.kP = 0.10;
         pitchConfig.Slot0.kD = 0.0;
 
+        pitchConfig.MotionMagic = new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(
+                        Units.radiansToRotations(LauncherConstants.profileConstraints.crusieVelocityRadPerSec()))
+                .withMotionMagicAcceleration(LauncherConstants.profileConstraints.accelerationRadPerSec2());
+
         launcherPitchTalonFX.getConfigurator().apply(pitchConfig);
 
         CANcoderConfiguration magConfig = new CANcoderConfiguration();
@@ -65,35 +73,23 @@ public class LauncherIOTalonFX implements LauncherIO {
     }
 
     @Override
-    public void updateInputs(LauncherIOInputs inputs) {
-
+    public void setBrakeMode(boolean topFlywheelBrake, boolean bottomFlywheelBrake, boolean feederBrake,
+            boolean wristBrake) {
+        topFlywheelTalonFX.setNeutralMode(topFlywheelBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        bottomFlywheelTalonFX.setNeutralMode(bottomFlywheelBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        launcherRollerTalonFX.setNeutralMode(feederBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        launcherPitchTalonFX.setNeutralMode(wristBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
     @Override
-    public void setPosition(double position) {
-        
+    public void setAngleSetpoint(double setpointRads) {
+        launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.radiansToRotations(setpointRads)));
     }
 
     @Override
-    public void setTopFlywheelVoltage(double volts, double acceleration, double feedforward) {
-        topFlywheelTalonFX.setControl(new VelocityVoltage(volts, acceleration, true, feedforward, 0, false, false, false));
+    public void setAngle(double angleRads) {
+        launcherPitchTalonFX.setPosition(Units.radiansToRotations(angleRads));
     }
-
-    @Override 
-    public void setTopFlywheelRollers(double volts) {
-        topFlywheelTalonFX.set(volts);
-    }
-
-    @Override
-    public void setBottomFlywheelVoltage(double volts, double acceleration, double feedforward) {
-        bottomFlywheelTalonFX.setControl(new VelocityVoltage(volts, acceleration, true, feedforward, 0, false, false, false));
-    }
-    
-    @Override 
-    public void setBottomFlywheelRollers(double volts) {
-        bottomFlywheelTalonFX.set(volts);
-    }
-
 
     @Override
     public void setFeederVoltage(double speed) {
@@ -102,6 +98,13 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public void setFlywheelVelocity(double rpm) {
-        topFlywheelTalonFX.setControl(m_torqueVelocity.withVelocity(rpm));
+        topFlywheelTalonFX.setControl(m_Velocity.withVelocity(rpm));
     }
+
+    @Override
+    public void stop() {
+        setFlywheelVelocity(0.0);
+        setFeederVoltage(0.0);
+    }
+
 }
