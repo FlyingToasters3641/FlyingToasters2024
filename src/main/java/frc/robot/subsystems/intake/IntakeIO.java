@@ -5,7 +5,11 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IntakeIO {
     @AutoLog
     public static class IntakeIOInputs {
-        
+
+        public double frontIntakeVolts;
+
+        public double rearIntakeVolts;
+
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}

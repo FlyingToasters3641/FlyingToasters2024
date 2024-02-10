@@ -14,9 +14,13 @@ public interface LauncherIO {
         public double wristAppliedVolts = 0.0;
                 
         public double launcherAngleRads = 0.0;
+
+        public double velocityRadPerSec = 0.0;
     }
 
     public default void updateInputs(LauncherIOInputs inputs) {}
+
+    public default void runVolts(double volts) {}
     
     public default void setFeederVoltage(double speed) {}
 
@@ -29,6 +33,10 @@ public interface LauncherIO {
     public default void stop() {}
 
     public default void setFlywheelVelocity(double rpm) {}
+
+    public default void setPID(double kP,double kI, double kD) {}
+
+    public default void setFF(double kS,double kV, double kA) {}
 
 }
 
