@@ -1,6 +1,12 @@
 package frc.robot.subsystems.elevator;
 
-public class ElevatorPositions {
+public class ElevatorConstants {
+
+  public static double minPos = 0;
+  public static double maxPos = 100;
+  
+
+
     public enum ElevatorPos {
 
         STORED_POSITION(0, false),
