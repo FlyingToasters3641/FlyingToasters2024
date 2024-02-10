@@ -2,8 +2,8 @@ package frc.robot.subsystems.elevator;
 
 public class ElevatorConstants {
 
-  public static double minPos = 0;
-  public static double maxPos = 100;
+  public static double minPos = 21.875;
+  public static double maxPos = 41.75;
   
 
 
