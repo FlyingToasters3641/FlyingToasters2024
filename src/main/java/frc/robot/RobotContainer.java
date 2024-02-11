@@ -154,6 +154,7 @@ public class RobotContainer {
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
               .onFalse(IntakeCommands.stopRear(m_intake));
+      m_driverController.a().onTrue(LauncherCommands.goToAngle(m_launcher, -60.0));
 
   }
      

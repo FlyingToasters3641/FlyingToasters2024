@@ -24,9 +24,15 @@ public class LauncherCommands {
     }
 
 
-    public static Command stopLauncher(Launcher m_Launcher){
+    public static Command stopLauncher(Launcher m_launcher){
         return Commands.runOnce(() -> {
-            m_Launcher.stop();
+            m_launcher.stop();
+        });
+    }
+
+    public static Command goToAngle(Launcher m_launcher, double angleDegrees){
+        return Commands.run(() -> {
+            m_launcher.setAngleSetpoint(angleDegrees);
         });
     }
 }

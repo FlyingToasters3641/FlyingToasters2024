@@ -14,6 +14,15 @@ public interface LauncherIO {
         public double wristAppliedVolts = 0.0;
                 
         public double launcherAngleRads = 0.0;
+
+        public double launcherPositionDegrees = 0.0;
+
+        public double launcherPosition = 0.0;
+
+        public double pitchMotorSensorDegrees = 0.0;
+
+        public double angleSetpointDegrees = 0.0;
+
     }
 
     public default void updateInputs(LauncherIOInputs inputs) {}
