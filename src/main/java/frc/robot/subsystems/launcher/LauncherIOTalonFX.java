@@ -14,12 +14,15 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 
 public class LauncherIOTalonFX implements LauncherIO {
+    
     private static final String CANbusName = "Lucas";
     public static final TalonFX topFlywheelTalonFX = new TalonFX(31, CANbusName);
     public static final TalonFX bottomFlywheelTalonFX = new TalonFX(32, CANbusName);
     public static final TalonFX launcherRollerTalonFX = new TalonFX(33, CANbusName);
     public static final TalonFX launcherPitchTalonFX = new TalonFX(34, CANbusName);
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
+
+    
 
     /* Start at velocity 0, no feed forward, use slot 0 */
     private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
@@ -28,7 +31,10 @@ public class LauncherIOTalonFX implements LauncherIO {
     public static final double SENSOR_RATIO = 6.0;// 12/48 -> 16/24
     private final double absoluteEncoderOffset = 0.0;// need to calibrate!
 
+
+    
     public LauncherIOTalonFX() {
+
         bottomFlywheelTalonFX.setInverted(true);
         topFlywheelTalonFX.setInverted(true);
         launcherRollerTalonFX.setInverted(true);
@@ -70,6 +76,12 @@ public class LauncherIOTalonFX implements LauncherIO {
 
         launcherPitchCANCoder.getConfigurator().apply(magConfig);
 
+    }
+
+    @Override
+    public void updateInputs(LauncherIOInputs inputs) {
+
+        inputs.launcherAngleRads = launcherPitchCANCoder.getPosition().getValueAsDouble();
     }
 
     @Override

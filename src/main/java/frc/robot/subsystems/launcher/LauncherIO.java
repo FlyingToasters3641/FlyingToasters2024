@@ -14,6 +14,8 @@ public interface LauncherIO {
         public double wristAppliedVolts = 0.0;
                 
         public double launcherAngleRads = 0.0;
+
+        public double CANCoderPosition = 0.0;
     }
 
     public default void updateInputs(LauncherIOInputs inputs) {}
@@ -30,5 +32,7 @@ public interface LauncherIO {
 
     public default void setFlywheelVelocity(double rpm) {}
 
+    public default void getAngle() {}
+ 
 }
 

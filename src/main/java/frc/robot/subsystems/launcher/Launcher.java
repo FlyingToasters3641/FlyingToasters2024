@@ -1,5 +1,7 @@
 package frc.robot.subsystems.launcher;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,6 +21,8 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+
+    Logger.recordOutput("Launcher/PitchEncoder", inputs.launcherAngleRads);
   }
 
   @Override
