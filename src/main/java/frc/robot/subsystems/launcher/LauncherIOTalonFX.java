@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -58,11 +59,13 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Feedback.SensorToMechanismRatio = 1;
         pitchConfig.Feedback.RotorToSensorRatio = PIVOT_RATIO;
 
-        //Needs Calibration
-        pitchConfig.Slot0.kG = 0.28;
-        pitchConfig.Slot0.kV = 0.44;
-        pitchConfig.Slot0.kP = 800;
-        pitchConfig.Slot0.kD = 20.0;
+        //Esitmated Values from Recalc
+        pitchConfig.Slot0.kG = 0.38;
+        pitchConfig.Slot0.kV = 2.79;
+        pitchConfig.Slot0.kA = 0.04;
+
+        pitchConfig.Slot0.kP = 1000;
+        pitchConfig.Slot0.kD = 10;
 
         pitchConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(
@@ -99,7 +102,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     @Override
     public void setAngleSetpoint(double setpointDegrees) {
         launcherSetpointDegrees = setpointDegrees;
-        launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(setpointDegrees)));
+        launcherPitchTalonFX.setControl(new MotionMagicExpoTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)));
     }
 
     @Override

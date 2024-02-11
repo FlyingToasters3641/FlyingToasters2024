@@ -11,7 +11,7 @@ public class LauncherCommands {
     
     public static Command runFlywheelSpeed(Launcher m_launcher){
         return Commands.runOnce(() -> {
-            m_launcher.setFlywheelVelocity(10000);
+            m_launcher.setFlywheelVelocity(1000);
         });
     }
 

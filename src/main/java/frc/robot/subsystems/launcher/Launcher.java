@@ -2,8 +2,6 @@ package frc.robot.subsystems.launcher;
 
 import org.littletonrobotics.junction.Logger;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
