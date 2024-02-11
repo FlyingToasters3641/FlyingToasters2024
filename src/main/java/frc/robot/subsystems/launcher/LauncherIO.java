@@ -39,5 +39,7 @@ public interface LauncherIO {
 
     public default void setFlywheelVelocity(double rpm) {}
 
+    public default void getAngle() {}
+ 
 }
 
