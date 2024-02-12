@@ -318,4 +318,8 @@ public class DriveSubsystem extends SubsystemBase {
   public double updateAimController() {
     return aimController.update();
   }
+
+  public SwerveDrivePoseEstimator getPoseEstimator () {
+    return poseEstimator;
+  }
 }
