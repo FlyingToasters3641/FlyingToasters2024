@@ -148,13 +148,14 @@ public class RobotContainer {
                                       new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                               m_robotDrive)
                               .ignoringDisable(true));
+      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger()
               .onTrue(LauncherCommands.runFlywheelSpeed(m_launcher))
               .onFalse(LauncherCommands.stopLauncher(m_launcher));
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
               .onFalse(IntakeCommands.stopRear(m_intake));
-      m_driverController.a().onTrue(LauncherCommands.goToAngle(m_launcher, 60.0));
+      
 
   }
      

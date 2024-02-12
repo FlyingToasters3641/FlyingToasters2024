@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.controllers.AimController;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -67,6 +68,8 @@ public class DriveSubsystem extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private AimController aimController = null;
 
   public DriveSubsystem(
       GyroIO gyroIO,
@@ -296,5 +299,23 @@ public class DriveSubsystem extends SubsystemBase {
       new Translation2d(-TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
       new Translation2d(-TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0)
     };
+  }
+
+  /** Enable auto aiming on drive */
+  public void setAimGoal() {
+    aimController = new AimController(poseEstimator);
+  }
+
+  /** Disable auto aiming on drive */
+  public void clearAimGoal() {
+    aimController = null;
+  }
+
+  public boolean getAimController() {
+    return aimController != null;
+  }
+
+  public double updateAimController() {
+    return aimController.update();
   }
 }
