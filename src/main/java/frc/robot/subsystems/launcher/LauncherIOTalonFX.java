@@ -33,9 +33,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     private double launcherSetpointDegrees = 0.0;
 
     public LauncherIOTalonFX() {
-
         bottomFlywheelTalonFX.setInverted(true);
-        topFlywheelTalonFX.setInverted(true);
+        bottomFlywheelTalonFX.setInverted(true);
         launcherRollerTalonFX.setInverted(true);
         launcherPitchTalonFX.setInverted(false);
 
@@ -50,6 +49,7 @@ public class LauncherIOTalonFX implements LauncherIO {
         flywheelConfig.TorqueCurrent.PeakReverseTorqueCurrent = 80;
 
         topFlywheelTalonFX.getConfigurator().apply(flywheelConfig);
+        bottomFlywheelTalonFX.getConfigurator().apply(flywheelConfig);
 
         TalonFXConfiguration pitchConfig = new TalonFXConfiguration();
 
@@ -116,7 +116,8 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public void setFlywheelVelocity(double rpm) {
-        topFlywheelTalonFX.setControl(m_Velocity.withVelocity(rpm));
+        topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+        bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
     }
 
     @Override
