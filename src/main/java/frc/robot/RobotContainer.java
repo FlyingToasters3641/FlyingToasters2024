@@ -9,7 +9,6 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
 import frc.robot.subsystems.RobotSystem;
-import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -50,6 +49,7 @@ import frc.robot.subsystems.launcher.LauncherIOTalonFX;
  */
 public class RobotContainer {
     // Subsystems
+    
     private final RobotSystem m_robotSystem;
     private final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
@@ -154,7 +154,7 @@ public class RobotContainer {
                                       new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                               m_robotDrive)
                               .ignoringDisable(true));
-      m_driverController.a().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger()
               .onTrue(LauncherCommands.runFlywheelSpeed(m_launcher))
               .onFalse(LauncherCommands.stopLauncher(m_launcher));
