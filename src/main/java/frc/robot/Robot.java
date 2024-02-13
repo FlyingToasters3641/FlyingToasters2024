@@ -105,7 +105,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     // checkDriverStationUpdate();
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand("TestPath");
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

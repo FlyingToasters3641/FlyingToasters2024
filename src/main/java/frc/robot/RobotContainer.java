@@ -23,6 +23,7 @@ import frc.robot.subsystems.intake.IntakeIOTalonFX;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,6 +31,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -58,11 +60,13 @@ public class RobotContainer {
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-
+    
     
     
     // Dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
+
+
   
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
@@ -113,7 +117,7 @@ public class RobotContainer {
 
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+  var autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -126,6 +130,8 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption("Auto", new PathPlannerAuto("TestPath"));
+    
 
     // Configure the button bindings
     configureButtonBindings();
@@ -161,12 +167,13 @@ public class RobotContainer {
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
               .onFalse(IntakeCommands.stopRear(m_intake));
-      
+    
+      LoggedDashboardChooser.fromLog();
 
   }
      
-  public Command getAutonomousCommand() {
-      PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+  public Command getAutonomousCommand(String pathName) {
+      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
       Translation2d startPoint = path.getPoint(0).position;
       // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
       // Rotation2d startRot = startRotStart.getTarget();
