@@ -172,6 +172,11 @@ public class SwerveModule implements ModuleIO {
         drivePositionQueue.stream()
             .mapToDouble((Double value) -> Units.rotationsToRadians(value) / DRIVE_GEAR_RATIO)
             .toArray();
+    inputs.odometryDrivePositionsMeters =
+    drivePositionQueue.stream()
+        .mapToDouble(
+            signalValue -> Units.rotationsToRadians(signalValue) * DriveConstants.driveConfig.wheelRadius())
+        .toArray();
     inputs.odometryTurnPositions =
       turnPositionQueue.stream()
           .map((Double value) -> Rotation2d.fromRotations(value / TURN_GEAR_RATIO))

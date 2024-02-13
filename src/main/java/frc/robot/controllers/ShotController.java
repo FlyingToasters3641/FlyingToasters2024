@@ -6,20 +6,17 @@ import java.util.TreeMap;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotState;
 
 public class ShotController {
     private PIDController headingController;
-    SwerveDrivePoseEstimator drivePoseEstimator;
 
     NavigableMap<Double, Double> distanceAngles;
 
-    public ShotController(SwerveDrivePoseEstimator mPoseEstimator) {
+    public ShotController() {
         headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        drivePoseEstimator = mPoseEstimator;
 
         distanceAngles = new TreeMap<Double, Double>();
         
@@ -34,9 +31,9 @@ public class ShotController {
     }
 
     public double updateDrive() {
-        var aimingParameters = new RobotState().getAimingParameters(drivePoseEstimator);
+        var aimingParameters = RobotState.getInstance().getAimingParameters();
         double output = headingController.calculate(
-                drivePoseEstimator.getEstimatedPosition().getRotation().getRadians(),
+                RobotState.getInstance().getEstimatedPose().getRotation().getRadians(),
                 aimingParameters.driveHeading().getRadians());
 
         Logger.recordOutput("AutoAim/HeadingError", headingController.getPositionError());
@@ -44,7 +41,7 @@ public class ShotController {
     }
 
     public double updateAngle() {
-        double output = nearestSetpoint(distanceAngles, new RobotState().distanceToTarget(drivePoseEstimator));
+        double output = nearestSetpoint(distanceAngles, RobotState.getInstance().getAimingParameters().distanceToTarget());
 
         Logger.recordOutput("AutoAim/LauncherAngle", output);
         return output;

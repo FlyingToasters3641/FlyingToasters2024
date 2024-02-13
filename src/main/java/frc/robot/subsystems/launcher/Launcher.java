@@ -2,7 +2,6 @@ package frc.robot.subsystems.launcher;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.controllers.ShotController;
@@ -59,8 +58,8 @@ public class Launcher extends SubsystemBase {
     io.setAngleSetpoint(angleDegrees);
   }
 
-  public double updateShot(SwerveDrivePoseEstimator poseEstimator) {
-    shotController = new ShotController(poseEstimator);
+  public double updateShot() {
+    shotController = new ShotController();
     return shotController.updateAngle();
   }
 

@@ -32,4 +32,7 @@ public final class Constants {
     REPLAY
   }
 
+  public static Mode getRobot() {
+    return currentMode;
+  }
 }

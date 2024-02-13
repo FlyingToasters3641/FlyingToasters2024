@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,14 +31,17 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotState;
 import frc.robot.controllers.AimController;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -58,6 +62,10 @@ public class DriveSubsystem extends SubsystemBase {
   private final SysIdRoutine sysId;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private SwerveDriveWheelPositions lastPositions = null;
+
+  private double lastTime = 0.0;
+
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
@@ -156,6 +164,8 @@ public class DriveSubsystem extends SubsystemBase {
         modules[0].getOdometryTimestamps(); // All signals are sampled together
     int sampleCount = sampleTimestamps.length;
     for (int i = 0; i < sampleCount; i++) {
+      int odometryIndex = i;
+      boolean includeMeasurement = true;
       // Read wheel positions and deltas from each module
       SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
       SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
@@ -181,7 +191,39 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      SwerveDriveWheelPositions wheelPositions =
+          new SwerveDriveWheelPositions(
+              Arrays.stream(modules)
+                  .map(module -> module.getModulePositions()[odometryIndex])
+                  .toArray(SwerveModulePosition[]::new));
+      // Filtering
+      if (lastPositions != null) {
+        double dt = Timer.getFPGATimestamp() - lastTime;
+        for (int j = 0; j < 4; j++) {
+          double velocity =
+              (wheelPositions.positions[j].distanceMeters
+                      - lastPositions.positions[j].distanceMeters)
+                  / dt;
+          double omega =
+              wheelPositions.positions[j].angle.minus(lastPositions.positions[j].angle).getRadians()
+                  / dt;
+
+          if (Math.abs(omega) > DriveConstants.moduleLimits.maxSteeringVelocity() * 100.0
+              || Math.abs(velocity) > DriveConstants.moduleLimits.maxDriveVelocity() * 100.0) {
+            includeMeasurement = false;
+            break;
+          }
+        }
+      }
+      if (includeMeasurement) {
+        lastPositions = wheelPositions;
+        RobotState.getInstance()
+            .addOdometryObservation(
+                new RobotState.OdometryObservation(
+                    wheelPositions, rawGyroRotation, sampleTimestamps[i]));
+      }
     }
+    lastTime = Timer.getFPGATimestamp();
   }
 
   /**
@@ -317,9 +359,5 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double updateAimController() {
     return aimController.update();
-  }
-
-  public SwerveDrivePoseEstimator getPoseEstimator () {
-    return poseEstimator;
   }
 }
