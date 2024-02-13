@@ -110,7 +110,7 @@ public class RobotContainer {
         m_robotSystem = new RobotSystem(m_launcher, m_intake); 
         break;
     }
-
+    
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -126,6 +126,8 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    autoChooser.addOption(
+        "TestPath", AutoBuilder.followPath(PathPlannerPath.fromPathFile("TestPath")));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -166,6 +168,7 @@ public class RobotContainer {
   }
      
   public Command getAutonomousCommand() {
+    /* 
       PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
       Translation2d startPoint = path.getPoint(0).position;
       // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
@@ -175,6 +178,9 @@ public class RobotContainer {
       // }
       Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
       m_robotDrive.setPose(start);
-      return AutoBuilder.followPath(path);
+     */ 
+      return autoChooser.get();
   }
+
+  
 }
