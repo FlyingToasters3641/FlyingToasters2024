@@ -14,7 +14,8 @@ public class RobotSystem extends SubsystemBase{
         INTAKE,
         REVERSE_INTAKE,
         STATION_INTAKE,
-        AMP
+        AMP_AIM,
+        AMP_SCORE
     }
 
     public enum GamepieceState {
@@ -42,33 +43,50 @@ public class RobotSystem extends SubsystemBase{
             case INTAKE -> currentState = SystemState.INTAKE;
             case REVERSE_INTAKE -> currentState = SystemState.REVERSE_INTAKE;
             case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
-            case AMP -> currentState = SystemState.AMP;
+            case AMP_AIM -> currentState = SystemState.AMP_AIM;
+            case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
         }
 
         switch (currentState){
             case IDLE -> {
                 launcher.setAngleSetpoint(LauncherConstants.IDLE);
-                launcher.setFlywheelVelocity(LauncherConstants.IDLE);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
             }
             case AIM -> {
-                launcher.setAngleSetpoint(40.0);
+                launcher.setAngleSetpoint(55.0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
             }
             case SHOOT -> {
-                launcher.setAngleSetpoint(40.0);
+                launcher.setAngleSetpoint(55.0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
             }
+            case INTAKE -> {
+                launcher.setAngleSetpoint(60);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.5);
+                intake.stopFront();
+                intake.runRear();
+            }
+            case REVERSE_INTAKE -> {
+                launcher.setAngleSetpoint(60);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(-0.5);
+                intake.stopFront();
+                intake.stopRear();
+            } 
+
+            }
         }
-    }
+    
 
     public void setGoalState(SystemState m_goalState){
         goalState = m_goalState;

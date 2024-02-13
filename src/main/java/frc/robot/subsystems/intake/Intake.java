@@ -43,6 +43,10 @@ public class Intake extends SubsystemBase{
     public void runRearRollers(DoubleSupplier axis) {
         io.setRearSpeed(axis.getAsDouble());
     }
+    
+    public void runRear() {
+        io.setRearSpeed(.5);
+    }
 
     public boolean frontCurrentSpike() {
         return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue() > 2.0);

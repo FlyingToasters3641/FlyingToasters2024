@@ -58,7 +58,7 @@ public class RobotContainer {
     //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
 
     
     
@@ -155,11 +155,11 @@ public class RobotContainer {
                                       new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                               m_robotDrive)
                               .ignoringDisable(true));
-      m_driverController.a().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT)).andThen(Commands.waitSeconds(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.leftTrigger()
-              .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
-              .onFalse(IntakeCommands.stopRear(m_intake));
+              .whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.INTAKE)))
+              .onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.REVERSE_INTAKE)).andThen(Commands.waitSeconds(.1)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       
 
   }
