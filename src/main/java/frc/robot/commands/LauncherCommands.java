@@ -2,7 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.RobotSystem.SystemState;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.RobotSystem;
 
@@ -38,15 +42,13 @@ public class LauncherCommands {
         });
     }
 
-    public static Command intakeNote(Launcher m_launcher, RobotSystem m_robotSystem) {
-        return Commands.runOnce(() -> {
-            if(m_launcher.getNote() == false) {
-                m_robotSystem.setGoalState(SystemState.INTAKE);
-            } else {
-                
-            }
-
-        });
-
+    public static Command intakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return Commands.run(() -> {
+            m_System.setGoalState(RobotSystem.SystemState.INTAKE);
+        }).until(() -> m_launcher.getNote() == false).andThen(
+            new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
+                Commands.waitSeconds(0.1))).andThen(
+                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 }

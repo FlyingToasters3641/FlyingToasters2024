@@ -23,7 +23,7 @@ public interface LauncherIO {
 
         public double angleSetpointDegrees = 0.0;
         
-
+        public boolean note = false;
     }
 
     public default void updateInputs(LauncherIOInputs inputs) {}
@@ -41,6 +41,8 @@ public interface LauncherIO {
     public default void setFlywheelVelocity(double rpm) {}
 
     public default void getAngle() {}
+
+    public default void getNote() {}
  
 }
 

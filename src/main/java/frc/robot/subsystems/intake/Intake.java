@@ -40,8 +40,8 @@ public class Intake extends SubsystemBase{
         io.setRearSpeed(axis.getAsDouble());
     }
 
-    public void runRearRollers(DoubleSupplier axis) {
-        io.setRearSpeed(axis.getAsDouble());
+    public void runRearRollers(double value) {
+        io.setRearSpeed(value);
     }
     
     public void runRear() {

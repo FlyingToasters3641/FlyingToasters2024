@@ -1,5 +1,7 @@
 package frc.robot.subsystems.launcher;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -12,9 +14,10 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class LauncherIOTalonFX implements LauncherIO {
-    
+    DigitalInput launchSensor = new DigitalInput(0);
     private static final String CANbusName = "Lucas";
     public static final TalonFX topFlywheelTalonFX = new TalonFX(31, CANbusName);
     public static final TalonFX bottomFlywheelTalonFX = new TalonFX(32, CANbusName);
@@ -87,6 +90,8 @@ public class LauncherIOTalonFX implements LauncherIO {
         inputs.launcherPositionDegrees = (Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         inputs.pitchMotorSensorDegrees = Units.rotationsToDegrees(launcherPitchTalonFX.getPosition().getValue());
         inputs.angleSetpointDegrees = launcherSetpointDegrees;
+        inputs.note = launchSensor.get();
+        Logger.recordOutput("Launcher/Sensor", launchSensor.get());
     }
 
     @Override

@@ -72,7 +72,7 @@ public class RobotSystem extends SubsystemBase{
             case INTAKE -> {
                 launcher.setAngleSetpoint(60);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.5);
+                launcher.setFeederVoltage(0.2);
                 intake.stopFront();
                 intake.runRear();
             }

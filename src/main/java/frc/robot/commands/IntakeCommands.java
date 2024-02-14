@@ -22,7 +22,7 @@ public class IntakeCommands {
       });
     }
 
-    public static Command runRearSpeed(Intake m_intake, DoubleSupplier axis) {
+    public static Command runRearSpeed(Intake m_intake, double axis) {
       return Commands.run(() -> {
         m_intake.runRearRollers(axis);
       });
