@@ -39,7 +39,7 @@ public class RobotState {
 
         Rotation2d vehicleToGoalDirection = predictedVehicleToTargetTranslation.getAngle();
 
-        Rotation2d targetRobotDirection = predictedVehicleFixedToTargetTranslation.getAngle();
+        Rotation2d targetRobotDirection = predictedVehicleFixedToTargetTranslation.g    etAngle();
         double targetDistance = predictedVehicleToTargetTranslation.getNorm();
 
         double feedVelocity = robotVelocity.dx * vehicleToGoalDirection.getSin() / targetDistance

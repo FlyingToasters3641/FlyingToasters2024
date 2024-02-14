@@ -22,6 +22,7 @@ public interface LauncherIO {
         public double pitchMotorSensorDegrees = 0.0;
 
         public double angleSetpointDegrees = 0.0;
+        
 
     }
 

@@ -158,7 +158,7 @@ public class RobotContainer {
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT)).andThen(Commands.waitSeconds(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.leftTrigger()
-              .whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.INTAKE)))
+              .whileTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.INTAKE))).onlyIf(() -> m_launcher.getNote()))
               .onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.REVERSE_INTAKE)).andThen(Commands.waitSeconds(.1)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       
 

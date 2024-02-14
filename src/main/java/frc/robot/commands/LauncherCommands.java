@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.RobotSystem;
 
 public class LauncherCommands {
 
@@ -34,5 +36,17 @@ public class LauncherCommands {
         return Commands.run(() -> {
             m_launcher.setAngleSetpoint(angleDegrees);
         });
+    }
+
+    public static Command intakeNote(Launcher m_launcher, RobotSystem m_robotSystem) {
+        return Commands.runOnce(() -> {
+            if(m_launcher.getNote() == false) {
+                m_robotSystem.setGoalState(SystemState.INTAKE);
+            } else {
+                
+            }
+
+        });
+
     }
 }
