@@ -25,6 +25,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.RotationTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -64,7 +65,7 @@ public class RobotContainer {
     
     
     // Dashboard inputs
-    private final SendableChooser<Command> autoChooser;
+    private final LoggedDashboardChooser<Command> autoChooser;
 
 
   
@@ -117,7 +118,7 @@ public class RobotContainer {
 
 
     // Set up auto routines
-  var autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+   autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -130,7 +131,7 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption("Auto", new PathPlannerAuto("TestPath"));
+    autoChooser.addOption("Auto", AutoBuilder.buildAuto("TestAuto"));
     
 
     // Configure the button bindings
@@ -166,22 +167,20 @@ public class RobotContainer {
               .onFalse(LauncherCommands.stopLauncher(m_launcher));
       m_driverController.leftTrigger()
               .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
-              .onFalse(IntakeCommands.stopRear(m_intake));
-    
-      LoggedDashboardChooser.fromLog();
+              .onFalse(IntakeCommands.stopRear(m_intake));}
 
-  }
-     
   public Command getAutonomousCommand(String pathName) {
-      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-      Translation2d startPoint = path.getPoint(0).position;
-      // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
-      // Rotation2d startRot = startRotStart.getTarget();
-      // if (startRot == null){
-      // startRot = new Rotation2d(0.0);
-      // }
-      Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
-      m_robotDrive.setPose(start);
-      return AutoBuilder.followPath(path);
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    Translation2d startPoint = path.getPoint(0).position;
+    Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
+    m_robotDrive.setPose(start);
+    return AutoBuilder.followPath(path);
   }
-}
+   
+            
+            
+            
+            
+            }
+    
+    
