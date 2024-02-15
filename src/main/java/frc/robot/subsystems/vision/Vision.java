@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 
-package frc.robot.subsystems;
-
-import static frc.robot.constants.VisionConstants.*;
+package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -34,6 +32,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
+
+import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
