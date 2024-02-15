@@ -8,7 +8,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.constants.FieldConstants;
+import frc.robot.subsystems.drive.DriveSubsystem.SwerveDriveState;
 import frc.robot.subsystems.launcher.LauncherConstants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.GeomUtil;
@@ -24,15 +26,17 @@ public class AimController {
 
     private Pose2d currentEsitmatedPose = null;
 
-    private Twist2d robotVelocity = new Twist2d();
+    private ChassisSpeeds robotVelocity = new ChassisSpeeds();
 
-    public AimController(Pose2d currentEstimatedPose2d) {
+    public AimController() {
         headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        currentEsitmatedPose = currentEstimatedPose2d;
+        
     }
 
-    public double update() {
+    public double update(SwerveDriveState swerveDriveState) {
+        currentEsitmatedPose = swerveDriveState.Pose;
+        robotVelocity = swerveDriveState.chassisSpeeds;
         var aimingParameters = getAimingParameters();
         double output = headingController.calculate(
                 currentEsitmatedPose.getRotation().getRadians(),
@@ -40,11 +44,6 @@ public class AimController {
 
         Logger.recordOutput("AutoAim/HeadingError", headingController.getPositionError());
         return output;
-    }
-
-    public void updateState(Pose2d currentEstimatedPose2d, Twist2d modulePositions){
-        currentEsitmatedPose = currentEstimatedPose2d;
-        robotVelocity = modulePositions;
     }
 
     public AimingParameters getAimingParameters() {
@@ -71,8 +70,8 @@ public class AimController {
     double targetDistance = predictedVehicleToTargetTranslation.getNorm();
 
     double feedVelocity =
-        robotVelocity.dx * vehicleToGoalDirection.getSin() / targetDistance
-            - robotVelocity.dy * vehicleToGoalDirection.getCos() / targetDistance;
+        robotVelocity.vxMetersPerSecond * vehicleToGoalDirection.getSin() / targetDistance
+            - robotVelocity.vyMetersPerSecond * vehicleToGoalDirection.getCos() / targetDistance;
 
     latestParameters =
         new AimingParameters(
@@ -102,9 +101,9 @@ public class AimController {
     return currentEsitmatedPose
         .exp(
             new Twist2d(
-                robotVelocity.dx * translationLookaheadS,
-                robotVelocity.dy * translationLookaheadS,
-                robotVelocity.dtheta * rotationLookaheadS));
+                robotVelocity.vxMetersPerSecond * translationLookaheadS,
+                robotVelocity.vyMetersPerSecond * translationLookaheadS,
+                robotVelocity.omegaRadiansPerSecond * rotationLookaheadS));
   }
 
 }

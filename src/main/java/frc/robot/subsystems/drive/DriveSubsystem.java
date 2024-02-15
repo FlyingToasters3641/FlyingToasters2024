@@ -16,7 +16,10 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -39,12 +42,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
-import frc.robot.util.GeomUtil;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  public static class SwerveDriveState {
+    public Pose2d Pose;
+
+    public ChassisSpeeds chassisSpeeds; 
+  }
+
+  protected final SwerveDriveState m_cachedState = new SwerveDriveState();
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5);
   private static final double TRACK_WIDTH_X = Units.inchesToMeters(25.0);
   private static final double TRACK_WIDTH_Y = Units.inchesToMeters(25.0);
@@ -72,6 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   private AimController aimController = null;
+  protected Consumer<SwerveDriveState> m_controllerFunction = null;
 
   public DriveSubsystem(
       GyroIO gyroIO,
@@ -183,13 +194,12 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-
-      ChassisSpeeds robotRelativeVelocity = kinematics.toChassisSpeeds(getModuleStates());
-      robotRelativeVelocity.omegaRadiansPerSecond = 
-        gyroInputs.connected
-          ? gyroInputs.yawVelocityRadPerSec
-          : robotRelativeVelocity.omegaRadiansPerSecond;
-      aimController.updateState(poseEstimator.getEstimatedPosition(), GeomUtil.toTwist2d(robotRelativeVelocity));
+      m_cachedState.Pose = poseEstimator.getEstimatedPosition();
+      
+      if (m_cachedState.chassisSpeeds == null) {
+        m_cachedState.chassisSpeeds = new ChassisSpeeds();
+      }
+      m_cachedState.chassisSpeeds = kinematics.toChassisSpeeds(getModuleStates());
     }
   }
 
@@ -310,9 +320,34 @@ public class DriveSubsystem extends SubsystemBase {
     };
   }
 
+  /**
+     * Gets the current state of the swerve drivetrain.
+     *
+     * @return Current state of the drivetrain
+     */
+    public SwerveDriveState getState() {
+      try {
+          odometryLock.lock();
+
+          return m_cachedState;
+      } finally {
+          odometryLock.unlock();
+      }
+  }
+
+  public void registerController(Consumer<SwerveDriveState> controllerFunction) {
+    try {
+      odometryLock.lock();
+      m_controllerFunction = controllerFunction;
+    }finally{
+      odometryLock.unlock();
+    }
+  }
+
   /** Enable auto aiming on drive */
   public void setAimGoal() {
-    aimController = new AimController(poseEstimator.getEstimatedPosition());
+    aimController = new AimController();
+    this.registerController(aimController::update);
   }
 
   /** Disable auto aiming on drive */
@@ -325,7 +360,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double updateAimController() {
-    return aimController.update();
+    return aimController.update(getState());
   }
   
 }
