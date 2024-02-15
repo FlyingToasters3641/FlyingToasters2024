@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Intake extends SubsystemBase{
     private IntakeIO io;
@@ -16,9 +17,12 @@ public class Intake extends SubsystemBase{
      */
     IntakeIOTalonFX IntakeTalonFX = new IntakeIOTalonFX();
 
+   
+
     public Intake(IntakeIO io) {
         this.io = io;
         io.setBrakeMode(false, false);
+        
     }
 
     @Override

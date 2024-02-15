@@ -1,17 +1,34 @@
 package frc.robot.subsystems.intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
+import frc.robot.subsystems.drive.ModuleIO;
 
 public class IntakeIOTalonFX implements IntakeIO {
     private final String CANbusName = "Lucas";
     public final TalonFX frontTalonFX = new TalonFX(2, CANbusName);
     public final TalonFX rearTalonFX = new TalonFX(1, CANbusName);
 
+
+
+
+    private final SysIdRoutine routine;
     public static double frontTalonVoltage;
 
+
     public IntakeIOTalonFX() {
-       frontTalonFX.setInverted(true);
+      
+        frontTalonFX.setInverted(true);
+       routine = new SysIdRoutine(new Config(null, null, null, (state) -> Logger.recordOutput("Intake/SysIdState", state.toString())), new Mechanism(null, null, null, "Intake"));
+       
     }
+
+
 
     @Override
     public void updateInputs(IntakeIOInputs inputs){
