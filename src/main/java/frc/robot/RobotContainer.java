@@ -156,9 +156,10 @@ public class RobotContainer {
                               m_robotDrive)
                               .ignoringDisable(true));
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
-      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT)).andThen(Commands.waitSeconds(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.leftTrigger().whileTrue(LauncherCommands.intakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-  }
+      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
+      m_driverController.leftTrigger().whileTrue(LauncherCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftBumper().whileTrue(LauncherCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+  }   
      
   public Command getAutonomousCommand() {
       PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
