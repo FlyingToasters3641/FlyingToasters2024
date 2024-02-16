@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -51,4 +52,12 @@ public class LauncherCommands {
                 Commands.waitSeconds(0.1))).andThen(
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction, Launcher m_launcher) {
+  return m_launcher.flywheelRoutine.quasistatic(direction);
+}
+
+public Command sysIdDynamic(SysIdRoutine.Direction direction, Launcher m_launcher) {
+  return m_launcher.flywheelRoutine.dynamic(direction);
+}
 }

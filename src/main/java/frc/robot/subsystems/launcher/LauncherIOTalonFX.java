@@ -15,6 +15,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 
 public class LauncherIOTalonFX implements LauncherIO {
     DigitalInput launchSensor = new DigitalInput(0);
@@ -24,6 +27,9 @@ public class LauncherIOTalonFX implements LauncherIO {
     public static final TalonFX launcherRollerTalonFX = new TalonFX(33, CANbusName);
     public static final TalonFX launcherPitchTalonFX = new TalonFX(34, CANbusName);
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
+
+    
+  
 
     
 
@@ -81,6 +87,8 @@ public class LauncherIOTalonFX implements LauncherIO {
         magConfig.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
 
         launcherPitchCANCoder.getConfigurator().apply(magConfig);
+
+        
 
     }
 

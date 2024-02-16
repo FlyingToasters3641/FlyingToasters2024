@@ -17,14 +17,13 @@ public class IntakeIOTalonFX implements IntakeIO {
 
 
 
-    private final SysIdRoutine routine;
     public static double frontTalonVoltage;
 
 
     public IntakeIOTalonFX() {
       
         frontTalonFX.setInverted(true);
-       routine = new SysIdRoutine(new Config(null, null, null, (state) -> Logger.recordOutput("Intake/SysIdState", state.toString())), new Mechanism(null, null, null, "Intake"));
+       
        
     }
 
