@@ -66,8 +66,8 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Slot0.kV = 2.79;
         pitchConfig.Slot0.kA = 0.04;
 
-        pitchConfig.Slot0.kP = 500;
-        pitchConfig.Slot0.kD = 5;
+        pitchConfig.Slot0.kP = 300;
+        pitchConfig.Slot0.kD = 3;
 
         pitchConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(

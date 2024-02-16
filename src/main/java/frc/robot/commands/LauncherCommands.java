@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.intake.Intake;
@@ -43,7 +44,7 @@ public class LauncherCommands {
         });
     }
 
-    public static Command intakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+    public static Command rearIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return Commands.run(() -> {
             m_System.setGoalState(RobotSystem.SystemState.INTAKE);
         }).until(() -> m_launcher.getNote() == false).andThen(
@@ -52,4 +53,34 @@ public class LauncherCommands {
                 Commands.waitSeconds(0.1))).andThen(
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
+    
+    public static Command frontIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return Commands.run(() -> {
+            m_System.setGoalState(RobotSystem.SystemState.FRONT_INTAKE);
+        }).until(() -> m_launcher.getNote() == false).andThen(
+            new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
+                Commands.waitSeconds(0.1))).andThen(
+                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+    }
+
+    public static SequentialCommandGroup shootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return new SequentialCommandGroup(
+          Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.SHOOT)),
+          new WaitCommand(0.5),
+          Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE))
+            );
+    }
+    
+    public static Command humanIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return Commands.run(() -> {
+            m_System.setGoalState(RobotSystem.SystemState.HUMAN_PLAYER);
+        }).until(() -> m_launcher.getNote() == false).andThen(
+            new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
+                Commands.waitSeconds(0.1))).andThen(
+                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+    }
+
+
 }
