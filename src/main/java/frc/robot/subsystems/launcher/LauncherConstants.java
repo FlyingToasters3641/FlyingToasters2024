@@ -18,7 +18,7 @@ public class LauncherConstants {
 
         public static double IDLE = 20.0;
         public static double FLYWHEEL_RPM_IDLE = 0.0;
-        public static double FLYWHEEL_RPM_DEFAULT = 5000;
+        public static double FLYWHEEL_RPM_DEFAULT = 3000;
         public static double FLYWHEEL_RPM_INTAKE = -1000;
 
 }
