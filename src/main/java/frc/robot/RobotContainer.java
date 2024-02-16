@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
+import frc.robot.controllers.AimController;
 import frc.robot.subsystems.RobotSystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
@@ -57,7 +58,8 @@ public class RobotContainer {
     //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+   
+    
 
     
     
@@ -156,7 +158,7 @@ public class RobotContainer {
                                       new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                               m_robotDrive)
                               .ignoringDisable(true));
-      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
+      m_driverController.a().onTrue(Commands.runOnce(()->m_robotDrive.getAimController())).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger()
               .onTrue(LauncherCommands.runFlywheelSpeed(m_launcher))
               .onFalse(LauncherCommands.stopLauncher(m_launcher));
@@ -168,7 +170,7 @@ public class RobotContainer {
   }
      
   public Command getAutonomousCommand() {
-    /* 
+    
       PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
       Translation2d startPoint = path.getPoint(0).position;
       // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
@@ -178,8 +180,8 @@ public class RobotContainer {
       // }
       Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
       m_robotDrive.setPose(start);
-     */ 
-      return autoChooser.get();
+     
+      return AutoBuilder.followPath(path);
   }
 
   

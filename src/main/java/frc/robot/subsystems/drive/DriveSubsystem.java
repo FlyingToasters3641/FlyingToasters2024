@@ -61,6 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double DRIVE_BASE_RADIUS =
       Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
   private static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
+  public static boolean run = false;
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
@@ -81,8 +82,9 @@ public class DriveSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-  private AimController aimController = null;
+  private AimController aimController = new AimController();
   protected Consumer<SwerveDriveState> m_controllerFunction = null;
+  
 
   public DriveSubsystem(
       GyroIO gyroIO,
@@ -194,12 +196,14 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      odometryLock.lock();
       m_cachedState.Pose = poseEstimator.getEstimatedPosition();
       
       if (m_cachedState.chassisSpeeds == null) {
         m_cachedState.chassisSpeeds = new ChassisSpeeds();
       }
       m_cachedState.chassisSpeeds = kinematics.toChassisSpeeds(getModuleStates());
+      odometryLock.unlock();
     }
   }
 
@@ -211,6 +215,9 @@ public class DriveSubsystem extends SubsystemBase {
   public void runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    if (run){
+      discreteSpeeds.omegaRadiansPerSecond = aimController.update(m_cachedState);
+    }
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
 
@@ -344,23 +351,13 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  /** Enable auto aiming on drive */
-  public void setAimGoal() {
-    aimController = new AimController();
-    this.registerController(aimController::update);
-  }
-
   /** Disable auto aiming on drive */
   public void clearAimGoal() {
-    aimController = null;
+    run = false;
   }
 
-  public boolean getAimController() {
-    return aimController != null;
-  }
-
-  public double updateAimController() {
-    return aimController.update(getState());
+  public void getAimController() {
+    run = true;
   }
   
 }
