@@ -11,6 +11,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
 public class VisionConstants {
+       
+       
         public static final String kCameraName = "Arducam_OV2311_USB_Cam_Front";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
