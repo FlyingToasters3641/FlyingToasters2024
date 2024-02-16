@@ -29,7 +29,7 @@ public class AimController {
     private SwerveDrivePoseEstimator drivePoseEstimator;
 
     public AimController(SwerveDrivePoseEstimator mPoseEstimator) {
-        headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
+        headingController = new PIDController(4.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
         drivePoseEstimator = mPoseEstimator;
     }

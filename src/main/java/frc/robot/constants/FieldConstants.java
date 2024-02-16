@@ -80,10 +80,7 @@ public class FieldConstants {
 
     /** Center of the speaker opening (blue alliance) */
     public static Translation3d centerSpeakerOpening =
-        new Translation3d(
-            topLeftSpeaker.getX() / 2.0,
-            fieldWidth - Units.inchesToMeters(104.0),
-            (bottomLeftSpeaker.getZ() + bottomRightSpeaker.getZ()) / 2.0);
+      bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
   }
 
   public static double aprilTagWidth = Units.inchesToMeters(6.50);
