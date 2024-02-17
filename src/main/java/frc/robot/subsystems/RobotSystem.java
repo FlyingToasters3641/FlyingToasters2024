@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.controllers.ShotController;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -30,10 +31,15 @@ public class RobotSystem extends SubsystemBase{
 
     private final Launcher launcher;
     private final Intake intake;
+    private final DriveSubsystem drive;
 
-    public RobotSystem(Launcher m_launcher, Intake m_intake) {
+    private final ShotController shotController;
+
+    public RobotSystem(Launcher m_launcher, Intake m_intake, DriveSubsystem m_drive) {
         launcher = m_launcher;
         intake = m_intake;
+        drive = m_drive;
+        shotController = new ShotController(m_drive.getPoseEstimator());
     }
 
     @Override 
@@ -60,35 +66,35 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear();
             }
             case AIM -> {
-                launcher.setAngleSetpoint(55.0);
+                launcher.setAngleSetpoint(shotController.updateAngle());
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
             }
             case SHOOT -> {
-                launcher.setAngleSetpoint(55.0);
+                launcher.setAngleSetpoint(shotController.updateAngle());
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
             }
             case INTAKE -> {
-                launcher.setAngleSetpoint(60);
+                launcher.setAngleSetpoint(30);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.2);
+                launcher.setFeederVoltage(0.15);
                 intake.stopFront();
                 intake.runRear();
             }
             case FRONT_INTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_INTAKE);
-                launcher.setFeederVoltage(0.2);
+                launcher.setFeederVoltage(0.15);
                 intake.runFront();
                 intake.stopRear();
             }
             case REVERSE_INTAKE -> {
-                launcher.setAngleSetpoint(60);
+                launcher.setAngleSetpoint(30);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(-0.5);
                 intake.stopFront();

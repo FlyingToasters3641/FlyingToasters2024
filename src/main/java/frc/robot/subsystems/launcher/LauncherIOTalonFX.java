@@ -63,12 +63,19 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Feedback.RotorToSensorRatio = PIVOT_RATIO;
 
         //Esitmated Values from Recalc
-        pitchConfig.Slot0.kG = -0.38;
+        pitchConfig.Slot0.kG = -25.00;
         pitchConfig.Slot0.kV = 2.79;
         pitchConfig.Slot0.kA = 0.04;
 
-        pitchConfig.Slot0.kP = 300;
-        pitchConfig.Slot0.kD = 3;
+        pitchConfig.Slot0.kP = 1000;
+        pitchConfig.Slot0.kD = 20;
+
+        pitchConfig.Slot1.kG = -20.00;
+        pitchConfig.Slot1.kV = 2.79;
+        pitchConfig.Slot1.kA = 0.04;
+
+        pitchConfig.Slot1.kP = 100;
+        pitchConfig.Slot1.kD = 2;
 
         pitchConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(
@@ -106,8 +113,12 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public void setAngleSetpoint(double setpointDegrees) {
+        if (setpointDegrees > 20.0){
+            launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
+        }else{
+            launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(1));
+        }
         launcherSetpointDegrees = setpointDegrees;
-        launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)));
     }
 
     @Override

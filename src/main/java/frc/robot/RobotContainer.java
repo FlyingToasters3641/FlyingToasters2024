@@ -84,7 +84,7 @@ public class RobotContainer {
                 new SwerveModule(3));
         m_intake = new Intake(new IntakeIOTalonFX());   
         m_launcher = new Launcher(new LauncherIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
 
       case SIM:
@@ -98,7 +98,7 @@ public class RobotContainer {
                 new ModuleIOSim());
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
 
       default:
@@ -112,7 +112,7 @@ public class RobotContainer {
                 new ModuleIO() {});
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
     }
 
