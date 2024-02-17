@@ -18,6 +18,9 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
@@ -58,6 +61,7 @@ public class RobotContainer {
     public final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
     private final Launcher m_launcher;
+    private final Elevator m_elevator;
     //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -84,7 +88,8 @@ public class RobotContainer {
                 new SwerveModule(3));
         m_intake = new Intake(new IntakeIOTalonFX());   
         m_launcher = new Launcher(new LauncherIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_elevator = new Elevator(new ElevatorIOTalonFX());
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive, m_elevator); 
         break;
 
       case SIM:
@@ -98,7 +103,8 @@ public class RobotContainer {
                 new ModuleIOSim());
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_elevator = new Elevator(new ElevatorIO() {});
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive, m_elevator); 
         break;
 
       default:
@@ -112,7 +118,8 @@ public class RobotContainer {
                 new ModuleIO() {});
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_elevator = new Elevator(new ElevatorIO() {});
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive,m_elevator); 
         break;
     }
 
