@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -17,6 +16,8 @@ import frc.robot.subsystems.drive.SwerveModule;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.leds.LEDIO;
+import frc.robot.subsystems.leds.LEDSubsystem;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -50,7 +51,9 @@ public class RobotContainer {
     private final DriveSubsystem m_robotDrive;
     private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
     private final Intake m_intake = new Intake(m_IntakeIO);
-     private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
+
+    private final LEDIO m_Ledio = new LEDIO(){} ;
+     private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem(m_Ledio);
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
