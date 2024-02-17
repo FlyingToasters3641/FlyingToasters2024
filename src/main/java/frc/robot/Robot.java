@@ -91,6 +91,25 @@ public class Robot extends LoggedRobot {
    @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
+
+    var visionEst = m_robotContainer.m_vision.getEstimatedGlobalPose();
+    visionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        var estStdDevs = m_robotContainer.m_vision.getEstimationStdDevs(estPose);
+
+        m_robotContainer.m_robotDrive.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }
+    );
+    visionEst = m_robotContainer.m_second_vision.getEstimatedGlobalPose();
+    visionEst.ifPresent(
+      est -> {
+        var estPose = est.estimatedPose.toPose2d();
+        var estStdDevs = m_robotContainer.m_second_vision.getEstimationStdDevs(estPose);
+
+        m_robotContainer.m_robotDrive.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+      }
+    );
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
