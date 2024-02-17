@@ -131,7 +131,15 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+     //auto commands
+     autoChooser.addOption("Auto", AutoBuilder.buildAuto("Test Auto"));
+     //Named Commands
+     NamedCommands.registerCommand("Intake Run Command", IntakeCommands.runFrontSpeed(m_intake, null));
+     NamedCommands.registerCommand("Intake Reverse Command", IntakeCommands.reverseFrontSpeed(m_intake, null));
+     NamedCommands.registerCommand("Shoot Note", LauncherCommands.shootNote(m_launcher, m_robotSystem));
+     NamedCommands.registerCommand("Front Intake and Launch", LauncherCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem));
 
+     
     // Configure the button bindings
     configureButtonBindings();
         // Configure the trigger bindings

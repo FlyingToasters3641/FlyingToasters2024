@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8995614596079393,
-        "y": 5.58606903233778
+        "x": 1.4620660010550806,
+        "y": 5.476153259998827
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8995614596079395,
-        "y": 5.58606903233778
+        "x": 2.4620660010550806,
+        "y": 5.476153259998827
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2931510085559395,
-        "y": 5.58606903233778
+        "x": 2.922373537054768,
+        "y": 5.476153259998827
       },
       "prevControl": {
-        "x": 2.2931510085559395,
-        "y": 5.58606903233778
+        "x": 1.922373537054768,
+        "y": 5.476153259998827
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,42 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.95,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot Note"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Front Intake and Launch"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
