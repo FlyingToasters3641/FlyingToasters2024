@@ -164,7 +164,8 @@ public class RobotContainer {
       m_driverController.rightBumper().whileTrue(LauncherCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftTrigger().whileTrue(LauncherCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(LauncherCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-  }   
+      m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
+  }     
      
   public Command getAutonomousCommand() {
       PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");

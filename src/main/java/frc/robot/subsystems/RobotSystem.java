@@ -107,6 +107,20 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
             }
+            case AMP_AIM -> {
+                launcher.setAngleSetpoint(66);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+                intake.stopRear();
+            }
+            case AMP_SCORE -> {
+                launcher.setAngleSetpoint(66);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                launcher.setFeederVoltage(0.4);
+                intake.stopFront();
+                intake.stopRear();
+            }
 
             }
         }

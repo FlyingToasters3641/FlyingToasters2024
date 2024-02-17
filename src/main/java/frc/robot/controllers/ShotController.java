@@ -28,9 +28,12 @@ public class ShotController {
         distanceAngles.put(Units.inchesToMeters(50.0), 62.0);
         distanceAngles.put(Units.inchesToMeters(60.0), 57.0);
         distanceAngles.put(Units.inchesToMeters(70.0), 53.0);
-        distanceAngles.put(Units.inchesToMeters(84.0), 42.0);
-        distanceAngles.put(Units.inchesToMeters(108.0), 34.0);
-        distanceAngles.put(Units.inchesToMeters(144.0), 28.0);
+        distanceAngles.put(Units.inchesToMeters(84.0), 51.0);
+        distanceAngles.put(Units.inchesToMeters(108.0), 45.0);
+        distanceAngles.put(Units.inchesToMeters(117.0), 42.0);
+        distanceAngles.put(Units.inchesToMeters(128.0), 38.0);
+        distanceAngles.put(Units.inchesToMeters(138.0), 34.0);
+        distanceAngles.put(Units.inchesToMeters(144.0), 32.5);
         distanceAngles.put(Units.inchesToMeters(168.0), 28.0);
         distanceAngles.put(Units.inchesToMeters(180.0), 25.0);
         distanceAngles.put(Units.inchesToMeters(204.0), 20.0);
@@ -57,6 +60,7 @@ public class ShotController {
         double output = distMap.floorEntry(distance).getValue();
         Logger.recordOutput("ShotControl/LauncherAngle", output);
         Logger.recordOutput("ShotControl/Distance", Units.metersToInches(distance));
+        
         return output;
     }
 }
