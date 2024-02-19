@@ -42,27 +42,7 @@ public class LauncherCommands {
         return Commands.run(() -> {
             m_launcher.setAngleSetpoint(angleDegrees);
         });
-    }
-
-    public static Command rearIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
-        return Commands.run(() -> {
-            m_System.setGoalState(RobotSystem.SystemState.INTAKE);
-        }).until(() -> m_launcher.getNote() == false).andThen(
-            new SequentialCommandGroup(
-                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.1))).andThen(
-                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
-    }
-    
-    public static Command frontIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
-        return Commands.run(() -> {
-            m_System.setGoalState(RobotSystem.SystemState.FRONT_INTAKE);
-        }).until(() -> m_launcher.getNote() == false).andThen(
-            new SequentialCommandGroup(
-                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.1))).andThen(
-                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
-    }
+    }  
 
     public static SequentialCommandGroup shootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return new SequentialCommandGroup(
@@ -70,16 +50,6 @@ public class LauncherCommands {
           new WaitCommand(0.5),
           Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE))
             );
-    }
-    
-    public static Command humanIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
-        return Commands.run(() -> {
-            m_System.setGoalState(RobotSystem.SystemState.HUMAN_PLAYER);
-        }).until(() -> m_launcher.getNote() == false).andThen(
-            new SequentialCommandGroup(
-                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.1))).andThen(
-                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
     
     public static SequentialCommandGroup ampNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
