@@ -7,7 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.IntakeCommands;
-import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.commands.LauncherCommands;
+import frc.robot.constants.VisionConstants;
+import frc.robot.subsystems.RobotSystem;
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -19,9 +23,14 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,9 +38,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import frc.robot.subsystems.launcher.Launcher;
+import frc.robot.subsystems.launcher.LauncherIO;
+import frc.robot.subsystems.launcher.LauncherIOTalonFX;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -44,13 +56,19 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
  */
 public class RobotContainer {
     // Subsystems
-    private final DriveSubsystem m_robotDrive;
-    private final IntakeIO m_IntakeIO = new IntakeIOTalonFX();
-    private final Intake m_intake = new Intake(m_IntakeIO);
-     private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
+    
+    private final RobotSystem m_robotSystem;
+    public final DriveSubsystem m_robotDrive;
+    private final Intake m_intake;
+    private final Launcher m_launcher;
+    //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+    public final Vision m_vision = new Vision(new PhotonCamera(VisionConstants.kCameraName), VisionConstants.kRobotToCam);
+    public final Vision m_second_vision = new Vision(new PhotonCamera(VisionConstants.kSecondCameraName), VisionConstants.kRobotToSecondCam);
+    
+    
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
   
@@ -67,6 +85,9 @@ public class RobotContainer {
                 new SwerveModule(1),
                 new SwerveModule(2),
                 new SwerveModule(3));
+        m_intake = new Intake(new IntakeIOTalonFX());   
+        m_launcher = new Launcher(new LauncherIOTalonFX());    
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
 
       case SIM:
@@ -78,6 +99,9 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        m_intake = new Intake(new IntakeIO() {});
+        m_launcher = new Launcher(new LauncherIO() {});
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
 
       default:
@@ -89,24 +113,20 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        m_intake = new Intake(new IntakeIO() {});
+        m_launcher = new Launcher(new LauncherIO() {});
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         break;
     }
 
+    // Set up named commands
+    NamedCommands.registerCommand("Shoot", LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-
+    autoChooser.addDefaultOption("TestPath", AutoBuilder.followPath(PathPlannerPath.fromPathFile("TestPath")));
     // Set up SysId routines
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Forward)",
-        m_robotDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Quasistatic Reverse)",
-        m_robotDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -135,40 +155,15 @@ public class RobotContainer {
                                       new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
                               m_robotDrive)
                               .ignoringDisable(true));
-      m_driverController.rightTrigger()
-              .whileTrue(IntakeCommands.runFrontSpeed(m_intake, () -> m_driverController.getRightTriggerAxis()))
-              .onFalse(IntakeCommands.stopFront(m_intake));
-      m_driverController.leftTrigger()
-              .whileTrue(IntakeCommands.runRearSpeed(m_intake, () -> m_driverController.getLeftTriggerAxis()))
-              .onFalse(IntakeCommands.stopRear(m_intake));
-      m_operatorController
-              .rightBumper()
-              .onTrue(
-                      new InstantCommand(() -> {
-                          m_LEDSubsystem.ledSwitch(2);
-                      }))
-              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
-
-      m_operatorController
-              .leftBumper()
-              .onTrue(
-                      new InstantCommand(() -> {
-                          m_LEDSubsystem.ledSwitch(0);
-                      }))
-              .onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
-
-  }
+      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
+      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
+      m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftTrigger().whileTrue(IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftBumper().whileTrue(IntakeCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
+  }     
      
   public Command getAutonomousCommand() {
-      PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
-      Translation2d startPoint = path.getPoint(0).position;
-      // RotationTarget startRotStart = path.getPoint(0).rotationTarget;
-      // Rotation2d startRot = startRotStart.getTarget();
-      // if (startRot == null){
-      // startRot = new Rotation2d(0.0);
-      // }
-      Pose2d start = new Pose2d(startPoint.getX(), startPoint.getY(), Rotation2d.fromDegrees(0.0));
-      m_robotDrive.setPose(start);
-      return AutoBuilder.followPath(path);
+      return autoChooser.get();
   }
 }

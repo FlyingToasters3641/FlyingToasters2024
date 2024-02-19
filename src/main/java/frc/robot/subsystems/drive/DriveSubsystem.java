@@ -23,6 +23,8 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,12 +34,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.controllers.AimController;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -67,6 +72,8 @@ public class DriveSubsystem extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private AimController aimController = null;
 
   public DriveSubsystem(
       GyroIO gyroIO,
@@ -274,8 +281,9 @@ public class DriveSubsystem extends SubsystemBase {
    * @param visionPose The pose of the robot as measured by the vision camera.
    * @param timestamp The timestamp of the vision measurement in seconds.
    */
-  public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
-    poseEstimator.addVisionMeasurement(visionPose, timestamp);
+  public void addVisionMeasurement(Pose2d visionPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
+    Logger.recordOutput("Camera/Pose", visionPose);
+    poseEstimator.addVisionMeasurement(visionPose, timestamp, visionMeasurementStdDevs);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
@@ -296,5 +304,27 @@ public class DriveSubsystem extends SubsystemBase {
       new Translation2d(-TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
       new Translation2d(-TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0)
     };
+  }
+
+  /** Enable auto aiming on drive */
+  public void setAimGoal() {
+    aimController = new AimController(poseEstimator);
+  }
+
+  /** Disable auto aiming on drive */
+  public void clearAimGoal() {
+    aimController = null;
+  }
+
+  public boolean getAimController() {
+    return aimController != null;
+  }
+
+  public double updateAimController() {
+    return aimController.update();
+  }
+
+  public SwerveDrivePoseEstimator getPoseEstimator () {
+    return poseEstimator;
   }
 }

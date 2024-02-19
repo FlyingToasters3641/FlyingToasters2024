@@ -61,6 +61,10 @@ public class DriveCommands {
                     // Convert to field relative speeds & send command
                     boolean isFlipped = DriverStation.getAlliance().isPresent()
                             && DriverStation.getAlliance().get() == Alliance.Red;
+                    // Auto aim steering takeover         
+                    if (drive.getAimController()){
+                        omega = drive.updateAimController() / drive.getMaxAngularSpeedRadPerSec(); //will get multiplied back later   
+                    }
                     drive.runVelocity(
                             ChassisSpeeds.fromFieldRelativeSpeeds(
                                     linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
@@ -69,6 +73,7 @@ public class DriveCommands {
                                     isFlipped
                                             ? drive.getRotation().plus(new Rotation2d(Math.PI))
                                             : drive.getRotation()));
+                    
                 },
                 drive);
     }

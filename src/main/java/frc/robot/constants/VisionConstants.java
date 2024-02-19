@@ -9,16 +9,19 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
-        public static final String kCameraName = "Arducam_OV2311_USB_Cam_Front";
+        public static final String kCameraName = "Maximocam";
+        public static final String kSecondCameraName = "Aadithcam";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
-
+                new Transform3d(new Translation3d(Units.inchesToMeters(10.16), -Units.inchesToMeters(10.1), Units.inchesToMeters(8.532)), new Rotation3d(0, Units.degreesToRadians(-30.0), Units.degreesToRadians(-45)));
+        public static final Transform3d kRobotToSecondCam =
+                new Transform3d(new Translation3d(Units.inchesToMeters(10.16), Units.inchesToMeters(10.1), Units.inchesToMeters(8.532)), new Rotation3d(0, Units.degreesToRadians(-30.0), Units.degreesToRadians(45)));
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =
-                AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+                AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
         // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
