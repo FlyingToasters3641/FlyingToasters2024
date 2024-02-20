@@ -25,12 +25,12 @@ public class ShotController {
         
         //Angle distance pairs - Needs Calibration
         distanceAngles.put(Units.inchesToMeters(36.0), 65.0);
-        distanceAngles.put(Units.inchesToMeters(50.0), 62.0);
-        distanceAngles.put(Units.inchesToMeters(60.0), 57.0);
-        distanceAngles.put(Units.inchesToMeters(70.0), 53.0);
-        distanceAngles.put(Units.inchesToMeters(84.0), 51.0);
-        distanceAngles.put(Units.inchesToMeters(108.0), 45.0);
-        distanceAngles.put(Units.inchesToMeters(117.0), 42.0);
+        distanceAngles.put(Units.inchesToMeters(50.0), 61.0);
+        distanceAngles.put(Units.inchesToMeters(60.0), 56.0);
+        distanceAngles.put(Units.inchesToMeters(70.0), 52.0);
+        distanceAngles.put(Units.inchesToMeters(84.0), 47.0);
+        distanceAngles.put(Units.inchesToMeters(108.0), 40.0);
+        distanceAngles.put(Units.inchesToMeters(117.0), 40.0);
         distanceAngles.put(Units.inchesToMeters(128.0), 38.0);
         distanceAngles.put(Units.inchesToMeters(138.0), 34.0);
         distanceAngles.put(Units.inchesToMeters(144.0), 32.5);
@@ -57,7 +57,12 @@ public class ShotController {
     }
 
     public double nearestSetpoint(NavigableMap<Double, Double> distMap, double distance) {
-        double output = distMap.floorEntry(distance).getValue();
+        double x1 = distMap.floorEntry(distance).getKey();
+        double y1 = distMap.floorEntry(distance).getValue();
+        double x2 = distMap.ceilingEntry(distance).getKey();
+        double y2 = distMap.ceilingEntry(distance).getValue();
+        double output = (distance - x1) / (x2 - x1) * (y2 - y1) + y1;
+        Logger.recordOutput("ShotControl/Floor", y1); 
         Logger.recordOutput("ShotControl/LauncherAngle", output);
         Logger.recordOutput("ShotControl/Distance", Units.metersToInches(distance));
         

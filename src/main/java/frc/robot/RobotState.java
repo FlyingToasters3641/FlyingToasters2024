@@ -17,7 +17,7 @@ public class RobotState {
     };
     private AimingParameters lastParamters = null;
     private Twist2d robotVelocity = new Twist2d();
-    private final double LOOK_AHEAD = 0.0; //Tune to compensate for robot position latency 
+    private final double LOOK_AHEAD = 4.0; //Tune to compensate for robot position latency 
     private final double HEIGHT_COMP = 0.0; //Tune to compensate for robot shot height
 
     public AimingParameters getAimingParameters(SwerveDrivePoseEstimator drivePoseEstimator) {

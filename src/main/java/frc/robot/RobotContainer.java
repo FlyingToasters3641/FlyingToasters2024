@@ -38,6 +38,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -122,10 +124,26 @@ public class RobotContainer {
     // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addDefaultOption("TestPath", AutoBuilder.followPath(PathPlannerPath.fromPathFile("TestPath")));
+    autoChooser.addOption("2 Piece Center", new SequentialCommandGroup(
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
+        new WaitCommand(1.0),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("2 Piece Center")),
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
+        new WaitCommand(1.0),
+        LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem)));
+     //3 piece center  
+    autoChooser.addOption("3 Piece Center", new SequentialCommandGroup(
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
+        new WaitCommand(1.0),
+        new PathPlannerAuto("3 Piece Center"),
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
+        new WaitCommand(1.0),
+        LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem)));
     // Set up SysId routines
 
     // Configure the button bindings
@@ -162,8 +180,13 @@ public class RobotContainer {
       m_driverController.leftBumper().whileTrue(IntakeCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
   }     
+
      
   public Command getAutonomousCommand() {
       return autoChooser.get();
+  }
+       
+  public Command getAutoCommand(String autoName) {
+      return new PathPlannerAuto(autoName);
   }
 }

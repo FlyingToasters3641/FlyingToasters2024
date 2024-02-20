@@ -111,7 +111,7 @@ public class SwerveModule implements ModuleIO {
     turnRelativeEncoder.setMeasurementPeriod(10);
     turnRelativeEncoder.setAverageDepth(2);
 
-    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10); // May need to adjust, this value can cause  CAN timeout
+    turnSparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20); // May need to adjust, this value can cause  CAN timeout
 
     turnSparkMax.setCANTimeout(0);
 
