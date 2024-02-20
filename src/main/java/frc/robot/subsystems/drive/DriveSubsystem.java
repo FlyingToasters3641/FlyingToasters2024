@@ -21,6 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
@@ -75,6 +76,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   private AimController aimController = null;
 
+  private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+    new PIDConstants(4.0), //Translation
+    new PIDConstants(4.0), //Rotation
+            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig());
+
   public DriveSubsystem(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -89,19 +95,18 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Start threads (no-op for each if no signals have been created)
     SparkMaxOdometryThread.getInstance().start();
-
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::setPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
+        pathFollowerConfig,
         () ->
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
         this);
+    
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -112,6 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
         (targetPose) -> {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
+    
 
     // Configure SysId
     sysId =
