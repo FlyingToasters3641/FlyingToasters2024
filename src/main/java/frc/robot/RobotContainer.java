@@ -130,21 +130,10 @@ public class RobotContainer {
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addDefaultOption("TestPath", AutoBuilder.followPath(PathPlannerPath.fromPathFile("TestPath")));
-    autoChooser.addOption("2 Piece Center", new SequentialCommandGroup(
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
-        new WaitCommand(1.0),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("2 Piece Center")),
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
-        new WaitCommand(1.0),
-        LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem)));
+    autoChooser.addOption("2 Piece Center", new PathPlannerAuto("2 Piece Center"));
      //3 piece center  
-    autoChooser.addOption("3 Piece Center", new SequentialCommandGroup(
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
-        new WaitCommand(1.0),
-        new PathPlannerAuto("3 Piece Center"),
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)),
-        new WaitCommand(1.0),
-        LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem)));
+    autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
+    autoChooser.addOption("4 Piece Center", new PathPlannerAuto("4 Piece Center"));
     // Set up SysId routines
 
     // Configure the button bindings
