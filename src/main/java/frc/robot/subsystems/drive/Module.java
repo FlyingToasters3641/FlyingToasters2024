@@ -45,7 +45,12 @@ public class Module {
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
     switch (Constants.currentMode) {
-      case REAL:
+      case COMP:
+        driveFeedforward = new SimpleMotorFeedforward(0.05, 0.08);
+        driveFeedback = new PIDController(0.13, 0.0, 0.0);
+        turnFeedback = new PIDController(7.0, 0.0, 0.00); //4.0
+        break;
+      case ALPHA:
         driveFeedforward = new SimpleMotorFeedforward(0.05, 0.08);
         driveFeedback = new PIDController(0.13, 0.0, 0.0);
         turnFeedback = new PIDController(7.0, 0.0, 0.00); //4.0

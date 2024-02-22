@@ -18,6 +18,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.drive.SwerveModuleComp;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
@@ -78,7 +79,22 @@ public class RobotContainer {
     public RobotContainer() {
         //Hardware or SIM?
         switch (Constants.currentMode) {
-        case REAL:
+            
+        case COMP:
+      
+        m_robotDrive =
+            new DriveSubsystem(
+                new GyroIOPigeon2(true),
+                new SwerveModuleComp(0),
+                new SwerveModuleComp(1),
+                new SwerveModuleComp(2),
+                new SwerveModuleComp(3));
+        m_intake = new Intake(new IntakeIOTalonFX());   
+        m_launcher = new Launcher(new LauncherIOTalonFX());    
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        
+        break;
+        case ALPHA:
         // Real robot, instantiate hardware IO implementations
         m_robotDrive =
             new DriveSubsystem(
@@ -92,7 +108,6 @@ public class RobotContainer {
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         
         break;
-
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_robotDrive =

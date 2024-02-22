@@ -19,11 +19,14 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
-  public static final Mode currentMode = Mode.REAL;
+  public static final Mode currentMode = Mode.ALPHA;
 
   public static enum Mode {
-    /** Running on a real robot. */
-    REAL,
+    /** Running the comp bot */
+    COMP,
+
+    /** Running on the alpha robot. */
+    ALPHA,
 
     /** Running a physics simulator. */
     SIM,
