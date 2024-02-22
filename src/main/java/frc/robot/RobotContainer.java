@@ -123,7 +123,7 @@ public class RobotContainer {
     }
 
     // Set up named commands
-    NamedCommands.registerCommand("Shoot", LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
 
