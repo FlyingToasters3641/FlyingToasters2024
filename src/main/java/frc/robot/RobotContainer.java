@@ -151,8 +151,8 @@ public class RobotContainer {
       m_robotDrive.setDefaultCommand(
               DriveCommands.joystickDrive(
                       m_robotDrive,
-                      () -> m_driverController.getLeftY(),
-                      () -> m_driverController.getLeftX(),
+                      () -> -m_driverController.getLeftY(),
+                      () -> -m_driverController.getLeftX(),
                       () -> -m_driverController.getRightX()));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
       m_driverController
