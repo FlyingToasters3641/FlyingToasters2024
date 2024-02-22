@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1,
-        "y": 7.1
+        "x": 2.7546355092710204,
+        "y": 6.9660616244309415
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.098994184857947,
-        "y": 7.055160077832308
+        "x": 3.701862019108655,
+        "y": 7.163400480647115
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.54,
-        "y": 7.65
+        "x": 8.378792911431978,
+        "y": 8.011957562376663
       },
       "prevControl": {
-        "x": 7.539999999999999,
-        "y": 7.65
+        "x": 7.530235829702429,
+        "y": 7.863953420214533
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "sequential",
         "data": {
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -168.340707346477,
+    "rotation": -177.66269414087608,
     "rotateFast": false
   },
   "reversed": false,

@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotState;
 
@@ -14,14 +15,14 @@ public class ShotController {
     private PIDController headingController;
     SwerveDrivePoseEstimator drivePoseEstimator;
 
-    NavigableMap<Double, Double> distanceAngles;
+    InterpolatingDoubleTreeMap distanceAngles;
 
     public ShotController(SwerveDrivePoseEstimator mPoseEstimator) {
         headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
         drivePoseEstimator = mPoseEstimator;
 
-        distanceAngles = new TreeMap<Double, Double>();
+        distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
         distanceAngles.put(Units.inchesToMeters(36.0), 65.0);
@@ -36,7 +37,7 @@ public class ShotController {
         distanceAngles.put(Units.inchesToMeters(144.0), 32.5);
         distanceAngles.put(Units.inchesToMeters(168.0), 28.0);
         distanceAngles.put(Units.inchesToMeters(180.0), 25.0);
-        distanceAngles.put(Units.inchesToMeters(204.0), 20.0);
+        distanceAngles.put(Units.inchesToMeters(204.0), 19.5);
     }
 
     public double updateDrive() {
@@ -56,16 +57,8 @@ public class ShotController {
         return output;
     }
 
-    public double nearestSetpoint(NavigableMap<Double, Double> distMap, double distance) {
-        double x1 = distMap.floorEntry(distance).getKey();
-        double y1 = distMap.floorEntry(distance).getValue();
-        double x2 = distMap.ceilingEntry(distance).getKey();
-        double y2 = distMap.ceilingEntry(distance).getValue();
-        double output = (distance - x1) / (x2 - x1) * (y2 - y1) + y1;
-        Logger.recordOutput("ShotControl/Floor", y1); 
-        Logger.recordOutput("ShotControl/LauncherAngle", output);
-        Logger.recordOutput("ShotControl/Distance", Units.metersToInches(distance));
+    public double nearestSetpoint(InterpolatingDoubleTreeMap distMap, double distance) {
         
-        return output;
+        return distMap.get(distance);
     }
 }
