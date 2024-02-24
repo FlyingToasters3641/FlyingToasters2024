@@ -11,6 +11,7 @@ import frc.robot.commands.LauncherCommands;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.RobotSystem;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.LEDs.LEDSubsystem;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.GyroIO;
@@ -38,6 +39,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -63,7 +65,7 @@ public class RobotContainer {
     public final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
     private final Launcher m_launcher;
-    //private final LEDSubsystem m_LEDSubsystem = new LEDSubsystem();
+    private final LEDSubsystem m_LEDSubsystem;
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
@@ -169,6 +171,10 @@ public class RobotContainer {
       m_driverController.leftTrigger().whileTrue(IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(IntakeCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
+
+      m_driverController.povUp().onTrue(new InstantCommand(() -> {
+        m_LEDSubsystem.ledSwitch(3);
+})).onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
   }     
 
      
