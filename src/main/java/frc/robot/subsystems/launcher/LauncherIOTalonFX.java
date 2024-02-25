@@ -63,7 +63,7 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Feedback.RotorToSensorRatio = PIVOT_RATIO;
 
         //Esitmated Values from Recalc
-        pitchConfig.Slot0.kG = -25.00;
+        pitchConfig.Slot0.kG = -30.00;
         pitchConfig.Slot0.kV = 2.79;
         pitchConfig.Slot0.kA = 0.04;
 
