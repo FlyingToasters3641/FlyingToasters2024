@@ -105,9 +105,7 @@ public class Module {
 
         // Run drive controller
         double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-        io.setDriveVoltage(
-            driveFeedforward.calculate(velocityRadPerSec)
-                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+        io.setDriveVelocity(velocityRadPerSec);
       }
     }
 
@@ -149,7 +147,7 @@ public class Module {
   /** Disables all outputs to motors. */
   public void stop() {
     io.setTurnVoltage(0.0);
-    io.setDriveVoltage(0.0);
+    io.setDriveVelocity(0.0);
 
     // Disable closed loop control for turn and drive
     angleSetpoint = null;
