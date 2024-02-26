@@ -52,6 +52,10 @@ public class Intake extends SubsystemBase{
         io.setFrontSpeed(.5);
     }
 
+    public void reverseRear() {
+        io.setRearSpeed(-0.5);
+    }
+
     public boolean frontCurrentSpike() {
         return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue() > 2.0);
     }

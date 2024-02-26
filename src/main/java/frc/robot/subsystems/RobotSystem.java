@@ -18,7 +18,8 @@ public class RobotSystem extends SubsystemBase{
         STATION_INTAKE,
         AMP_AIM,
         AMP_SCORE,
-        HUMAN_PLAYER
+        HUMAN_PLAYER,
+        REAL_REVERSE_INTAKE
     }
 
     public enum GamepieceState {
@@ -55,6 +56,7 @@ public class RobotSystem extends SubsystemBase{
             case AMP_AIM -> currentState = SystemState.AMP_AIM;
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
+            case REAL_REVERSE_INTAKE -> currentState = SystemState.REAL_REVERSE_INTAKE;
         }
 
         switch (currentState){
@@ -120,6 +122,13 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.4);
                 intake.stopFront();
                 intake.stopRear();
+            }
+            case REAL_REVERSE_INTAKE -> {
+                launcher.setAngleSetpoint(30);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(-0.2);
+                intake.stopFront();
+                intake.reverseRear();
             }
 
             }

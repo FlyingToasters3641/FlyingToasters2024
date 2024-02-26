@@ -136,6 +136,7 @@ public class RobotContainer {
      //3 piece center  
     autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
     autoChooser.addOption("4 Piece Center", new PathPlannerAuto("4 Piece Center"));
+    autoChooser.addOption("2 Piece Left", new PathPlannerAuto("2 Piece Left"));
     // Set up SysId routines
 
     // Configure the button bindings
@@ -169,9 +170,9 @@ public class RobotContainer {
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
       m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftTrigger().whileTrue(IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.leftBumper().whileTrue(IntakeCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
-
+      
 //       m_driverController.povUp().onTrue(new InstantCommand(() -> {
 //         m_LEDSubsystem.ledSwitch(3);
 // })).onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));

@@ -59,6 +59,13 @@ public class IntakeCommands {
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 
+    
+    public static Command rearOutakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return Commands.run(() -> {
+            m_System.setGoalState(RobotSystem.SystemState.REAL_REVERSE_INTAKE);
+        });
+    }
+    
     public static Command humanIntakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
       return Commands.run(() -> {
           m_System.setGoalState(RobotSystem.SystemState.HUMAN_PLAYER);
