@@ -24,6 +24,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Module {
   private static final double WHEEL_RADIUS = Units.inchesToMeters(1.4375);
+  private static final double WHEEL_CIR = (WHEEL_RADIUS * 2) * Math.PI;
   static final double ODOMETRY_FREQUENCY = 250.0;
 
   private final ModuleIO io;
@@ -104,8 +105,8 @@ public class Module {
         double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
 
         // Run drive controller
-        double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-        io.setDriveVelocity(velocityRadPerSec);
+        double velocityRotPerSec = adjustSpeedSetpoint / WHEEL_CIR;
+        io.setDriveVelocity(velocityRotPerSec);
       }
     }
 

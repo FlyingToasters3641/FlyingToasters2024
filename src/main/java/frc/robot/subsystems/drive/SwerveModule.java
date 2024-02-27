@@ -21,6 +21,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -96,9 +97,9 @@ public class SwerveModule implements ModuleIO {
     driveConfig.CurrentLimits.StatorCurrentLimit = 40.0;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    driveConfig.Slot0.kS = 0.05;
-    driveConfig.Slot0.kV = 0.08;
-    driveConfig.Slot0.kP = 0.09;
+    driveConfig.Slot0.kV = 0.3;
+    driveConfig.Slot0.kA = 0.0;
+    driveConfig.Slot0.kP = 0.0;
     
     driveTalon.getConfigurator().apply(driveConfig);
     setDriveBrakeMode(true);
@@ -195,7 +196,7 @@ public class SwerveModule implements ModuleIO {
 
   @Override
   public void setDriveVelocity(double velocity){
-    driveTalon.setControl(new VelocityTorqueCurrentFOC(velocity));
+    driveTalon.setControl(new VelocityVoltage(velocity, 0.0, true, 0.0, 0, false, false, false));
   }
 
   @Override
