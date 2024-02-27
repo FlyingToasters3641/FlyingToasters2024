@@ -56,13 +56,6 @@ public class LauncherCommands {
     // Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     // }
 
-    public static SequentialCommandGroup shootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
-        return new SequentialCommandGroup(
-                Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.AIM))
-                        .until(() -> m_launcher.atThreshold())
-                        .andThen(Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.SHOOT))),
-                new WaitCommand(.5), Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
-    }
 
     public static SequentialCommandGroup autoShootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return new SequentialCommandGroup(

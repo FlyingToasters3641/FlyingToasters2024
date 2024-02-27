@@ -44,7 +44,7 @@ public interface LauncherIO {
 
     public default void getNote() {}
 
-    public default boolean atThreshold() {return false;}
+    public default boolean atThreshold() {return true;}
  
 }
 

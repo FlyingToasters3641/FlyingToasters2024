@@ -154,9 +154,12 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public boolean atThreshold() {
-        double threshold = 2.0;
-        if (launcherPitchCANCoder.getPosition().getValueAsDouble() >= (launcherSetpointDegrees - threshold)
-                && launcherPitchCANCoder.getPosition().getValueAsDouble() <= (launcherSetpointDegrees + threshold)) {
+        double threshold = 5.0;
+
+        Logger.recordOutput("Launcher/angelDegreesweareusing", Units.rotationsToDegrees(-launcherPitchCANCoder.getPosition().getValue()));
+
+        if (Units.rotationsToDegrees(-launcherPitchCANCoder.getPosition().getValue()) >= (launcherSetpointDegrees - threshold)
+        && Units.rotationsToDegrees(-launcherPitchCANCoder.getPosition().getValue()) <= (launcherSetpointDegrees + threshold)) {
             return true;
         } else {
             return false;
