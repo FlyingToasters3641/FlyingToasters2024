@@ -2,6 +2,7 @@ package frc.robot.subsystems.launcher;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +12,7 @@ public class Launcher extends SubsystemBase {
 
   private LauncherIO io;
   private final LauncherIOInputsAutoLogged inputs = new LauncherIOInputsAutoLogged();
+
   private ShotController shotController;
   
 
@@ -19,7 +21,7 @@ public class Launcher extends SubsystemBase {
   public Launcher(LauncherIO io) {
     this.io = io;
     io.setBrakeMode(false, false, false, true);
-    
+
   }
 
   @Override
@@ -69,4 +71,10 @@ public class Launcher extends SubsystemBase {
     return inputs.note;
   }
 
+
+  public boolean atThreshold(){
+    Logger.recordOutput("Launcher/AtThreshold",io.atThreshold());
+
+    return io.atThreshold();
+  }
 }

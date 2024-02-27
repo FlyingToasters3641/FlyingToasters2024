@@ -43,6 +43,8 @@ public interface LauncherIO {
     public default void getAngle() {}
 
     public default void getNote() {}
+
+    public default boolean atThreshold() {return false;}
  
 }
 
