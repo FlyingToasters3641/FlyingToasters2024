@@ -10,20 +10,24 @@ import frc.robot.subsystems.launcher.Launcher;
 public class ShootNote extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Launcher launcher;
-  private final Intake intake;
   private final RobotSystem robotSystem;
+  private boolean endCommand;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param m_launcher The subsystem used by this command.
    */
-  public ShootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+  public ShootNote(Launcher m_launcher, RobotSystem m_System) {
     launcher = m_launcher;
-    intake = m_intake;
     robotSystem = m_System;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_launcher, m_intake, m_System);
+    addRequirements(m_launcher, m_System);
+  }
+
+  @Override
+  public void initialize() {
+    endCommand = false;
   }
 
 
@@ -32,9 +36,18 @@ public class ShootNote extends Command {
         robotSystem.setGoalState(SystemState.AIM);
         if (launcher.atThreshold()) {
             robotSystem.setGoalState(SystemState.SHOOT);
-            cancel();
+            endCommand = true;
         }
     }
+
+  @Override
+  public boolean isFinished() {
+    if (endCommand = true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
 }
