@@ -11,6 +11,8 @@ import frc.robot.commands.LauncherCommands;
 import frc.robot.constants.VisionConstants;
 import frc.robot.subsystems.RobotSystem;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.LEDs.LEDCANdle;
+import frc.robot.subsystems.LEDs.LEDIO;
 import frc.robot.subsystems.LEDs.LEDSubsystem;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -65,7 +67,7 @@ public class RobotContainer {
     public final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
     private final Launcher m_launcher;
-    //private final LEDSubsystem m_LEDSubsystem;
+    private final LEDSubsystem m_LEDSubsystem;
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
@@ -92,6 +94,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFX());   
         m_launcher = new Launcher(new LauncherIOTalonFX());    
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_LEDSubsystem = new LEDSubsystem(new LEDCANdle());
         
         break;
 
@@ -107,6 +110,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+         m_LEDSubsystem = new LEDSubsystem(new LEDCANdle() {});
         break;
 
       default:
@@ -121,6 +125,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+         m_LEDSubsystem = new LEDSubsystem(new LEDCANdle() {});
         break;
     }
 
@@ -173,9 +178,9 @@ public class RobotContainer {
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
       
-//       m_driverController.povUp().onTrue(new InstantCommand(() -> {
-//         m_LEDSubsystem.ledSwitch(3);
-// })).onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(1)));
+      m_driverController.povUp().onTrue(new InstantCommand(() -> {
+        m_LEDSubsystem.ledSwitch(2);
+})).onFalse(new InstantCommand(() -> m_LEDSubsystem.ledSwitch(0)));
   }     
 
      

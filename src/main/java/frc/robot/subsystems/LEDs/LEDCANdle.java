@@ -6,7 +6,6 @@ package frc.robot.subsystems.LEDs;
 import com.ctre.phoenix.led.CANdle;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.LEDs.LEDIO.LEDIOInputs;
 
 public class LEDCANdle implements LEDIO {
 
@@ -16,8 +15,8 @@ public class LEDCANdle implements LEDIO {
 
     @Override
     public void updateInputs(LEDIOInputs inputs) {
-        inputs.ledStatus = ledStatus;
-        inputs.ledBlink = ledBlink;
+        LEDIOInputs.ledStatus = ledStatus;
+        LEDIOInputs.ledBlink = ledBlink;
     }
 
 

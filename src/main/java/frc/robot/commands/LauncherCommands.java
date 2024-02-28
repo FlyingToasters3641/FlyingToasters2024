@@ -47,14 +47,14 @@ public class LauncherCommands {
         });
     }
 
-    // public static SequentialCommandGroup shootNote(Launcher m_launcher, Intake
-    // m_intake, RobotSystem m_System) {
+    public static SequentialCommandGroup shootNote(Launcher m_launcher, Intake
+    m_intake, RobotSystem m_System) {
 
-    // return new SequentialCommandGroup(
-    // Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.SHOOT)),
-    // new WaitCommand(0.5),
-    // Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
-    // }
+    return new SequentialCommandGroup(
+    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.SHOOT)),
+    new WaitCommand(0.5),
+    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+    }
 
 
     public static SequentialCommandGroup autoShootNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
