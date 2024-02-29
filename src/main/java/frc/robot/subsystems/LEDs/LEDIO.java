@@ -11,19 +11,14 @@ public interface LEDIO {
  
     @AutoLog
     public static class LEDIOInputs {
-        static int ledStatus = 0;
-        public static int ledBlink = 0;
+        public int ledStatus = 0;
+        public int ledBlink = 0;
     }
     
     public default void updateInputs(LEDIOInputs inputs) {}
 
+    public default void setColor(String color, int index, int count){}
     
-    public default void setColor(String color, int index, int count){
-
-    
-    }
-    public default void ledSwitch(int status, Timer greenTimer){
-        
-    }
+    public default void ledSwitch(int status, Timer greenTimer){}
 
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.LEDs;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.CANdleConfiguration;
@@ -12,23 +14,17 @@ public class LEDSubsystem extends SubsystemBase {
     private static final LEDIOInputs inputs = null;
     // creates CANdle in the code;
     // COME BACK LATER TO CHANGE THE NUMBER;
-    private CANdle candle = new CANdle(30);
     private final Timer ledTimer = new Timer(); // creates timer for coordinating the strips;
     private final Timer greenTimer = new Timer();
     private boolean ledStatusSwitch; // changes LED status
     private int ledBlink; // blinks the LEDs
     private int ledStatus; // Which colors should be on or off
-    private int[] ledIndex = { 8, 68, 128 }; // Shows where colors start, CHANGE LATER
+    private int[] ledIndex = { 0, 61, 121 }; // Shows where colors start, CHANGE LATER
     private boolean ledDisable;
     private LEDIO io;
     public LEDSubsystem(LEDIO io) {
         // defines starting variables;
-        CANdleConfiguration config = new CANdleConfiguration();
-           this.io = io;
 
-        ledStatus = LEDIO.ledStatus;
-        config.stripType = LEDStripType.RGB; // sets it to rgb;
-        candle.configAllSettings(config);
         ledTimer.start();
         ledStatusSwitch = false;
         ledBlink = 1;
@@ -39,14 +35,10 @@ public class LEDSubsystem extends SubsystemBase {
 
     }
        
-     
-        
-
-    
-
+    @Override
     public void periodic() {
         if (RobotState.isDisabled() == true) {
-            ledSwitch(1); // checks if the robot is disabled, if disabled it will display a plain color
+            ledSwitch(1); // checks if the robot is disabled, if disabled it will display a plain orange
             ledDisable = true;
         } else if (RobotState.isEnabled() && ledDisable == true) {
             ledSwitch(0);
@@ -57,12 +49,12 @@ public class LEDSubsystem extends SubsystemBase {
                 // flowing/moving colors
                 ledTimer.advanceIfElapsed(.2); {
                 // Moves colors by 2 every .2 seconds
-                setColor("Pink", ledIndex[2], 60);// pink CHANGE COUNT AND COLORS LATER
-                setColor("Purple", ledIndex[4], 60);// purple CHANGE COUNT AND COLORS LATER
-                setColor("Blue", ledIndex[6], 60);// blue CHANGE COUNT AND COLORS LATER
+                setColor("Pink", ledIndex[0], 60);// pink CHANGE COUNT AND COLORS LATER
+                setColor("Purple", ledIndex[1], 60);// purple CHANGE COUNT AND COLORS LATER
+                setColor("Blue", ledIndex[2], 60);// blue CHANGE COUNT AND COLORS LATER
+                ledIndex[0]++;
+                ledIndex[1]++;
                 ledIndex[2]++;
-                ledIndex[4]++;
-                ledIndex[6]++;
             }
                 break;
             case 1:
@@ -80,14 +72,16 @@ public class LEDSubsystem extends SubsystemBase {
                 }
 
                 if (ledStatusSwitch) {
-                    setColor("green", 8, 100);// CHANGE NUMBER LATER
+                    setColor("Green", 8, 120);// CHANGE NUMBER LATER
                 }
                 if (ledStatusSwitch) {
-                    setColor("none", 8, 100);// CHANGE NUMBER LATER
+                    setColor("none", 8, 120);// CHANGE NUMBER LATER
                 }
 
         }
         io.updateInputs(inputs);
+        Logger.recordOutput("LEDs/ledStatus", inputs.ledStatus);
+        
 
     }
 
