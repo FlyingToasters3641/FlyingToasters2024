@@ -4,8 +4,8 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
     @AutoLog
-    public static class IntakeIOInputs {
-        
+    public static class IntakeIOInputs {      
+        public boolean note = false;
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
@@ -19,5 +19,8 @@ public interface IntakeIO {
     public default void stopFront(){}
 
     public default void stopRear(){}
+   
+    public default void getIntakeNote() {}
+    
 
 }

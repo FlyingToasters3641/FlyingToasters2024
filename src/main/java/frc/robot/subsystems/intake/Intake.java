@@ -7,13 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase{
     private IntakeIO io;
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-    /*
-     * private static boolean isFrontRunning = false;
-     * private static boolean isRearRunning = false;
-     * private final SimpleMotorFeedforward intakeFeedforward;
-     * private final PIDController frontFeedback;
-     * private final PIDController rearFeedback;
-     */
+   
     IntakeIOTalonFX IntakeTalonFX = new IntakeIOTalonFX();
 
     public Intake(IntakeIO io) {
@@ -63,4 +57,8 @@ public class Intake extends SubsystemBase{
     public void stopRear() {
         io.stopRear();
     }
+    
+  public boolean getIntakeNote(){
+    return inputs.note;
+  }
 }
