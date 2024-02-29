@@ -18,17 +18,13 @@ public class Elevator extends SubsystemBase{
     @Override
     public void periodic(){
         io.updateInputs(inputs);
-        Logger.recordOutput("Elevator/AbsoluteElevatorPosition", inputs.elevatorPosition);
-        Logger.recordOutput("Elevator/Acceleration", inputs.elevatorAcceleration);
+        Logger.recordOutput("Elevator/ElevatorHeight", inputs.currentElevatorHeight);
     }
 
-    public void setPosition(double position){
-        io.setPosition(position);
+    public void setHeight(double position){
+        io.setHeight(position);
     }
 
-    public void setPosition(double position, double acceleration){
-        io.setPosition(position, acceleration);
-    }
 
 
 

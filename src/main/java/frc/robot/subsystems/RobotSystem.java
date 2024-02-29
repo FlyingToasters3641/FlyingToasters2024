@@ -118,7 +118,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0, 0); //testing the elevator commands
+                elevator.setPosition(35, 0); //testing the elevator commands
             }
             }
         }

@@ -1,71 +1,106 @@
 package frc.robot.subsystems.elevator;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.launcher.LauncherConstants;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
 
     private final String CANbusName = "Lucas";
     public final TalonFX leaderTalonFX = new TalonFX(2, CANbusName);
     public final TalonFX followerTalonFX = new TalonFX(1, CANbusName);
-    public final CANcoder leaderEncoder = new CANcoder(3, CANbusName);
+    public final CANcoder leaderCANcoder = new CANcoder(3, CANbusName);
 
-    public double elevatorPosition = 0.0;
+
+    //Measured in whatever units
+    public double currentElevatorHeight = 0.0;
+
     public double elevatorAcceleration = 0.0;
+
+    
 
     private MotionMagicVelocityVoltage m_VelocityVoltage = new MotionMagicVelocityVoltage(0.0);
 
+    
+    private final double absoluteEncoderOffset = 0.2855;// need to calibrate!
+
     public ElevatorIOTalonFX() {
 
+        //set motor to follow leader
         followerTalonFX.setControl(new Follower(leaderTalonFX.getDeviceID(), false));
 
-        // in init function
-        // in init function
-        var talonFXConfigs = new TalonFXConfiguration();
+        TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 
-        // set slot 0 gains
-        var slot0Configs = talonFXConfigs.Slot0;
-        slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
-        slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-        slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
-        slot0Configs.kI = 0; // no output for integrated error
-        slot0Configs.kD = 0; // no output for error derivative
+        //NONE OF THESE ARE TESTED!!!
+        // set slot 0 gains (elevator moving up)
+        elevatorConfig.Slot0.kG = 0.0;
+        elevatorConfig.Slot0.kV = 0.0;
+        elevatorConfig.Slot0.kA = 0.0;
+
+        elevatorConfig.Slot0.kP = 0.0;
+        elevatorConfig.Slot0.kD = 0.0;
+
+        //set slot 1 gains (elevator moving down)
+        elevatorConfig.Slot1.kG = 0.0;
+        elevatorConfig.Slot1.kV = 0.0;
+        elevatorConfig.Slot1.kA = 0.0;
+
+        elevatorConfig.Slot1.kP = 0.0;
+        elevatorConfig.Slot1.kD = 0.0;
+        //set slot 2 gains (climber)
+        elevatorConfig.Slot2.kG = 0.0;
+        elevatorConfig.Slot2.kV = 0.0;
+        elevatorConfig.Slot2.kA = 0.0;
+
+        elevatorConfig.Slot2.kP = 0.0;
+        elevatorConfig.Slot2.kD = 0.0;
+        
 
         // set Motion Magic Velocity settings
-        var motionMagicConfigs = talonFXConfigs.MotionMagic;
-        motionMagicConfigs.MotionMagicAcceleration = 400; // Target acceleration of 400 rps/s (0.25 seconds to max)
-        motionMagicConfigs.MotionMagicJerk = 4000; // Target jerk of 4000 rps/s/s (0.1 seconds)
+        elevatorConfig.MotionMagic = new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(
+                        Units.radiansToRotations(ElevatorConstants.profileConstraints.crusieVelocityRadPerSec()))
+                .withMotionMagicAcceleration(ElevatorConstants.profileConstraints.accelerationRadPerSec2());
 
-        leaderTalonFX.getConfigurator().apply(talonFXConfigs);
+        leaderTalonFX.getConfigurator().apply(elevatorConfig);
+
+        
+        CANcoderConfiguration magConfig = new CANcoderConfiguration();
+
+        magConfig.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
+
+        leaderCANcoder.getConfigurator().apply(magConfig);
     }
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs){
-        inputs.elevatorPosition = leaderEncoder.getAbsolutePosition().getValueAsDouble();
+        inputs.elevatorPosition = leaderCANcoder.getAbsolutePosition().getValueAsDouble();
         inputs.elevatorAcceleration = elevatorAcceleration;
     }
 
     @Override
-    public void setPosition(double position) {
+    public void setHeight(double height) {
+        //It is assumed that we would measure out the rotation of motors in degrees/radians/whatever in AdvantageScope for each novel position we want.
+        //You don't have to do radians, i used it because it seems more easy to read compared to degrees/rotations, put rotations directly if its too much of a hassle.
+        
+        //convert height to rotations
+        double convertedRot = height * ElevatorConstants.unitsToRotations;
+         if (height > currentElevatorHeight){
+            leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(convertedRot).withSlot(0));
+        } else {
+            leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(convertedRot).withSlot(1));
+        }
 
-        leaderTalonFX.setControl(m_VelocityVoltage.withVelocity(position));
-        elevatorPosition = position;
-    }
-
-    @Override
-    public void setPosition(double position, double acceleration) {
-
-        m_VelocityVoltage.Acceleration = acceleration;
-        leaderTalonFX.setControl(m_VelocityVoltage.withVelocity(position));
-
-        elevatorPosition = position;
+        currentElevatorHeight = height;
     }
 
     @Override
@@ -73,5 +108,25 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         leaderTalonFX.setNeutralMode(leaderFlywheelBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
         followerTalonFX.setNeutralMode(followerFlywheelBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
+
+    // @Override
+    // public void setPosition(double position, double acceleration) {
+
+    //     m_VelocityVoltage.Acceleration = acceleration;
+    //     leaderTalonFX.setControl(m_VelocityVoltage.withVelocity(position));
+
+    //     elevatorPosition = position;
+    // }
+
+    // @Override
+    // public void setRealPosition(double position) {
+    //     if (position > elevatorPosition){
+    //         leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(position)).withSlot(0));
+    //     } else {
+    //         leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(position)).withSlot(1));
+    //     }
+    // }
+
+    
 
 }
