@@ -83,8 +83,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs){
-        inputs.elevatorPosition = leaderCANcoder.getAbsolutePosition().getValueAsDouble();
-        inputs.elevatorAcceleration = elevatorAcceleration;
+        inputs.currentElevatorHeight = leaderTalonFX.getPosition().getValueAsDouble() * ElevatorConstants.unitsToRotations;//leaderCANcoder.getAbsolutePosition().getValueAsDouble();
+        
     }
 
     @Override

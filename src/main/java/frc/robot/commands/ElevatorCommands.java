@@ -9,7 +9,7 @@ public class ElevatorCommands {
 
     public static Command goToHeight(Elevator m_elevator, double height){
         return Commands.runOnce(() -> {
-            m_elevator.setPosition(height);
+            m_elevator.setHeight(height);
         });
     }
 
