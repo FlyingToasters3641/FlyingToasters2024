@@ -22,6 +22,8 @@ public interface LauncherIO {
         public double pitchMotorSensorDegrees = 0.0;
 
         public double angleSetpointDegrees = 0.0;
+
+        public double flywheelVelocity = 0.0;
         
         public boolean note = false;
     }

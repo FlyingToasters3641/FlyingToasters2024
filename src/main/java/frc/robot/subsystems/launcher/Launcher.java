@@ -31,6 +31,7 @@ public class Launcher extends SubsystemBase {
     Logger.recordOutput("Launcher/PitchSensorDegrees", inputs.launcherPositionDegrees);
     Logger.recordOutput("Launcher/PitchMotorDegrees", inputs.pitchMotorSensorDegrees);
     Logger.recordOutput("Launcher/PitchSetpointDegrees", inputs.angleSetpointDegrees);
+    Logger.recordOutput("Launcher/FeederVelocity", inputs.flywheelVelocity);
   }
 
   @Override

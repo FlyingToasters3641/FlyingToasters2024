@@ -32,6 +32,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     private final double absoluteEncoderOffset = 0.2855;// need to calibrate!
 
     private double launcherSetpointDegrees = 0.0;
+    private double flywheelSpeed = 0.0;
 
     public LauncherIOTalonFX() {
         bottomFlywheelTalonFX.setInverted(true);
@@ -102,6 +103,7 @@ public class LauncherIOTalonFX implements LauncherIO {
         inputs.launcherPositionDegrees = (Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         inputs.pitchMotorSensorDegrees = Units.rotationsToDegrees(launcherPitchTalonFX.getPosition().getValue());
         inputs.angleSetpointDegrees = launcherSetpointDegrees;
+        inputs.flywheelVelocity = topFlywheelTalonFX.getVelocity().getValue();
         inputs.note = launchSensor.get();
         Logger.recordOutput("Launcher/Sensor", launchSensor.get());
     }
@@ -144,6 +146,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     public void setFlywheelVelocity(double rpm) {
         topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
         bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+
+        flywheelSpeed = rpm;
     }
 
     @Override
@@ -154,13 +158,18 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public boolean atThreshold() {
-        double threshold = 5.0;
+        double launcherThreshold = 4.0;
+        double flywheelThreshold = 50;
 
         double currentDegrees =  -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
+        double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();
         Logger.recordOutput("Launcher/currentDegrees", currentDegrees);
+        Logger.recordOutput("Launcher/currentFlywheelVelocity", currentFlywheelVelocity);
 
-        if (currentDegrees >= (launcherSetpointDegrees - threshold) 
-        && currentDegrees <= (launcherSetpointDegrees + threshold)) {
+        if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold) 
+        && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
+        && flywheelSpeed >= (currentFlywheelVelocity - flywheelThreshold)
+        && flywheelSpeed <= (currentFlywheelVelocity + flywheelThreshold)) {
             return true;
         } else {
             return false;
