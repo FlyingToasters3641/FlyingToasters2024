@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
@@ -21,24 +22,28 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public final CANcoder leaderCANcoder = new CANcoder(3, CANbusName);
 
 
-    //Measured in whatever units
+    //elevator gear ratio 
+    public static final double ELEVATOR_RATIO = 0.0653;
+    //Measured in whatever units (0 being the lowest height)
     public double currentElevatorHeight = 0.0;
-
-    public double elevatorAcceleration = 0.0;
-
-    
-
-    private MotionMagicVelocityVoltage m_VelocityVoltage = new MotionMagicVelocityVoltage(0.0);
+    //Cancoder offset NOT TUINED
+    public static double absoluteEncoderOffset = 0.0;
 
     
-    private final double absoluteEncoderOffset = 0.2855;// need to calibrate!
-
     public ElevatorIOTalonFX() {
 
         //set motor to follow leader
         followerTalonFX.setControl(new Follower(leaderTalonFX.getDeviceID(), false));
 
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
+
+        
+
+        elevatorConfig.Feedback.FeedbackRemoteSensorID = leaderCANcoder.getDeviceID();
+        elevatorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        elevatorConfig.Feedback.SensorToMechanismRatio = ELEVATOR_RATIO;
+        elevatorConfig.Feedback.RotorToSensorRatio = 1;
+
 
         //NONE OF THESE ARE TESTED!!!
         // set slot 0 gains (elevator moving up)
@@ -89,11 +94,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public void setHeight(double height) {
-        //It is assumed that we would measure out the rotation of motors in degrees/radians/whatever in AdvantageScope for each novel position we want.
-        //You don't have to do radians, i used it because it seems more easy to read compared to degrees/rotations, put rotations directly if its too much of a hassle.
-        
+
         //convert height to rotations
         double convertedRot = height * ElevatorConstants.unitsToRotations;
+        
          if (height > currentElevatorHeight){
             leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(convertedRot).withSlot(0));
         } else {
@@ -109,23 +113,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         followerTalonFX.setNeutralMode(followerFlywheelBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
-    // @Override
-    // public void setPosition(double position, double acceleration) {
 
-    //     m_VelocityVoltage.Acceleration = acceleration;
-    //     leaderTalonFX.setControl(m_VelocityVoltage.withVelocity(position));
-
-    //     elevatorPosition = position;
-    // }
-
-    // @Override
-    // public void setRealPosition(double position) {
-    //     if (position > elevatorPosition){
-    //         leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(position)).withSlot(0));
-    //     } else {
-    //         leaderTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(position)).withSlot(1));
-    //     }
-    // }
 
     
 

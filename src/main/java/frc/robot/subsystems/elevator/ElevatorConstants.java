@@ -16,7 +16,7 @@ public class ElevatorConstants {
     public static final double unitsToRotations = 0.0;
 
 
-    //Use this space to add CONSTANT values which are TESTED if you need any (they haven't been tested as of 2/28/24)
+    //Use this space to add CONSTANT values for set positions of elevator height when needed
 
 
 }
