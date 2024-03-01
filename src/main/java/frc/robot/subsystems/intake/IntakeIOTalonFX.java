@@ -17,12 +17,6 @@ public class IntakeIOTalonFX implements IntakeIO {
     public void updateInputs(IntakeIOInputs inputs){
     }
 
-
-    @Override
-    public void setFrontSpeed(double speed){
-        frontTalonFX.set(speed);
-    }
-
     @Override
     public void setRearSpeed(double speed){
         rearTalonFX.set(speed);

@@ -42,7 +42,7 @@ public interface LauncherIO {
 
     public default void getAngle() {}
 
-    public default void getNote() {}
+    public default void getLauncherNote() {}
  
 }
 

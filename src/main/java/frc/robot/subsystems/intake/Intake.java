@@ -22,20 +22,16 @@ public class Intake extends SubsystemBase{
 
     }
 
-    public void reverseFrontRollers(DoubleSupplier axis) {
-        io.setFrontSpeed(axis.getAsDouble());
+    public void reverseFrontRollers() {
+        io.setFrontSpeed(-.5);
     }
 
     public void runFrontRollers(DoubleSupplier axis) {
         io.setFrontSpeed(axis.getAsDouble());
     }
 
-    public void reverseRearRollers(DoubleSupplier axis) {
-        io.setRearSpeed(axis.getAsDouble());
-    }
-
-    public void runRearRollers(double value) {
-        io.setRearSpeed(value);
+    public void reverseRearRollers() {
+        io.setRearSpeed(-.5);
     }
     
     public void runRear() {
@@ -58,7 +54,11 @@ public class Intake extends SubsystemBase{
         io.stopRear();
     }
     
-  public boolean getIntakeNote(){
+  public boolean getfrontIntake(){
+    return inputs.note;
+  }
+
+    public boolean getrearIntake(){
     return inputs.note;
   }
 }

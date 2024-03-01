@@ -180,9 +180,7 @@ public class RobotContainer {
                               .ignoringDisable(true));
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
-      m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.leftTrigger().whileTrue(IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.leftBumper().whileTrue(IntakeCommands.frontIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftTrigger().whileTrue(IntakeCommands.Intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
   }     
 

@@ -12,13 +12,10 @@ public class RobotSystem extends SubsystemBase{
         IDLE,
         AIM,
         SHOOT,
-        INTAKE,
-        FRONT_INTAKE,
-        REVERSE_INTAKE,
-        STATION_INTAKE,
         AMP_AIM,
         AMP_SCORE,
-        HUMAN_PLAYER
+        HUMAN_PLAYER,
+        LAUNCHER_FEED
     }
 
     public enum GamepieceState {
@@ -48,13 +45,10 @@ public class RobotSystem extends SubsystemBase{
             case IDLE -> currentState = SystemState.IDLE;
             case AIM -> currentState = SystemState.AIM;
             case SHOOT -> currentState = SystemState.SHOOT;
-            case INTAKE -> currentState = SystemState.INTAKE;
-            case FRONT_INTAKE -> currentState = SystemState.FRONT_INTAKE;
-            case REVERSE_INTAKE -> currentState = SystemState.REVERSE_INTAKE;
-            case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
             case AMP_AIM -> currentState = SystemState.AMP_AIM;
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
+            case LAUNCHER_FEED -> currentState = SystemState.LAUNCHER_FEED;
         }
 
         switch (currentState){
@@ -79,27 +73,6 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
             }
-            case INTAKE -> {
-                launcher.setAngleSetpoint(30);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.15);
-                intake.stopFront();
-                intake.runRear();
-            }
-            case FRONT_INTAKE -> {
-                launcher.setAngleSetpoint(0);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_INTAKE);
-                launcher.setFeederVoltage(0.15);
-                intake.runFront();
-                intake.stopRear();
-            }
-            case REVERSE_INTAKE -> {
-                launcher.setAngleSetpoint(30);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(-0.5);
-                intake.stopFront();
-                intake.stopRear();
-            } 
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_INTAKE);
@@ -121,6 +94,7 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
             }
+         
 
             }
         }

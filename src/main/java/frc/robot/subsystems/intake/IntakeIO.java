@@ -6,6 +6,7 @@ public interface IntakeIO {
     @AutoLog
     public static class IntakeIOInputs {      
         public boolean note = false;
+      
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {}
@@ -20,7 +21,9 @@ public interface IntakeIO {
 
     public default void stopRear(){}
    
-    public default void getIntakeNote() {}
+    public default void getfrontIntake() {}
+
+    public default void getrearIntake() {}
     
 
 }
