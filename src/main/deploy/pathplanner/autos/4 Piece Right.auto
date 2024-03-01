@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7401886415755699,
+      "y": 6.663465994549679
+    },
+    "rotation": -122.61924307119274
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 2 Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right to middle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Middle to Outside"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Outside to Middle"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
