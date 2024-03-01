@@ -33,6 +33,9 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     private double launcherSetpointDegrees = 0.0;
     private double flywheelSpeed = 0.0;
+    private double launcherThreshold = 4.0;
+    private double flywheelThreshold = 2.0;
+    private double realFlywheelSpeed = 42.0;
 
     public LauncherIOTalonFX() {
         bottomFlywheelTalonFX.setInverted(true);
@@ -158,8 +161,6 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public boolean atThreshold() {
-        double launcherThreshold = 4.0;
-        double flywheelThreshold = 50;
 
         double currentDegrees =  -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();
@@ -168,8 +169,8 @@ public class LauncherIOTalonFX implements LauncherIO {
 
         if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold) 
         && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
-        && flywheelSpeed >= (currentFlywheelVelocity - flywheelThreshold)
-        && flywheelSpeed <= (currentFlywheelVelocity + flywheelThreshold)) {
+        && currentFlywheelVelocity >= (realFlywheelSpeed - flywheelThreshold)
+        && currentFlywheelVelocity <= (realFlywheelSpeed + flywheelThreshold)) {
             return true;
         } else {
             return false;
