@@ -19,6 +19,8 @@ public interface ElevatorIO {
 
     public default void getPosition() {}
 
+    public default void setClimber(double position) {}
+
 
 
     

@@ -25,6 +25,10 @@ public class Elevator extends SubsystemBase{
         io.setHeight(position);
     }
 
+    public void setClimber(double position){
+        io.setClimber(position);
+    }
+
 
 
 

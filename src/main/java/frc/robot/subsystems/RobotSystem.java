@@ -22,7 +22,8 @@ public class RobotSystem extends SubsystemBase{
         AMP_SCORE,
         HUMAN_PLAYER,
         SHOOT_WITH_ELEVATOR, //Example enum which uses the elevator in it.,
-        REAL_REVERSE_INTAKE
+        REAL_REVERSE_INTAKE,
+        CLIMB
     }
 
     public enum GamepieceState {
@@ -64,6 +65,7 @@ public class RobotSystem extends SubsystemBase{
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
             case SHOOT_WITH_ELEVATOR -> currentState = SystemState.SHOOT_WITH_ELEVATOR;
             case REAL_REVERSE_INTAKE -> currentState = SystemState.REAL_REVERSE_INTAKE;
+            case CLIMB -> currentState = SystemState.CLIMB;
         }
 
         switch (currentState){
@@ -130,7 +132,7 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setHeight(0.0); //testing the elevator commands
-            }            case AMP_AIM -> {
+            }   case AMP_AIM -> {
                 launcher.setAngleSetpoint(66);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
@@ -150,6 +152,15 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.reverseRear();
+            }
+            case CLIMB -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0);
+                intake.stopFront();
+                intake.stopRear();
+                elevator.setHeight(0);
+                elevator.setClimber(0);
             }
 
             }

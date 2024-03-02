@@ -20,6 +20,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     public final TalonFX leaderTalonFX = new TalonFX(2, CANbusName);
     public final TalonFX followerTalonFX = new TalonFX(1, CANbusName);
     public final CANcoder leaderCANcoder = new CANcoder(3, CANbusName);
+    public final TalonFX climberTalonFX = new TalonFX(4, CANbusName);
 
 
     //elevator gear ratio 
@@ -105,6 +106,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         }
 
         currentElevatorHeight = height;
+    }
+
+    @Override
+    public void setClimber(double height) {
+        double convertedRot = height * ElevatorConstants.unitsToRotations;
+        climberTalonFX.setControl(new MotionMagicTorqueCurrentFOC(convertedRot).withSlot(2));
+        
     }
 
     @Override
