@@ -77,8 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
   private AimController aimController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-    new PIDConstants(5.0), //Translation
-    new PIDConstants(5.0), //Rotation
+    new PIDConstants(5.5), //Translation
+    new PIDConstants(4.0), //Rotation
             MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig());
 
   public DriveSubsystem(
