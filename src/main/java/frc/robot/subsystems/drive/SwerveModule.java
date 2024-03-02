@@ -13,8 +13,6 @@ import edu.wpi.first.math.util.Units;
 
 import java.util.Queue;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -22,8 +20,6 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -68,7 +64,7 @@ public class SwerveModule implements ModuleIO {
         driveTalon = new TalonFX(13, CANbusName);
         turnSparkMax = new CANSparkMax(20, MotorType.kBrushless);
         cancoder = new CANcoder(17, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.025146)); //-0.013428 // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.013428)); // MUST BE CALIBRATED
         break;
       case 1: // Front Right
         driveTalon = new TalonFX(10, CANbusName);
@@ -98,11 +94,6 @@ public class SwerveModule implements ModuleIO {
     var driveConfig = new TalonFXConfiguration();
     driveConfig.CurrentLimits.StatorCurrentLimit = 40.0;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
-    driveConfig.Slot0.kS = 0.317;
-    driveConfig.Slot0.kV = 0.68;
-    driveConfig.Slot0.kP = 0.1;
-    
     driveTalon.getConfigurator().apply(driveConfig);
     setDriveBrakeMode(true);
 
@@ -189,18 +180,11 @@ public class SwerveModule implements ModuleIO {
     timestampQueue.clear();
     drivePositionQueue.clear();
     turnPositionQueue.clear();
-    Logger.recordOutput("Drive/velocityDrive", driveVelocity.getValueAsDouble()/4.40);
-    Logger.recordOutput("Drive/voltageOutput", driveTalon.getMotorVoltage().getValueAsDouble());
   }
 
   @Override
   public void setDriveVoltage(double volts) {
     driveTalon.setControl(new VoltageOut(volts, true, false, false, false));
-  }
-
-  @Override
-  public void setDriveVelocity(double velocity){
-    driveTalon.setControl(new VelocityVoltage(velocity));
   }
 
   @Override

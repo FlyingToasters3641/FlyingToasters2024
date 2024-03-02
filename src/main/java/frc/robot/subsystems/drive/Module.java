@@ -23,8 +23,7 @@ import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
-  private static final double WHEEL_RADIUS = Units.inchesToMeters(1.375);
-  private static final double WHEEL_CIR = WHEEL_RADIUS * (2 * Math.PI);
+  private static final double WHEEL_RADIUS = Units.inchesToMeters(1.4375);
   static final double ODOMETRY_FREQUENCY = 250.0;
 
   private final ModuleIO io;
@@ -49,7 +48,7 @@ public class Module {
       case REAL:
         driveFeedforward = new SimpleMotorFeedforward(0.05, 0.08);
         driveFeedback = new PIDController(0.09, 0.0, 0.0);
-        turnFeedback = new PIDController(5.0, 0.0, 0.00); //4.0
+        turnFeedback = new PIDController(7.0, 0.0, 0.00); //4.0
         break;
       case REPLAY:
         driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
@@ -105,9 +104,10 @@ public class Module {
         double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
 
         // Run drive controller
-        double velocityRotPerSec = adjustSpeedSetpoint / WHEEL_CIR;
-        io.setDriveVelocity(velocityRotPerSec);
-        Logger.recordOutput("Drive/velocitySetpoint", velocityRotPerSec);
+        double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
+        io.setDriveVoltage(
+            driveFeedforward.calculate(velocityRadPerSec)
+                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
       }
     }
 
@@ -149,7 +149,7 @@ public class Module {
   /** Disables all outputs to motors. */
   public void stop() {
     io.setTurnVoltage(0.0);
-    io.setDriveVelocity(0.0);
+    io.setDriveVoltage(0.0);
 
     // Disable closed loop control for turn and drive
     angleSetpoint = null;
