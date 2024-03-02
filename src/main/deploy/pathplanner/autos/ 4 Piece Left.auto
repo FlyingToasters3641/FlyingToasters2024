@@ -81,13 +81,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Middle to Outside"
+            "pathName": "Middle to Outside"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Outside to Middle"
+            "pathName": " Outside to Middle"
           }
         }
       ]

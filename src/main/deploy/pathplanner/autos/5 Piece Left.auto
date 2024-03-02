@@ -81,25 +81,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Middle to Outside"
+            "pathName": "Middle to Outside"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Outside to Middle"
+            "pathName": " Outside to Middle"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Middle to Outside 2"
+            "pathName": " Middle to Outside 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Outside to Middle 2"
+            "pathName": "Outside to Middle 2"
           }
         }
       ]
