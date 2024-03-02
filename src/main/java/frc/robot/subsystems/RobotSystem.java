@@ -82,7 +82,7 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear();
             }
             case INTAKE -> {
-                launcher.setAngleSetpoint(30);
+                launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.15);
                 intake.stopFront();
@@ -96,7 +96,7 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear();
             }
             case REVERSE_INTAKE -> {
-                launcher.setAngleSetpoint(30);
+                launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(-0.5);
                 intake.stopFront();

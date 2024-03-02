@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -70,4 +72,7 @@ public class LauncherCommands {
                 Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 
+    public static Command pitchJoystick(Launcher m_Launcher, DoubleSupplier joystick){
+        return Commands.runOnce(() -> m_Launcher.setAngleSetpoint(joystick.getAsDouble() * 10.0));
+    }
 }

@@ -20,6 +20,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.SwerveModule;
+import frc.robot.subsystems.drive.SwerveModuleComp;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
@@ -49,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherIO;
 import frc.robot.subsystems.launcher.LauncherIOTalonFX;
+import frc.robot.subsystems.launcher.LauncherIOTalonFXComp;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -86,12 +88,12 @@ public class RobotContainer {
         m_robotDrive =
             new DriveSubsystem(
                 new GyroIOPigeon2(true),
-                new SwerveModule(0),
-                new SwerveModule(1),
-                new SwerveModule(2),
-                new SwerveModule(3));
+                new SwerveModuleComp(0),
+                new SwerveModuleComp(1),
+                new SwerveModuleComp(2),
+                new SwerveModuleComp(3));
         m_intake = new Intake(new IntakeIOTalonFX());   
-        m_launcher = new Launcher(new LauncherIOTalonFX());    
+        m_launcher = new Launcher(new LauncherIOTalonFXComp());    
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
         
         break;
@@ -132,7 +134,7 @@ public class RobotContainer {
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    autoChooser.addDefaultOption("TestPath", AutoBuilder.followPath(PathPlannerPath.fromPathFile("TestPath")));
+    
     autoChooser.addOption("2 Piece Center", new PathPlannerAuto("2 Piece Center"));
      //3 piece center  
     autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
@@ -173,6 +175,7 @@ public class RobotContainer {
       m_driverController.leftTrigger().whileTrue(IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
+      
       
 //       m_driverController.povUp().onTrue(new InstantCommand(() -> {
 //         m_LEDSubsystem.ledSwitch(3);
