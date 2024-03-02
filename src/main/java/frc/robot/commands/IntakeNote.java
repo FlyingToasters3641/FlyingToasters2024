@@ -17,19 +17,23 @@ public class IntakeNote extends Command{
     launcher = m_launcher;
 
     addRequirements(m_intake, m_launcher, m_robotSys);
+    
+    }
+
+    @Override
+    public void initialize(){
+        robotSys.setGoalState(SystemState.INTAKE);
     }
 
     @Override
     public void execute() {
-    robotSys.setGoalState(SystemState.INTAKE);
     if (intake.getRearNote() == false) {
     IntakeCommands.rearIntakeNote(launcher, intake, robotSys);
     } else if (intake.getFrontNote() == false) {
-    robotSys.setGoalState(SystemState.FRONT_INTAKE);
-    if (intake.getRearNote() == false) {
-        IntakeCommands.rearIntakeNote(launcher, intake, robotSys);
-    }}}
+    IntakeCommands.frontIntake(launcher, intake, robotSys);
+    }}
 
+    
     @Override
     public boolean isFinished() {
         if (launcher.getLauncherNote() == false) {

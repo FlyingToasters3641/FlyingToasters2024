@@ -86,7 +86,7 @@ public class RobotSystem extends SubsystemBase{
             case INTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(-0.5);
+                launcher.setFeederVoltage(0.0);
                 intake.runFront();
                 intake.runRear();
             }
@@ -100,7 +100,7 @@ public class RobotSystem extends SubsystemBase{
             case FRONT_INTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(-0.5);
+                launcher.setFeederVoltage(-0.4);
                 intake.runFront();
                 intake.reverseRear();
             }
@@ -133,7 +133,7 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear();
             }
             case REAL_REVERSE_INTAKE -> {
-                launcher.setAngleSetpoint(30);
+                launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
