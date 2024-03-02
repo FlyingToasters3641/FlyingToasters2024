@@ -67,4 +67,12 @@ public class Intake extends SubsystemBase{
     public void stopRear() {
         io.stopRear();
     }
+
+    public boolean getFrontNote() {
+        return inputs.frontNote;
+    }
+
+    public boolean getRearNote() {
+        return inputs.rearNote;
+    }
 }

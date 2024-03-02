@@ -68,7 +68,7 @@ public class Launcher extends SubsystemBase {
     return shotController.updateAngle();
   }
 
-  public boolean getNote(){
+  public boolean getLauncherNote(){
     return inputs.note;
   }
 
