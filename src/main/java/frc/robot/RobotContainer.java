@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.GetIntake;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
 import frc.robot.constants.VisionConstants;
@@ -22,6 +23,8 @@ import frc.robot.subsystems.drive.SwerveModuleComp;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.IntakeStates;
+
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.photonvision.PhotonCamera;
@@ -61,6 +64,7 @@ public class RobotContainer {
     // Subsystems
     
     private final RobotSystem m_robotSystem;
+    private final IntakeStates m_intakeSys;
     public final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
     private final Launcher m_launcher;
@@ -92,6 +96,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFX());   
         m_launcher = new Launcher(new LauncherIOTalonFX());    
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_intakeSys = new IntakeStates(m_launcher, m_intake, m_robotDrive);
         
         break;
         case ALPHA:
@@ -106,6 +111,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFX());   
         m_launcher = new Launcher(new LauncherIOTalonFX());    
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_intakeSys = new IntakeStates(m_launcher, m_intake, m_robotDrive);
         
         break;
       case SIM:
@@ -120,6 +126,8 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_intakeSys = new IntakeStates(m_launcher, m_intake, m_robotDrive);
+
         break;
 
       default:
@@ -134,12 +142,14 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_robotDrive); 
+        m_intakeSys = new IntakeStates(m_launcher, m_intake, m_robotDrive);
+
         break;
     }
 
     // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
-    NamedCommands.registerCommand("Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Intake", new GetIntake(m_launcher, m_robotSystem, m_intake, m_intakeSys));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
 
     // Set up auto routines
@@ -180,7 +190,7 @@ public class RobotContainer {
                               .ignoringDisable(true));
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(LauncherCommands.shootNote(m_launcher, m_intake, m_robotSystem));
-      m_driverController.leftTrigger().whileTrue(IntakeCommands.Intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.leftTrigger().whileTrue(new GetIntake(m_launcher, m_robotSystem, m_intake, m_intakeSys)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM))).onFalse(LauncherCommands.ampNote(m_launcher, m_intake, m_robotSystem));
   }     
 
