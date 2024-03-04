@@ -19,6 +19,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -55,6 +57,8 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double DRIVE_BASE_RADIUS =
       Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
   private static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
+  private final static PathConstraints m_Constraints = new PathConstraints(3.0,4.0,Units.degreesToRadians(540),Units.degreesToRadians(720));
+
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
@@ -332,5 +336,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveDrivePoseEstimator getPoseEstimator () {
     return poseEstimator;
+  }
+
+  public Command driveAmp() {
+    return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
   }
 }

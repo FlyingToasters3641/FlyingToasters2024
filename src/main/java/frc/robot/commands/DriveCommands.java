@@ -30,14 +30,9 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 import java.util.Set;
 import java.util.function.DoubleSupplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 public class DriveCommands {
     private static final double DEADBAND = 0.1;
-
-    private final static PathConstraints m_Constraints = new PathConstraints(3.0,4.0,Units.degreesToRadians(540),Units.degreesToRadians(720));
 
     private DriveCommands() {
     }
@@ -94,7 +89,5 @@ public class DriveCommands {
         });
     }
 
-    public static Command driveAmp() {
-        return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
-    }
+    
 }
