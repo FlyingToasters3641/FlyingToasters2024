@@ -39,6 +39,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
@@ -49,6 +50,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -77,6 +79,7 @@ public class RobotContainer {
     private final Intake m_intake;
     private final Launcher m_launcher;
     private final Elevator m_elevator;
+    
     //private final LEDSubsystem m_LEDSubsystem;
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -135,7 +138,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive);
         break;
     }
 
@@ -186,7 +189,7 @@ public class RobotContainer {
       m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.y().whileTrue(AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), null, 0).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.y().whileTrue(Commands.deferredProxy(() -> DriveCommands.driveAmp())).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       
   }     
 

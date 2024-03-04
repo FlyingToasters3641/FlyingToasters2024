@@ -69,8 +69,8 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         pitchConfig.Slot0.kP = 1000;
         pitchConfig.Slot0.kD = 100;
 
-        pitchConfig.Slot1.kP = 1000;
-        pitchConfig.Slot1.kD = 100;
+        pitchConfig.Slot1.kP = 100;
+        pitchConfig.Slot1.kD = 10;
 
         pitchConfig.Slot2.kG = -18.00;
 
