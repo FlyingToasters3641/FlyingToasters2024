@@ -64,7 +64,7 @@ public class LauncherCommands {
                 Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.SHOOT)),
                 new WaitCommand(0.5));
     }
-
+    
     public static SequentialCommandGroup ampNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return new SequentialCommandGroup(
                 Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.AMP_SCORE)),

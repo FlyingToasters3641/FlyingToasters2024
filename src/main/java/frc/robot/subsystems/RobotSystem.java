@@ -23,11 +23,12 @@ public class RobotSystem extends SubsystemBase{
         REAR_INTAKE,
         FRONT_INTAKE,
         REVERSE_INTAKE,
+        INTAKE_AND_SHOOT,
         STATION_INTAKE,
         AMP_AIM,
         AMP_SCORE,
         HUMAN_PLAYER,
-        REAL_REVERSE_INTAKE
+        OUTTAKE
     }
 
     public enum GamepieceState {
@@ -63,11 +64,12 @@ public class RobotSystem extends SubsystemBase{
             case REAR_INTAKE -> currentState = SystemState.REAR_INTAKE;
             case FRONT_INTAKE -> currentState = SystemState.FRONT_INTAKE;
             case REVERSE_INTAKE -> currentState = SystemState.REVERSE_INTAKE;
+            case INTAKE_AND_SHOOT -> currentState = SystemState.INTAKE_AND_SHOOT;
             case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
             case AMP_AIM -> currentState = SystemState.AMP_AIM;
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
-            case REAL_REVERSE_INTAKE -> currentState = SystemState.REAL_REVERSE_INTAKE;
+            case OUTTAKE -> currentState = SystemState.OUTTAKE;
         }
 
         switch (currentState){
@@ -121,12 +123,19 @@ public class RobotSystem extends SubsystemBase{
             }
             case REVERSE_INTAKE -> {
                 launcher.setAngleSetpoint(0);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(-0.1);
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.1);
             } 
+            case INTAKE_AND_SHOOT -> {
+                launcher.setAngleSetpoint(shotController.updateAngle());
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(1.0);
+                intake.stopFront();
+                intake.runRear();
+                elevator.setPosition(0.1);
+            }
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_INTAKE);
@@ -162,7 +171,7 @@ public class RobotSystem extends SubsystemBase{
                     setGoalState(SystemState.IDLE);
                 }
             }
-            case REAL_REVERSE_INTAKE -> {
+            case OUTTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(-0.2);
