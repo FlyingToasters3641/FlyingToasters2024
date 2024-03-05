@@ -25,19 +25,17 @@ public class ShotController {
         distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
-        distanceAngles.put(Units.inchesToMeters(36.0), 65.0);
-        distanceAngles.put(Units.inchesToMeters(50.0), 61.0);
-        distanceAngles.put(Units.inchesToMeters(60.0), 56.0);
-        distanceAngles.put(Units.inchesToMeters(70.0), 52.0);
-        distanceAngles.put(Units.inchesToMeters(84.0), 47.0);
-        distanceAngles.put(Units.inchesToMeters(108.0), 40.0);
-        distanceAngles.put(Units.inchesToMeters(117.0), 40.0);
-        distanceAngles.put(Units.inchesToMeters(128.0), 38.0);
-        distanceAngles.put(Units.inchesToMeters(138.0), 34.0);
-        distanceAngles.put(Units.inchesToMeters(144.0), 32.5);
-        distanceAngles.put(Units.inchesToMeters(168.0), 28.0);
-        distanceAngles.put(Units.inchesToMeters(180.0), 25.0);
-        distanceAngles.put(Units.inchesToMeters(204.0), 19.5);
+        distanceAngles.put(Units.inchesToMeters(36.0), 46.0);
+        distanceAngles.put(Units.inchesToMeters(50.0), 42.0);
+        distanceAngles.put(Units.inchesToMeters(60.0), 40.0);
+        distanceAngles.put(Units.inchesToMeters(70.0), 34.0);
+        distanceAngles.put(Units.inchesToMeters(84.0), 30.0);
+        distanceAngles.put(Units.inchesToMeters(108.0), 26.0);
+        distanceAngles.put(Units.inchesToMeters(117.0), 22.0);
+        distanceAngles.put(Units.inchesToMeters(128.0), 18.0);
+        distanceAngles.put(Units.inchesToMeters(168.0), 14.0);
+        distanceAngles.put(Units.inchesToMeters(180.0), 11.0);
+        distanceAngles.put(Units.inchesToMeters(204.0), 8.5);
     }
 
     public double updateDrive() {

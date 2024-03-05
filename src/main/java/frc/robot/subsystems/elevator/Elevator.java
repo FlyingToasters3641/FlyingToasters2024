@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Elevator extends SubsystemBase{
     private ElevatorIO io;
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
-    private final double threshold = 0.05;
+    private final double threshold = 0.1;
 
     public Elevator(ElevatorIO io){
         this.io = io;

@@ -30,6 +30,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     public static final double PIVOT_RATIO = 50.625;
     private final double absoluteEncoderOffset = 0.193359;// need to calibrate!
+    private double lastSetpoint = 0.0;
 
     private double launcherSetpointDegrees = 0.0;
     private double flywheelSpeed = 0.0;
@@ -64,18 +65,14 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         pitchConfig.Feedback.RotorToSensorRatio = PIVOT_RATIO;
 
         // Esitmated Values from Recalc
-        pitchConfig.Slot0.kG = -18.00;
+        pitchConfig.Slot0.kG = -20.00;
 
-        pitchConfig.Slot0.kP = 1000;
+        pitchConfig.Slot0.kP = 1400;
         pitchConfig.Slot0.kD = 100;
 
-        pitchConfig.Slot1.kP = 100;
-        pitchConfig.Slot1.kD = 10;
-
-        pitchConfig.Slot2.kG = -18.00;
-
-        pitchConfig.Slot2.kP = 1000;
-        pitchConfig.Slot2.kD = 100;
+        pitchConfig.Slot1.kG = -20.0;
+        pitchConfig.Slot1.kP = 500;
+        pitchConfig.Slot1.kD = 5;
 
         pitchConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(
@@ -114,16 +111,10 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     @Override
     public void setAngleSetpoint(double setpointDegrees) {
-        if (setpointDegrees > 20.0 && setpointDegrees <= 100) {
             launcherPitchTalonFX.setControl(
                     new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
-        } else if (setpointDegrees > 100) {
-            launcherPitchTalonFX.setControl(
-                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(2));
-        } else {
-            launcherPitchTalonFX.setControl(
-                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(1));
-        }
+        
+        Logger.recordOutput("Launcher/SetAngleSetpoint", setpointDegrees - launcherSetpointDegrees);
         launcherSetpointDegrees = setpointDegrees;
     }
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.controllers.ShotController;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.Elevator;
@@ -76,7 +77,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case AIM -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
@@ -84,7 +85,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
@@ -92,7 +93,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -100,15 +101,15 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.runFront();
                 intake.runRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case REAR_INTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.15);
+                launcher.setFeederVoltage(0.1);
                 intake.stopFront();
                 intake.runRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case FRONT_INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -116,15 +117,15 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.4);
                 intake.runFront();
                 intake.reverseRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case REVERSE_INTAKE -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(-0.5);
+                launcher.setFeederVoltage(-0.1);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             } 
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
@@ -132,14 +133,16 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.1);
             }
             case AMP_AIM -> {
                 if (launcher.getLauncherNote() == false){
-                    elevator.setPosition(0);
+                    elevator.setPosition(6.1);
+            
                 }else{
                     setGoalState(SystemState.IDLE);
                 }
+                
                 launcher.setAngleSetpoint(0.0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
@@ -149,12 +152,15 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_SCORE -> {
                 if (launcher.getLauncherNote() == false){
-                    scoreAmp(launcher, elevator);
+                    elevator.setPosition(6.3);
+                    launcher.setAngleSetpoint(-35);
+                    launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                    launcher.setFeederVoltage(0.1);
+                    intake.stopFront();
+                    intake.stopRear();
                 }else{
                     setGoalState(SystemState.IDLE);
                 }
-                intake.stopFront();
-                intake.stopRear();
             }
             case REAL_REVERSE_INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -174,10 +180,15 @@ public class RobotSystem extends SubsystemBase{
 
     public Command scoreAmp(Launcher m_Launcher, Elevator m_Elevator){
         return Commands.runOnce(() -> new SequentialCommandGroup(
-            Commands.run(() -> m_Elevator.setPosition(0.0)).until(() -> m_Elevator.atThreshold()),
-            Commands.run(() -> m_Launcher.setAngleSetpoint(0.0)).until(() -> m_Launcher.atThreshold()),
-            Commands.runOnce(() -> m_Launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP)),
-            Commands.runOnce(() -> m_Launcher.setFeederVoltage(0.4))
-        ));
+            Commands.runOnce(() -> m_Elevator.setPosition(5.4)),
+            Commands.runOnce(() -> m_Launcher.setAngleSetpoint(-5)),
+            Commands.runOnce(() -> m_Launcher.setFeederVoltage(1)),
+            Commands.runOnce(() -> m_Launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP))
+            )
+        );
+    }
+
+    public Command moveWrist(Launcher m_Launcher, double AngleSetpoint) {
+        return Commands.runOnce(() -> m_Launcher.setAngleSetpoint(AngleSetpoint));
     }
 }
