@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left to Note"
+            "pathName": "Left to Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Bottom Note"
           }
         },
         {
@@ -33,12 +39,6 @@
           "type": "path",
           "data": {
             "pathName": "to 2nd Bottom Center Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2nd Bottom Center Note to Shoot"
           }
         }
       ]

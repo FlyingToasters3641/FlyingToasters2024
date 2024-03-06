@@ -2,19 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6875609159469604,
-      "y": 4.388582229614258
+      "x": 1.476513147354126,
+      "y": 4.114960193634033
     },
-    "rotation": 117.80146225110802
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Left to Shoot.1"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "Aim"
           }
         },
         {
@@ -26,13 +32,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ShootAndIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left to Note"
+            "pathName": "Shoot to Bottom Note"
           }
         },
         {
@@ -57,6 +63,12 @@
           "type": "path",
           "data": {
             "pathName": "Middle Note to Top Note"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         }
       ]
