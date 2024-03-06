@@ -17,7 +17,8 @@ public class RobotState {
     };
     private AimingParameters lastParamters = null;
     private Twist2d robotVelocity = new Twist2d();
-    private final double LOOK_AHEAD = 4.0; //Tune to compensate for robot position latency 
+    private final double LOOK_AHEAD = 10.0; //Tune to compensate for robot position latency 
+    private final double ROT_AHEAD = 0.25 * Math.PI;
     private final double HEIGHT_COMP = 0.0; //Tune to compensate for robot shot height
 
     public AimingParameters getAimingParameters(SwerveDrivePoseEstimator drivePoseEstimator) {
@@ -29,7 +30,7 @@ public class RobotState {
         Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening)
                 .toTranslation2d());
 
-        Pose2d fieldToPredictedPose = getPredictedPose(LOOK_AHEAD, LOOK_AHEAD, drivePoseEstimator);
+        Pose2d fieldToPredictedPose = getPredictedPose(LOOK_AHEAD, ROT_AHEAD, drivePoseEstimator);
         Pose2d fieldToPredictedPoseFixed = new Pose2d(fieldToPredictedPose.getTranslation(), new Rotation2d());
 
         Translation2d predictedVehicleToTargetTranslation =

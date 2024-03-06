@@ -35,7 +35,7 @@ public class ShotController {
         distanceAngles.put(Units.inchesToMeters(128.0), 18.0);
         distanceAngles.put(Units.inchesToMeters(168.0), 14.0);
         distanceAngles.put(Units.inchesToMeters(180.0), 11.0);
-        distanceAngles.put(Units.inchesToMeters(204.0), 8.5);
+        distanceAngles.put(Units.inchesToMeters(204.0), 9.5);
     }
 
     public double updateDrive() {

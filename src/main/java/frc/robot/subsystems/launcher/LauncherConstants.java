@@ -17,7 +17,7 @@ public class LauncherConstants {
         new Translation2d(-Units.inchesToMeters(12.0), Units.inchesToMeters(8.0));
 
         public static double IDLE = 4.0;
-        public static double FLYWHEEL_RPM_IDLE = 0.0;
+        public static double FLYWHEEL_RPM_IDLE = 15;
         public static double FLYWHEEL_RPM_DEFAULT = 35;
         public static double FLYWHEEL_RPM_INTAKE = -1000;
         public static double FLYWHEEL_RPM_AMP = 7;

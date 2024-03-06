@@ -38,8 +38,8 @@ public class ShootNote extends Command {
     public void execute() {
         robotSystem.setGoalState(SystemState.AIM);
         if (launcher.atThreshold()) {
-            robotSystem.setGoalState(SystemState.SHOOT);
-            endCommand = true;
+          robotSystem.setGoalState(SystemState.SHOOT);
+          endCommand = true;
         }
         Logger.recordOutput("Launcher/endcommand", endCommand);
     }

@@ -35,7 +35,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     private double launcherSetpointDegrees = 0.0;
     private double flywheelSpeed = 0.0;
     private double launcherThreshold = 4.0;
-    private double flywheelThreshold = 2.0;
+    private double flywheelThreshold = 4.0;
     private double realFlywheelSpeed = 42.0;
 
     public LauncherIOTalonFXComp() {
