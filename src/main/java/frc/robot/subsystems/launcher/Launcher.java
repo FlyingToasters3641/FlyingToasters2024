@@ -77,4 +77,17 @@ public class Launcher extends SubsystemBase {
 
     return io.atThreshold();
   }
+  
+    public boolean withinPosition(double goToPosition){
+        double threshold = 0.3;
+
+        double launcherPosition = -inputs.launcherPositionDegrees;
+
+            if (launcherPosition >= (goToPosition - threshold) 
+        && launcherPosition <= (goToPosition + threshold)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

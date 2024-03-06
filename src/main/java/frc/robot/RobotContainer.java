@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
@@ -42,6 +43,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -145,6 +147,8 @@ public class RobotContainer {
     // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Front Intake", IntakeCommands.frontIntake(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Rear Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
 
@@ -194,6 +198,8 @@ public class RobotContainer {
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(1.0)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.x().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)))).onFalse(ElevatorCommands.climb(m_elevator, m_robotSystem));
+      //m_driverController.start().onTrue((Commands.runOnce(m_driverController.back().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)))))));
   }     
 
      

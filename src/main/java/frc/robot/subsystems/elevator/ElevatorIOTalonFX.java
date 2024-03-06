@@ -76,4 +76,7 @@ public class ElevatorIOTalonFX implements ElevatorIO{
         setpoint = position;
         leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(0));
     }
+
+
+
 }

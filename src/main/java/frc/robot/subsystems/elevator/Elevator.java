@@ -21,8 +21,25 @@ public class Elevator extends SubsystemBase{
         io.setPosition(position);
     }
 
+    public void setClimberPosition(double position){
+        io.setPosition(position);
+    }
+
     public boolean atThreshold(){
         return (Math.abs(inputs.positionSetpointInches - inputs.position) <= threshold);
+    }
+
+    public boolean withinPosition(double goToPosition){
+        double threshold = 0.3;
+
+        double elevatorPosition = inputs.position;
+
+            if (elevatorPosition >= (goToPosition - threshold) 
+        && elevatorPosition <= (goToPosition + threshold)) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
 }
