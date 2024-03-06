@@ -19,7 +19,7 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
 
-  public static final Mode currentMode = Mode.REAL;
+  public static final Mode currentMode = Mode.ALPHA;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -27,6 +27,9 @@ public final class Constants {
 
     /** Running a physics simulator. */
     SIM,
+ 
+    /** Running Oni code. */
+    ALPHA,
 
     /** Replaying from a log file. */
     REPLAY

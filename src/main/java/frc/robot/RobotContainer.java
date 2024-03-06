@@ -125,6 +125,20 @@ public class RobotContainer {
         m_elevator = new Elevator(new ElevatorIO() {});
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive); 
         break;
+      case ALPHA:
+        // Oni code
+        m_robotDrive =
+            new DriveSubsystem(
+                new GyroIO() {},
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim());
+        m_intake = new Intake(new IntakeIO() {});
+        m_launcher = new Launcher(new LauncherIO() {});
+        m_elevator = new Elevator(new ElevatorIO() {});
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive); 
+        break;
 
       default:
         // Replayed robot, disable IO implementations

@@ -61,6 +61,11 @@ public class Module {
         driveFeedback = new PIDController(0.1, 0.0, 0.0);
         turnFeedback = new PIDController(10.0, 0.0, 0.0);
         break;
+       case ALPHA:
+        driveFeedforward = new SimpleMotorFeedforward(0.05, 0.08);
+        driveFeedback = new PIDController(0.09, 0.0, 0.0);
+        turnFeedback = new PIDController(7.0, 0.0, 0.00); //4.0
+        break;
       default:
         driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
         driveFeedback = new PIDController(0.0, 0.0, 0.0);
