@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6875609159469604,
+      "y": 4.388582229614258
+    },
+    "rotation": 117.80146225110802
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left to Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Bottom Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Note to Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Center Note to Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "to 2nd Bottom Center Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

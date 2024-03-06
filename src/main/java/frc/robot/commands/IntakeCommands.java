@@ -66,7 +66,7 @@ public class IntakeCommands {
     
     public static Command rearOutakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return Commands.run(() -> {
-            m_System.setGoalState(RobotSystem.SystemState.REAL_REVERSE_INTAKE);
+            m_System.setGoalState(RobotSystem.SystemState.OUTTAKE);
         });
     }
     

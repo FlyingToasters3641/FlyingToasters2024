@@ -144,8 +144,9 @@ public class RobotContainer {
 
     // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
-    NamedCommands.registerCommand("Intake", new IntakeNote(m_intake, m_launcher, m_robotSystem));
+    NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
+    NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -155,6 +156,9 @@ public class RobotContainer {
     autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
     autoChooser.addOption("4 Piece Center", new PathPlannerAuto("4 Piece Center"));
     autoChooser.addOption("2 Piece Left", new PathPlannerAuto("2 Piece Left"));
+    autoChooser.addOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
+    autoChooser.addOption("4 Piece Left-Far", new PathPlannerAuto("CenterDemon"));
+   
     // Set up SysId routines
 
     // Configure the button bindings
