@@ -202,7 +202,6 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.5);
-
             }
             case CLIMB_LOCK -> {
                 launcher.setAngleSetpoint(50);

@@ -72,10 +72,10 @@ public class Launcher extends SubsystemBase {
   }
 
 
-  public boolean atThreshold(){
-    Logger.recordOutput("Launcher/AtThreshold",io.atThreshold());
+  public boolean atShooterThreshold(){
+    Logger.recordOutput("Launcher/AtShooterThreshold",io.atShooterThreshold());
 
-    return io.atThreshold();
+    return io.atShooterThreshold();
   }
   
     public boolean withinPosition(double goToPosition){
@@ -90,4 +90,8 @@ public class Launcher extends SubsystemBase {
             return false;
         }
     }
+  
+  public boolean atThreshold() {
+    return io.atThreshold();
+  }
 }

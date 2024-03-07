@@ -37,7 +37,7 @@ public class ShootNote extends Command {
   @Override
     public void execute() {
         robotSystem.setGoalState(SystemState.AIM);
-        if (launcher.atThreshold()) {
+        if (launcher.atShooterThreshold()) {
           robotSystem.setGoalState(SystemState.SHOOT);
           endCommand = true;
         }

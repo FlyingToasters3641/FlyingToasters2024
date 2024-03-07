@@ -16,6 +16,6 @@ public interface ElevatorIO {
 
     public default void getAngle() {}
 
-
+    public default boolean atThreshold() {return true;}
     
 }

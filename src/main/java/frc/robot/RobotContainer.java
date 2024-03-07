@@ -199,7 +199,7 @@ public class RobotContainer {
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(1.0)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.x().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)))).onFalse(ElevatorCommands.climb(m_elevator, m_robotSystem));
-      //m_driverController.start().onTrue((Commands.runOnce(m_driverController.back().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)))))));
+      m_driverController.start().and(m_driverController.leftStick()).onTrue((Commands.run(() -> m_driverController.leftStick().onTrue((ElevatorCommands.unlockElevator(m_elevator, m_launcher, m_robotSystem))))));
   }     
 
      

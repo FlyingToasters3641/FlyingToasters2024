@@ -14,15 +14,15 @@ public class ElevatorCommands {
     private ElevatorCommands() {}
     
     public static Command climb(Elevator m_elevator, RobotSystem m_system){
-        return Commands.run(() -> m_system.setGoalState(SystemState.CLIMB_RETRACT)).until(() -> m_elevator.withinPosition(0.5) == true).andThen(Commands.run(() -> m_system.setGoalState(SystemState.CLIMB_LOCK)));
+        return Commands.run(() -> m_system.setGoalState(SystemState.CLIMB_RETRACT)).until(() -> m_elevator.atThreshold() == true).andThen(Commands.runOnce(() -> m_system.setGoalState(SystemState.CLIMB_LOCK)));
     }
 
     public static ConditionalCommand unlockElevator(Elevator m_elevator, Launcher m_launcher, RobotSystem m_system) {
-        return new ConditionalCommand(Commands.runOnce(() -> m_system.setGoalState(SystemState.CLIMB_LOCK)), declimb(m_elevator, m_system),() -> (m_elevator.withinPosition(0.5) == true && m_launcher.withinPosition(50) == true));
+        return new ConditionalCommand(declimb(m_elevator, m_system), Commands.runOnce(() -> m_system.setGoalState(SystemState.CLIMB_LOCK)),() -> (m_elevator.atThreshold() == true && m_launcher.atThreshold() == true));
     }
 
     public static Command declimb(Elevator m_Elevator, RobotSystem m_system){
-        return Commands.run(() -> m_system.setGoalState(SystemState.CLIMB_RETRACT)).andThen(Commands.run(() -> m_system.setGoalState(SystemState.CLIMB_EXTEND)));
+        return Commands.runOnce(() -> m_system.setGoalState(SystemState.CLIMB_RETRACT)).andThen(Commands.runOnce(() -> m_system.setGoalState(SystemState.CLIMB_EXTEND)));
     }
     
 }

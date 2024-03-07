@@ -25,7 +25,7 @@ public class Elevator extends SubsystemBase{
         io.setPosition(position);
     }
 
-    public boolean atThreshold(){
+    public boolean withinThreshold(){
         return (Math.abs(inputs.positionSetpointInches - inputs.position) <= threshold);
     }
 
@@ -41,5 +41,11 @@ public class Elevator extends SubsystemBase{
             return false;
         }
     }
+
+    public boolean atThreshold(){
+        return io.atThreshold();
+    }
+
+
     
 }
