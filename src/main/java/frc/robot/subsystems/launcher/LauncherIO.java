@@ -46,7 +46,8 @@ public interface LauncherIO {
 
     public default void getLauncherNote() {}
 
+    public default boolean atShooterThreshold() {return true;}
+
     public default boolean atThreshold() {return true;}
- 
 }
 

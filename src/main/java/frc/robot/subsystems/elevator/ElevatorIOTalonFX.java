@@ -28,6 +28,7 @@ public class ElevatorIOTalonFX implements ElevatorIO{
     public static final double ENCODER_RATIO = 1;
 
     public double lastPosition = 0.0;
+    public double elevatorThreshold = 0.5;
 
     public ElevatorIOTalonFX(){
         leftTalonFX.setInverted(false);
@@ -82,4 +83,20 @@ public class ElevatorIOTalonFX implements ElevatorIO{
         }
         
     }
+
+    @Override
+    public boolean atThreshold() {
+
+        double currentAngle = -elevatorCANCoder.getPosition().getValueAsDouble();
+        
+        if (currentAngle >= (setpoint - elevatorThreshold) 
+        && currentAngle <= (setpoint + elevatorThreshold)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
 }

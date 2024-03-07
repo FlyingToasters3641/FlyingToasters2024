@@ -29,7 +29,10 @@ public class RobotSystem extends SubsystemBase{
         AMP_AIM,
         AMP_SCORE,
         HUMAN_PLAYER,
-        OUTTAKE
+        OUTTAKE,
+        CLIMB_EXTEND,
+        CLIMB_RETRACT,
+        CLIMB_LOCK
     }
 
     public enum GamepieceState {
@@ -72,6 +75,9 @@ public class RobotSystem extends SubsystemBase{
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
             case OUTTAKE -> currentState = SystemState.OUTTAKE;
+            case CLIMB_EXTEND -> currentState = SystemState.CLIMB_EXTEND;
+            case CLIMB_RETRACT -> currentState = SystemState.CLIMB_RETRACT;
+            case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
         }
 
         switch (currentState){
@@ -179,6 +185,31 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.reverseRear();
                 elevator.setPosition(0.2);
+            }
+            case CLIMB_EXTEND -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0);
+                intake.stopFront();
+                intake.stopRear(); 
+                elevator.setPosition(6);
+
+            }
+            case CLIMB_RETRACT -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0);
+                intake.stopFront();
+                intake.stopRear(); 
+                elevator.setPosition(0.5);
+            }
+            case CLIMB_LOCK -> {
+                launcher.setAngleSetpoint(50);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0);
+                intake.stopFront();
+                intake.stopRear(); 
+                elevator.setPosition(1);
             }
             }
         }

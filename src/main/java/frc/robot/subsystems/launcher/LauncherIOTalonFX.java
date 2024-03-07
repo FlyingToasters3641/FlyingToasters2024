@@ -160,7 +160,7 @@ public class LauncherIOTalonFX implements LauncherIO {
     }
 
     @Override
-    public boolean atThreshold() {
+    public boolean atShooterThreshold() {
 
         double currentDegrees =  -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();

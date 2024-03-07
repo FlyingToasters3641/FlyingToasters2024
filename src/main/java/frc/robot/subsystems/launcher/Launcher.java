@@ -72,9 +72,26 @@ public class Launcher extends SubsystemBase {
   }
 
 
-  public boolean atThreshold(){
-    Logger.recordOutput("Launcher/AtThreshold",io.atThreshold());
+  public boolean atShooterThreshold(){
+    Logger.recordOutput("Launcher/AtShooterThreshold",io.atShooterThreshold());
 
+    return io.atShooterThreshold();
+  }
+  
+    public boolean withinPosition(double goToPosition){
+        double threshold = 0.3;
+
+        double launcherPosition = -inputs.launcherPositionDegrees;
+
+            if (launcherPosition >= (goToPosition - threshold) 
+        && launcherPosition <= (goToPosition + threshold)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+  
+  public boolean atThreshold() {
     return io.atThreshold();
   }
 }

@@ -111,9 +111,9 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     @Override
     public void setAngleSetpoint(double setpointDegrees) {
-            launcherPitchTalonFX.setControl(
-                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
-        
+        launcherPitchTalonFX.setControl(
+                new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
+
         Logger.recordOutput("Launcher/SetAngleSetpoint", setpointDegrees - launcherSetpointDegrees);
         launcherSetpointDegrees = setpointDegrees;
     }
@@ -143,20 +143,35 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     }
 
     @Override
-    public boolean atThreshold() {
+    public boolean atShooterThreshold() {
 
-        double currentDegrees =  -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
+        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();
         Logger.recordOutput("Launcher/currentDegrees", currentDegrees);
         Logger.recordOutput("Launcher/currentFlywheelVelocity", currentFlywheelVelocity);
 
-        if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold) 
-        && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
-        && currentFlywheelVelocity >= (realFlywheelSpeed - flywheelThreshold)
-        && currentFlywheelVelocity <= (realFlywheelSpeed + flywheelThreshold)) {
+        if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold)
+                && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
+                && currentFlywheelVelocity >= (realFlywheelSpeed - flywheelThreshold)
+                && currentFlywheelVelocity <= (realFlywheelSpeed + flywheelThreshold)) {
             return true;
         } else {
             return false;
         }
+
     }
+
+    @Override
+    public boolean atThreshold() {
+
+        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
+
+        if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold)
+                && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)) {
+            return true;
+        }
+        return false;
+
+    }
+
 }
