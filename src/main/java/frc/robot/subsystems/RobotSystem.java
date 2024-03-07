@@ -22,6 +22,7 @@ public class RobotSystem extends SubsystemBase{
         INTAKE,
         REAR_INTAKE,
         FRONT_INTAKE,
+        FRONT_INTAKE_FEED,
         REVERSE_INTAKE,
         INTAKE_AND_SHOOT,
         STATION_INTAKE,
@@ -63,6 +64,7 @@ public class RobotSystem extends SubsystemBase{
             case INTAKE -> currentState = SystemState.INTAKE;
             case REAR_INTAKE -> currentState = SystemState.REAR_INTAKE;
             case FRONT_INTAKE -> currentState = SystemState.FRONT_INTAKE;
+            case FRONT_INTAKE_FEED -> currentState = SystemState.FRONT_INTAKE_FEED;
             case REVERSE_INTAKE -> currentState = SystemState.REVERSE_INTAKE;
             case INTAKE_AND_SHOOT -> currentState = SystemState.INTAKE_AND_SHOOT;
             case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
@@ -79,7 +81,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case AIM -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
@@ -87,7 +89,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
@@ -95,7 +97,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -103,7 +105,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.0);
                 intake.runFront();
                 intake.runRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case REAR_INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -111,7 +113,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0.2);
                 intake.stopFront();
                 intake.runRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case FRONT_INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -119,7 +121,15 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.5);
                 intake.runFront();
                 intake.reverseRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
+            }
+            case FRONT_INTAKE_FEED -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.15); //Only difference between REAR_INTAKE
+                intake.stopFront();
+                intake.runRearRollers(0.2);
+                elevator.setPosition(0.2);
             }
             case REVERSE_INTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -127,7 +137,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             } 
             case INTAKE_AND_SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
@@ -135,7 +145,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.runRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
@@ -143,17 +153,11 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.stopRear();
-                elevator.setPosition(0.1);
+                elevator.setPosition(0.2);
             }
             case AMP_AIM -> {
-                if (launcher.getLauncherNote() == false){
-                    elevator.setPosition(6.1);
-            
-                }else{
-                    setGoalState(SystemState.IDLE);
-                }
-                
-                launcher.setAngleSetpoint(0.0);
+                elevator.setPosition(2.5);
+                launcher.setAngleSetpoint(35);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
@@ -161,16 +165,12 @@ public class RobotSystem extends SubsystemBase{
                 
             }
             case AMP_SCORE -> {
-                if (launcher.getLauncherNote() == false){
-                    elevator.setPosition(6.3);
-                    launcher.setAngleSetpoint(-35);
+                    elevator.setPosition(2.5);
+                    launcher.setAngleSetpoint(35);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
-                    launcher.setFeederVoltage(0.1);
+                    launcher.setFeederVoltage(1.0);
                     intake.stopFront();
                     intake.stopRear();
-                }else{
-                    setGoalState(SystemState.IDLE);
-                }
             }
             case OUTTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -178,7 +178,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.reverseRear();
-                elevator.setPosition(0);
+                elevator.setPosition(0.2);
             }
             }
         }

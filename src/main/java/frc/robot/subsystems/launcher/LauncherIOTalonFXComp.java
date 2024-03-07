@@ -29,7 +29,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
 
     public static final double PIVOT_RATIO = 50.625;
-    private final double absoluteEncoderOffset = 0.193359;// need to calibrate!
+    private final double absoluteEncoderOffset = -0.072510;// need to calibrate!
     private double lastSetpoint = 0.0;
 
     private double launcherSetpointDegrees = 0.0;

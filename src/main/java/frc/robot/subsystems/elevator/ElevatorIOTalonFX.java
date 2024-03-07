@@ -24,8 +24,7 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
     public static final double absoluteEncoderOffset = -0.147705; //Calibrate
 
-    public static final double ELEVATOR_RATIO = 15.3125;
-
+    public static final double ELEVATOR_RATIO = 6.34375;
     public static final double ENCODER_RATIO = 1;
 
     public double lastPosition = 0.0;
@@ -36,8 +35,10 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 
-        elevatorConfig.Slot0.kP = 100.0;
-        elevatorConfig.Slot0.kD = 10.0;
+        elevatorConfig.Slot0.kP = 50.0;
+        elevatorConfig.Slot0.kD = 5.0;
+
+        elevatorConfig.Slot1.kP = 10.0;
 
 
         elevatorConfig.Feedback.FeedbackRemoteSensorID = elevatorCANCoder.getDeviceID();
@@ -46,8 +47,8 @@ public class ElevatorIOTalonFX implements ElevatorIO{
         elevatorConfig.Feedback.RotorToSensorRatio = ELEVATOR_RATIO;
 
         elevatorConfig.MotionMagic = new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(800)
-                .withMotionMagicAcceleration(1600);
+                .withMotionMagicCruiseVelocity(80)
+                .withMotionMagicAcceleration(80);
 
         leftTalonFX.getConfigurator().apply(elevatorConfig);
 
@@ -74,6 +75,11 @@ public class ElevatorIOTalonFX implements ElevatorIO{
     @Override
     public void setPosition(double position){
         setpoint = position;
-        leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(0));
+        if (position <= 1.0){
+            leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(1));
+        }else{
+            leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(0));
+        }
+        
     }
 }

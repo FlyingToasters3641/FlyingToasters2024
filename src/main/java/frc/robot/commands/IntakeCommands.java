@@ -63,6 +63,16 @@ public class IntakeCommands {
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 
+    public static Command frontIntakeFeed(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+        return Commands.run(() -> {
+            m_System.setGoalState(RobotSystem.SystemState.FRONT_INTAKE_FEED);
+        }).until(() -> m_launcher.getLauncherNote() == false).andThen(
+            new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
+                Commands.waitSeconds(0.05))).andThen(
+                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+    }
+
     
     public static Command rearOutakeNote(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
         return Commands.run(() -> {
@@ -83,7 +93,7 @@ public class IntakeCommands {
 
   public static Command frontIntake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem){
     return Commands.run(() -> m_robotSystem.setGoalState(SystemState.FRONT_INTAKE))
-    .until(() -> m_intake.getRearNote() == false).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))).andThen(rearIntakeNote(m_launcher, m_intake, m_robotSystem));
+    .until(() -> m_intake.getRearNote() == false).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))).andThen(frontIntakeFeed(m_launcher, m_intake, m_robotSystem));
   }
     
   public static Command intake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem){
