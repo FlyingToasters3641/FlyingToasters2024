@@ -36,8 +36,8 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 
-        elevatorConfig.Slot0.kP = 50.0;
-        elevatorConfig.Slot0.kD = 5.0;
+        elevatorConfig.Slot0.kP = 400.0;
+        elevatorConfig.Slot0.kD = 15.0;
 
         elevatorConfig.Slot1.kP = 10.0;
 
@@ -49,7 +49,7 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
         elevatorConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(80)
-                .withMotionMagicAcceleration(80);
+                .withMotionMagicAcceleration(50);
 
         leftTalonFX.getConfigurator().apply(elevatorConfig);
 
@@ -76,12 +76,8 @@ public class ElevatorIOTalonFX implements ElevatorIO{
     @Override
     public void setPosition(double position){
         setpoint = position;
-        if (position <= 1.0){
-            leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(1));
-        }else{
-            leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(0));
-        }
-        
+        leftTalonFX.setControl(new MotionMagicTorqueCurrentFOC(-position).withSlot(0));
+
     }
 
     @Override

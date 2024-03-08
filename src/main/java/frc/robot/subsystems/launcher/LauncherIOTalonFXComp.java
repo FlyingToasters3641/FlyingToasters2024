@@ -151,9 +151,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         Logger.recordOutput("Launcher/currentFlywheelVelocity", currentFlywheelVelocity);
 
         if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold)
-                && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
-                && currentFlywheelVelocity >= (realFlywheelSpeed - flywheelThreshold)
-                && currentFlywheelVelocity <= (realFlywheelSpeed + flywheelThreshold)) {
+                && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)) {
             return true;
         } else {
             return false;

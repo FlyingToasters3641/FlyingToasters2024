@@ -162,8 +162,8 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             }
             case AMP_AIM -> {
-                elevator.setPosition(2.5);
-                launcher.setAngleSetpoint(35);
+                elevator.setPosition(6.3);
+                launcher.setAngleSetpoint(-35);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
@@ -171,8 +171,8 @@ public class RobotSystem extends SubsystemBase{
                 
             }
             case AMP_SCORE -> {
-                    elevator.setPosition(2.5);
-                    launcher.setAngleSetpoint(35);
+                    elevator.setPosition(6.3);
+                    launcher.setAngleSetpoint(-35);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                     launcher.setFeederVoltage(1.0);
                     intake.stopFront();
@@ -188,7 +188,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case CLIMB_EXTEND -> {
                 launcher.setAngleSetpoint(0);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFlywheelVelocity(0.0);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
@@ -197,19 +197,19 @@ public class RobotSystem extends SubsystemBase{
             }
             case CLIMB_RETRACT -> {
                 launcher.setAngleSetpoint(0);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFlywheelVelocity(0.0);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
-                elevator.setPosition(0.5);
+                elevator.setPosition(0.2);
             }
             case CLIMB_LOCK -> {
-                launcher.setAngleSetpoint(50);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setAngleSetpoint(100);
+                launcher.setFlywheelVelocity(0.0);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
-                elevator.setPosition(1);
+                elevator.setPosition(0.1);
             }
             }
         }

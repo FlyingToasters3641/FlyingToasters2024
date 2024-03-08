@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase{
     }
     
     public void runRear() {
-        io.setRearSpeed(.3);
+        io.setRearSpeed(.5);
     }
 
     public void runFront() {
