@@ -22,6 +22,8 @@ public interface LauncherIO {
         public double pitchMotorSensorDegrees = 0.0;
 
         public double angleSetpointDegrees = 0.0;
+
+        public double flywheelVelocity = 0.0;
         
         public boolean note = false;
     }
@@ -42,7 +44,10 @@ public interface LauncherIO {
 
     public default void getAngle() {}
 
-    public default void getNote() {}
- 
+    public default void getLauncherNote() {}
+
+    public default boolean atShooterThreshold() {return true;}
+
+    public default boolean atThreshold() {return true;}
 }
 

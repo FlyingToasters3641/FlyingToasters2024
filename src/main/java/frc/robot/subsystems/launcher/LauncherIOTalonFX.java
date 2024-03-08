@@ -6,7 +6,6 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -26,8 +25,6 @@ public class LauncherIOTalonFX implements LauncherIO {
     public static final TalonFX launcherPitchTalonFX = new TalonFX(34, CANbusName);
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
 
-    
-
     /* Start at velocity 0, no feed forward, use slot 0 */
     private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
 
@@ -35,6 +32,10 @@ public class LauncherIOTalonFX implements LauncherIO {
     private final double absoluteEncoderOffset = 0.2855;// need to calibrate!
 
     private double launcherSetpointDegrees = 0.0;
+    private double flywheelSpeed = 0.0;
+    private double launcherThreshold = 4.0;
+    private double flywheelThreshold = 2.0;
+    private double realFlywheelSpeed = 42.0;
 
     public LauncherIOTalonFX() {
         bottomFlywheelTalonFX.setInverted(true);
@@ -62,8 +63,8 @@ public class LauncherIOTalonFX implements LauncherIO {
         pitchConfig.Feedback.SensorToMechanismRatio = 1;
         pitchConfig.Feedback.RotorToSensorRatio = PIVOT_RATIO;
 
-        //Esitmated Values from Recalc
-        pitchConfig.Slot0.kG = -25.00;
+        // Esitmated Values from Recalc
+        pitchConfig.Slot0.kG = -30.00;
         pitchConfig.Slot0.kV = 2.79;
         pitchConfig.Slot0.kA = 0.04;
 
@@ -76,14 +77,13 @@ public class LauncherIOTalonFX implements LauncherIO {
 
         pitchConfig.Slot1.kP = 100;
         pitchConfig.Slot1.kD = 2;
-        
+
         pitchConfig.Slot2.kG = -7.00;
         pitchConfig.Slot2.kV = 2.79;
         pitchConfig.Slot2.kA = 0.04;
 
         pitchConfig.Slot2.kP = 300;
         pitchConfig.Slot2.kD = 10;
-        
 
         pitchConfig.MotionMagic = new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(
@@ -106,6 +106,7 @@ public class LauncherIOTalonFX implements LauncherIO {
         inputs.launcherPositionDegrees = (Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
         inputs.pitchMotorSensorDegrees = Units.rotationsToDegrees(launcherPitchTalonFX.getPosition().getValue());
         inputs.angleSetpointDegrees = launcherSetpointDegrees;
+        inputs.flywheelVelocity = topFlywheelTalonFX.getVelocity().getValue();
         inputs.note = launchSensor.get();
         Logger.recordOutput("Launcher/Sensor", launchSensor.get());
     }
@@ -121,13 +122,15 @@ public class LauncherIOTalonFX implements LauncherIO {
 
     @Override
     public void setAngleSetpoint(double setpointDegrees) {
-        if (setpointDegrees > 20.0 && setpointDegrees <= 100){
-            launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
+        if (setpointDegrees > 20.0 && setpointDegrees <= 100) {
+            launcherPitchTalonFX.setControl(
+                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(0));
         } else if (setpointDegrees > 100) {
-            launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(2));
-        }
-        else{
-            launcherPitchTalonFX.setControl(new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(1));
+            launcherPitchTalonFX.setControl(
+                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(2));
+        } else {
+            launcherPitchTalonFX.setControl(
+                    new MotionMagicTorqueCurrentFOC(Units.degreesToRotations(-setpointDegrees)).withSlot(1));
         }
         launcherSetpointDegrees = setpointDegrees;
     }
@@ -146,6 +149,8 @@ public class LauncherIOTalonFX implements LauncherIO {
     public void setFlywheelVelocity(double rpm) {
         topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
         bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+
+        flywheelSpeed = rpm;
     }
 
     @Override
@@ -154,4 +159,21 @@ public class LauncherIOTalonFX implements LauncherIO {
         setFeederVoltage(0.0);
     }
 
+    @Override
+    public boolean atShooterThreshold() {
+
+        double currentDegrees =  -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
+        double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();
+        Logger.recordOutput("Launcher/currentDegrees", currentDegrees);
+        Logger.recordOutput("Launcher/currentFlywheelVelocity", currentFlywheelVelocity);
+
+        if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold) 
+        && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)
+        && currentFlywheelVelocity >= (realFlywheelSpeed - flywheelThreshold)
+        && currentFlywheelVelocity <= (realFlywheelSpeed + flywheelThreshold)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -23,7 +23,8 @@ import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Module {
-  private static final double WHEEL_RADIUS = Units.inchesToMeters(1.5);
+  private static final double WHEEL_RADIUS = Units.inchesToMeters(1.4);
+  private static final double WHEEL_CIR = WHEEL_RADIUS * (2 * Math.PI);
   static final double ODOMETRY_FREQUENCY = 250.0;
 
   private final ModuleIO io;
@@ -46,6 +47,10 @@ public class Module {
     // separate robot with different tuning)
     switch (Constants.currentMode) {
       case REAL:
+        driveFeedforward = new SimpleMotorFeedforward(0.05, 0.08);
+        driveFeedback = new PIDController(0.09, 0.0, 0.0);
+        turnFeedback = new PIDController(6.5, 0.0, 0.00); //4.0
+        break;
       case REPLAY:
         driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
         driveFeedback = new PIDController(0.05, 0.0, 0.0);
@@ -100,10 +105,9 @@ public class Module {
         double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
 
         // Run drive controller
-        double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-        io.setDriveVoltage(
-            driveFeedforward.calculate(velocityRadPerSec)
-                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+        double velocityRotPerSec = adjustSpeedSetpoint / WHEEL_CIR;
+        io.setDriveVelocity(velocityRotPerSec);
+        Logger.recordOutput("Drive/velocitySetpoint", velocityRotPerSec);
       }
     }
 

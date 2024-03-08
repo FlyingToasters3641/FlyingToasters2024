@@ -19,8 +19,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
@@ -48,12 +51,14 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class DriveSubsystem extends SubsystemBase {
-  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(14.5);
-  private static final double TRACK_WIDTH_X = Units.inchesToMeters(25.0);
-  private static final double TRACK_WIDTH_Y = Units.inchesToMeters(25.0);
+  private static final double MAX_LINEAR_SPEED = Units.feetToMeters(17.0);
+  private static final double TRACK_WIDTH_X = Units.inchesToMeters(20.5);
+  private static final double TRACK_WIDTH_Y = Units.inchesToMeters(20.5);
   private static final double DRIVE_BASE_RADIUS =
       Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
   private static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
+  private final static PathConstraints m_Constraints = new PathConstraints(3.0,4.0,Units.degreesToRadians(540),Units.degreesToRadians(720));
+
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
@@ -75,6 +80,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   private AimController aimController = null;
 
+  private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+    new PIDConstants(1.0), //Translation
+    new PIDConstants(1.0), //Rotation
+            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig());
+
   public DriveSubsystem(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -89,19 +99,18 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Start threads (no-op for each if no signals have been created)
     SparkMaxOdometryThread.getInstance().start();
-
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configureHolonomic(
         this::getPose,
         this::setPose,
         () -> kinematics.toChassisSpeeds(getModuleStates()),
         this::runVelocity,
-        new HolonomicPathFollowerConfig(
-            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig()),
+        pathFollowerConfig,
         () ->
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
         this);
+    
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -112,6 +121,7 @@ public class DriveSubsystem extends SubsystemBase {
         (targetPose) -> {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
+    
 
     // Configure SysId
     sysId =
@@ -326,5 +336,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public SwerveDrivePoseEstimator getPoseEstimator () {
     return poseEstimator;
+  }
+
+  public Command driveAmp() {
+    return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
   }
 }

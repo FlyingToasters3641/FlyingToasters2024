@@ -11,6 +11,7 @@ public class Launcher extends SubsystemBase {
 
   private LauncherIO io;
   private final LauncherIOInputsAutoLogged inputs = new LauncherIOInputsAutoLogged();
+
   private ShotController shotController;
   
 
@@ -19,7 +20,7 @@ public class Launcher extends SubsystemBase {
   public Launcher(LauncherIO io) {
     this.io = io;
     io.setBrakeMode(false, false, false, true);
-    
+
   }
 
   @Override
@@ -29,6 +30,7 @@ public class Launcher extends SubsystemBase {
     Logger.recordOutput("Launcher/PitchSensorDegrees", inputs.launcherPositionDegrees);
     Logger.recordOutput("Launcher/PitchMotorDegrees", inputs.pitchMotorSensorDegrees);
     Logger.recordOutput("Launcher/PitchSetpointDegrees", inputs.angleSetpointDegrees);
+    Logger.recordOutput("Launcher/FeederVelocity", inputs.flywheelVelocity);
   }
 
   @Override
@@ -65,8 +67,31 @@ public class Launcher extends SubsystemBase {
     return shotController.updateAngle();
   }
 
-  public boolean getNote(){
+  public boolean getLauncherNote(){
     return inputs.note;
   }
 
+
+  public boolean atShooterThreshold(){
+    Logger.recordOutput("Launcher/AtShooterThreshold",io.atShooterThreshold());
+
+    return io.atShooterThreshold();
+  }
+  
+    public boolean withinPosition(double goToPosition){
+        double threshold = 0.3;
+
+        double launcherPosition = -inputs.launcherPositionDegrees;
+
+            if (launcherPosition >= (goToPosition - threshold) 
+        && launcherPosition <= (goToPosition + threshold)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+  
+  public boolean atThreshold() {
+    return io.atThreshold();
+  }
 }
