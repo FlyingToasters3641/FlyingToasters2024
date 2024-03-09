@@ -49,8 +49,9 @@ public class ShotController {
     }
 
     public double updateAngle() {
-        double output = nearestSetpoint(distanceAngles, new RobotState().distanceToTarget(drivePoseEstimator));
-
+        double distance = new RobotState().distanceToTarget(drivePoseEstimator);
+        double output = nearestSetpoint(distanceAngles, distance);
+        Logger.recordOutput("AutoAim/DistanceToTarget", distance);
         
         return output;
     }
