@@ -32,7 +32,9 @@ public class RobotSystem extends SubsystemBase{
         OUTTAKE,
         CLIMB_EXTEND,
         CLIMB_RETRACT,
-        CLIMB_LOCK
+        CLIMB_LOCK,
+        SHOOT_TAPE,
+        AIM_TAPE
     }
 
     public enum GamepieceState {
@@ -78,6 +80,8 @@ public class RobotSystem extends SubsystemBase{
             case CLIMB_EXTEND -> currentState = SystemState.CLIMB_EXTEND;
             case CLIMB_RETRACT -> currentState = SystemState.CLIMB_RETRACT;
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
+            case SHOOT_TAPE -> currentState = SystemState.SHOOT_TAPE;
+            case AIM_TAPE -> currentState = SystemState.AIM_TAPE;
         }
 
         switch (currentState){
@@ -163,7 +167,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_AIM -> {
                 elevator.setPosition(6.3);
-                launcher.setAngleSetpoint(-35);
+                launcher.setAngleSetpoint(-33);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
@@ -172,7 +176,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_SCORE -> {
                     elevator.setPosition(6.3);
-                    launcher.setAngleSetpoint(-35);
+                    launcher.setAngleSetpoint(-33);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                     launcher.setFeederVoltage(1.0);
                     intake.stopFront();
@@ -206,6 +210,22 @@ public class RobotSystem extends SubsystemBase{
             case CLIMB_LOCK -> {
                 launcher.setAngleSetpoint(100);
                 launcher.setFlywheelVelocity(0.0);
+                launcher.setFeederVoltage(0);
+                intake.stopFront();
+                intake.stopRear(); 
+                elevator.setPosition(0.1);
+            }
+            case SHOOT_TAPE -> {
+                launcher.setAngleSetpoint(28);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(1.0);
+                intake.stopFront();
+                intake.stopRear(); 
+                elevator.setPosition(0.1);
+            }
+            case AIM_TAPE -> {
+                launcher.setAngleSetpoint(28);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 

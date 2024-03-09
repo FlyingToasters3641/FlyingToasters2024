@@ -155,13 +155,10 @@ public class RobotContainer {
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
-    autoChooser.addOption("2 Piece Center", new PathPlannerAuto("2 Piece Center"));
-     //3 piece center  
-    autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
-    autoChooser.addOption("4 Piece Center", new PathPlannerAuto("4 Piece Center"));
-    autoChooser.addOption("2 Piece Left", new PathPlannerAuto("2 Piece Left"));
     autoChooser.addOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
     autoChooser.addOption("4 Piece Left-Far", new PathPlannerAuto("CenterDemon"));
+    autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
+    autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
    
     // Set up SysId routines
 
@@ -194,10 +191,10 @@ public class RobotContainer {
                               .ignoringDisable(true));
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.rightBumper().whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_TAPE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT_TAPE)).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(1.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.x().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)))).onFalse(ElevatorCommands.climb(m_elevator, m_robotSystem));
       m_driverController.start().and(m_driverController.leftStick()).onTrue((Commands.run(() -> m_driverController.leftStick().onTrue((ElevatorCommands.unlockElevator(m_elevator, m_launcher, m_robotSystem))))));
   }     

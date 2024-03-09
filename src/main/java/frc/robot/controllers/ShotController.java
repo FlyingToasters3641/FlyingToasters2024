@@ -25,9 +25,9 @@ public class ShotController {
         distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
-        distanceAngles.put(Units.inchesToMeters(36.0), 48.0);
-        distanceAngles.put(Units.inchesToMeters(50.0), 44.0);
-        distanceAngles.put(Units.inchesToMeters(60.0), 38.0);
+        distanceAngles.put(Units.inchesToMeters(36.0), 46.0);
+        distanceAngles.put(Units.inchesToMeters(50.0), 42.0);
+        distanceAngles.put(Units.inchesToMeters(60.0), 40.0);
         distanceAngles.put(Units.inchesToMeters(70.0), 34.0);
         distanceAngles.put(Units.inchesToMeters(84.0), 28.0);
         distanceAngles.put(Units.inchesToMeters(108.0), 23.0);
