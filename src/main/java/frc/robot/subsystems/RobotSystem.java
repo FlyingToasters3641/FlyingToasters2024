@@ -167,7 +167,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_AIM -> {
                 elevator.setPosition(6.3);
-                launcher.setAngleSetpoint(-33);
+                launcher.setAngleSetpoint(-35);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
@@ -176,7 +176,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_SCORE -> {
                     elevator.setPosition(6.3);
-                    launcher.setAngleSetpoint(-33);
+                    launcher.setAngleSetpoint(-35);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                     launcher.setFeederVoltage(1.0);
                     intake.stopFront();
