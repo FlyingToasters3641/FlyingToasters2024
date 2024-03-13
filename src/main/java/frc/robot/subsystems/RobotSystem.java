@@ -178,7 +178,7 @@ public class RobotSystem extends SubsystemBase{
                     elevator.setPosition(6.3);
                     launcher.setAngleSetpoint(-35);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
-                    launcher.setFeederVoltage(1.0);
+                    launcher.setFeederVoltage(0.3);
                     intake.stopFront();
                     intake.stopRear();
             }
