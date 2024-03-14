@@ -36,6 +36,7 @@ import javax.swing.text.html.parser.Element;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.photonvision.PhotonCamera;
 
+import com.ctre.phoenix6.signals.System_StateValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -151,7 +152,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Rear Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
-
+    NamedCommands.registerCommand("Steal", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.STEAL)));
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     

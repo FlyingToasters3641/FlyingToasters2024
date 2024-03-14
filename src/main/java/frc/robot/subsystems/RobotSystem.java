@@ -34,7 +34,8 @@ public class RobotSystem extends SubsystemBase{
         CLIMB_RETRACT,
         CLIMB_LOCK,
         SHOOT_TAPE,
-        AIM_TAPE
+        AIM_TAPE,
+        STEAL,
     }
 
     public enum GamepieceState {
@@ -82,6 +83,7 @@ public class RobotSystem extends SubsystemBase{
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
             case SHOOT_TAPE -> currentState = SystemState.SHOOT_TAPE;
             case AIM_TAPE -> currentState = SystemState.AIM_TAPE;
+            case STEAL -> currentState = SystemState.STEAL;
         }
 
         switch (currentState){
@@ -230,6 +232,14 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
+            }
+            case STEAL -> {
+                launcher.setAngleSetpoint(LauncherConstants.IDLE);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.0);
+                intake.reverseFront();
+                intake.runRear();
+                elevator.setPosition(0.2);
             }
             }
         }

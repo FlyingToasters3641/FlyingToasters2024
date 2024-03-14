@@ -1,0 +1,85 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5165321826934814,
+      "y": 2.369241237640381
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Start to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Bottom Center"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Steal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Center to Second Bottom Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Bottom to Middle Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle to Second Top Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Second Top to Top Center"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
