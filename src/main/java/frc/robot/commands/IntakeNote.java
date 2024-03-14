@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.RobotSystem;
 import frc.robot.subsystems.RobotSystem.SystemState;
@@ -10,7 +11,7 @@ public class IntakeNote extends Command{
     private final Intake intake;
     private final RobotSystem robotSys;
     private final Launcher launcher;
-
+ 
     public IntakeNote(Intake m_intake, Launcher m_launcher, RobotSystem m_robotSys) {
     intake = m_intake;
     robotSys = m_robotSys;

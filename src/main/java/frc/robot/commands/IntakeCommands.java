@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -14,7 +16,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 
 public class IntakeCommands {
-
+   private static GenericHID m_vibrateController = new GenericHID(0); 
     private IntakeCommands() {}
 
     public static Command runFrontSpeed(Intake m_intake, DoubleSupplier axis) {
@@ -59,8 +61,11 @@ public class IntakeCommands {
         }).until(() -> m_launcher.getLauncherNote() == false).andThen(
             new SequentialCommandGroup(
                 Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.05))).andThen(
-                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+                Commands.waitSeconds(0.05))).andThen(new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE)),
+  Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 1)),
+   new WaitCommand(0.3),
+   Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 0))));
     }
 
     public static Command frontIntakeFeed(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
@@ -69,8 +74,11 @@ public class IntakeCommands {
         }).until(() -> m_launcher.getLauncherNote() == false).andThen(
             new SequentialCommandGroup(
                 Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.05))).andThen(
-                    Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
+                Commands.waitSeconds(0.05))).andThen(new SequentialCommandGroup(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE)),
+  Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 1)),
+   new WaitCommand(0.3),
+   Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 0))));
     }
 
     
