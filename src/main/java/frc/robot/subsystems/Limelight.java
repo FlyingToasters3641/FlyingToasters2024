@@ -9,13 +9,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
     
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
-        
-
-        // read values periodically
         
         double y = ty.getDouble(0.0);
 
