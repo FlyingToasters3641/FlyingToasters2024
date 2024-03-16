@@ -19,6 +19,8 @@ public class RobotSystem extends SubsystemBase{
         IDLE,
         AIM,
         SHOOT,
+        SUBWOOF_AIM,
+        SUBWOOF_SHOOT,
         INTAKE,
         REAR_INTAKE,
         FRONT_INTAKE,
@@ -34,7 +36,9 @@ public class RobotSystem extends SubsystemBase{
         CLIMB_RETRACT,
         CLIMB_LOCK,
         SHOOT_TAPE,
-        AIM_TAPE
+        AIM_TAPE,
+        AMP_MIDDLE,
+        AMP_UP
     }
 
     public enum GamepieceState {
@@ -66,6 +70,8 @@ public class RobotSystem extends SubsystemBase{
             case IDLE -> currentState = SystemState.IDLE;
             case AIM -> currentState = SystemState.AIM;
             case SHOOT -> currentState = SystemState.SHOOT;
+            case SUBWOOF_AIM -> currentState = SystemState.SUBWOOF_AIM;
+            case SUBWOOF_SHOOT -> currentState = SystemState.SUBWOOF_SHOOT;
             case INTAKE -> currentState = SystemState.INTAKE;
             case REAR_INTAKE -> currentState = SystemState.REAR_INTAKE;
             case FRONT_INTAKE -> currentState = SystemState.FRONT_INTAKE;
@@ -82,6 +88,8 @@ public class RobotSystem extends SubsystemBase{
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
             case SHOOT_TAPE -> currentState = SystemState.SHOOT_TAPE;
             case AIM_TAPE -> currentState = SystemState.AIM_TAPE;
+            case AMP_MIDDLE -> currentState = SystemState.AMP_MIDDLE;
+            case AMP_UP -> currentState = SystemState.AMP_UP;
         }
 
         switch (currentState){
@@ -98,11 +106,27 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
-                intake.stopRear();
+                intake.runRear();
                 elevator.setPosition(0.2);
             }
             case SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(1.0);
+                intake.stopFront();
+                intake.stopRear();
+                elevator.setPosition(0.2);
+            }
+            case SUBWOOF_AIM -> {
+                launcher.setAngleSetpoint(50);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+                intake.stopRear();
+                elevator.setPosition(0.2);
+            }
+            case SUBWOOF_SHOOT -> {
+                launcher.setAngleSetpoint(50);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
@@ -166,17 +190,32 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             }
             case AMP_AIM -> {
-                elevator.setPosition(6.3);
-                launcher.setAngleSetpoint(-33);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                elevator.setPosition(1.2);
+                launcher.setAngleSetpoint(0.0);
+                launcher.setFlywheelVelocity(7.0);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
-                
+            }
+            case AMP_MIDDLE -> {
+                elevator.setPosition(1.0);
+                launcher.setAngleSetpoint(90);
+                launcher.setFlywheelVelocity(7.0);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+                intake.stopRear();
             }
             case AMP_SCORE -> {
-                    elevator.setPosition(6.3);
-                    launcher.setAngleSetpoint(-33);
+                    elevator.setPosition(1.0);
+                    launcher.setAngleSetpoint(110);
+                    launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                    launcher.setFeederVoltage(1.0);
+                    intake.stopFront();
+                    intake.stopRear();
+            }
+            case AMP_UP -> {
+                elevator.setPosition(3);
+                    launcher.setAngleSetpoint(0.0);
                     launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
                     launcher.setFeederVoltage(1.0);
                     intake.stopFront();
@@ -196,7 +235,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
-                elevator.setPosition(6);
+                elevator.setPosition(6.4);
 
             }
             case CLIMB_RETRACT -> {
@@ -239,17 +278,10 @@ public class RobotSystem extends SubsystemBase{
         goalState = m_goalState;
     }
 
-    public Command scoreAmp(Launcher m_Launcher, Elevator m_Elevator){
-        return Commands.runOnce(() -> new SequentialCommandGroup(
-            Commands.runOnce(() -> m_Elevator.setPosition(5.4)),
-            Commands.runOnce(() -> m_Launcher.setAngleSetpoint(-5)),
-            Commands.runOnce(() -> m_Launcher.setFeederVoltage(1)),
-            Commands.runOnce(() -> m_Launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP))
-            )
-        );
-    }
 
     public Command moveWrist(Launcher m_Launcher, double AngleSetpoint) {
         return Commands.runOnce(() -> m_Launcher.setAngleSetpoint(AngleSetpoint));
     }
+
+    
 }
