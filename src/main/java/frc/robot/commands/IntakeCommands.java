@@ -16,7 +16,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
 
 public class IntakeCommands {
-   private static GenericHID m_vibrateController = new GenericHID(0); 
+
     private IntakeCommands() {}
 
     public static Command runFrontSpeed(Intake m_intake, DoubleSupplier axis) {
@@ -61,11 +61,9 @@ public class IntakeCommands {
         }).until(() -> m_launcher.getLauncherNote() == false).andThen(
             new SequentialCommandGroup(
                 Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.05))).andThen(new SequentialCommandGroup(
-                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE)),
-  Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 1)),
-   new WaitCommand(0.3),
-   Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 0))));
+                Commands.waitSeconds(0.05))).andThen(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE))
+                );
     }
 
     public static Command frontIntakeFeed(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
@@ -74,11 +72,9 @@ public class IntakeCommands {
         }).until(() -> m_launcher.getLauncherNote() == false).andThen(
             new SequentialCommandGroup(
                 Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.05))).andThen(new SequentialCommandGroup(
-                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE)),
-  Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 1)),
-   new WaitCommand(0.3),
-   Commands.runOnce(() ->   m_vibrateController.setRumble(RumbleType.kBothRumble, 0))));
+                Commands.waitSeconds(0.05))).andThen(
+                Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.IDLE))
+                );
     }
 
     
