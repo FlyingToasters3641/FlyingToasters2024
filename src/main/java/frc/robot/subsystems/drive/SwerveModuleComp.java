@@ -32,7 +32,7 @@ public class SwerveModuleComp implements ModuleIO {
   public static final String CANbusName = "Lucas";
 
   // Gear ratios for Swerve XS, adjust as necessary
-  private static final double DRIVE_GEAR_RATIO = 4.40;
+  private static final double DRIVE_GEAR_RATIO = 4.13;
   private static final double TURN_GEAR_RATIO = 41.25;
 
   // Motor Objects
