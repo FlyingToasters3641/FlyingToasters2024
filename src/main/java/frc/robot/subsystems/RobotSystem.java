@@ -61,7 +61,7 @@ public class RobotSystem extends SubsystemBase{
         intake = m_intake;
         elevator = m_elevator;
         drive = m_drive;
-        shotController = new ShotController(m_drive.getPoseEstimator());
+        shotController = new ShotController();
     }
 
     @Override 

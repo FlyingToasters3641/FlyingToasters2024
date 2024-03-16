@@ -62,8 +62,8 @@ public class Launcher extends SubsystemBase {
     io.setAngleSetpoint(angleDegrees);
   }
 
-  public double updateShot(SwerveDrivePoseEstimator poseEstimator) {
-    shotController = new ShotController(poseEstimator);
+  public double updateShot() {
+    shotController = new ShotController();
     return shotController.updateAngle();
   }
 

@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
+import frc.robot.subsystems.Limelight;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -77,6 +78,8 @@ public class DriveSubsystem extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private Limelight limelight = new Limelight();
 
   private AimController aimController = null;
 
@@ -318,7 +321,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Enable auto aiming on drive */
   public void setAimGoal() {
-    aimController = new AimController(poseEstimator);
+    aimController = new AimController();
   }
 
   /** Disable auto aiming on drive */

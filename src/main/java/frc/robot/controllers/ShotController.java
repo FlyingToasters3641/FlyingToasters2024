@@ -9,47 +9,45 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
+
+
 import frc.robot.RobotState;
+import frc.robot.subsystems.Limelight;
 
 public class ShotController {
     private PIDController headingController;
-    SwerveDrivePoseEstimator drivePoseEstimator;
+
+    Limelight limelight;
 
     InterpolatingDoubleTreeMap distanceAngles;
 
-    public ShotController(SwerveDrivePoseEstimator mPoseEstimator) {
+    public ShotController() {
+
+
         headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        drivePoseEstimator = mPoseEstimator;
+
 
         distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
-        distanceAngles.put(Units.inchesToMeters(36.0), 45.0);
-        distanceAngles.put(Units.inchesToMeters(50.0), 40.0);
-        distanceAngles.put(Units.inchesToMeters(60.0), 49.0);
-        distanceAngles.put(Units.inchesToMeters(70.0), 35.0);
-        distanceAngles.put(Units.inchesToMeters(84.0), 28.0);
-        distanceAngles.put(Units.inchesToMeters(108.0), 21.0);
-        distanceAngles.put(Units.inchesToMeters(117.0), 19.0);
-        distanceAngles.put(Units.inchesToMeters(128.0), 17.0);
-        distanceAngles.put(Units.inchesToMeters(168.0), 14.0);
-        distanceAngles.put(Units.inchesToMeters(180.0), 11.0);
-        distanceAngles.put(Units.inchesToMeters(204.0), 9.5);
+        distanceAngles.put((36.0), 45.0);
+        distanceAngles.put((50.0), 40.0);
+        distanceAngles.put((60.0), 49.0);
+        distanceAngles.put((70.0), 35.0);
+        distanceAngles.put((84.0), 28.0);
+        distanceAngles.put((108.0), 21.0);
+        distanceAngles.put((117.0), 19.0);
+        distanceAngles.put((128.0), 17.0);
+        distanceAngles.put((168.0), 14.0);
+        distanceAngles.put((180.0), 11.0);
+        distanceAngles.put((204.0), 9.5);
     }
 
-    public double updateDrive() {
-        var aimingParameters = new RobotState().getAimingParameters(drivePoseEstimator);
-        double output = headingController.calculate(
-                drivePoseEstimator.getEstimatedPosition().getRotation().getRadians(),
-                aimingParameters.driveHeading().getRadians());
 
-        Logger.recordOutput("AutoAim/HeadingError", headingController.getPositionError());
-        return output;
-    }
 
     public double updateAngle() {
-        double distance = new RobotState().distanceToTarget(drivePoseEstimator);
+        double distance = limelight.getArea();
         double output = nearestSetpoint(distanceAngles, distance);
         Logger.recordOutput("AutoAim/DistanceToTarget", distance);
         

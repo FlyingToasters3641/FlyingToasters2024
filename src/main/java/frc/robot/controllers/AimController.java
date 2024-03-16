@@ -4,26 +4,32 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.util.Units;
 import frc.robot.RobotState;
+import frc.robot.subsystems.Limelight;
 
 public class AimController {
 
     private PIDController headingController;
-    SwerveDrivePoseEstimator drivePoseEstimator;
 
-    public AimController(SwerveDrivePoseEstimator mPoseEstimator) {
+    Limelight limelightHelpers;
+    
+
+    public AimController() {
         headingController = new PIDController(6.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-        drivePoseEstimator = mPoseEstimator;
+        
+        
     }
 
     public double update() {
-        var aimingParameters = new RobotState().getAimingParameters(drivePoseEstimator);
         double output = headingController.calculate(
-                drivePoseEstimator.getEstimatedPosition().getRotation().getRadians(),
-                aimingParameters.driveHeading().getRadians());
-
+                0,
+                limelightHelpers.getAngleOffset().getRadians());
+                
+        
         Logger.recordOutput("AutoAim/HeadingError", headingController.getPositionError());
+        Logger.recordOutput("AutoAim/HeadingDegrees", Units.radiansToDegrees(output));
         return output;
     }
 

@@ -111,7 +111,6 @@ public class RobotContainer {
         m_launcher = new Launcher(new LauncherIOTalonFXComp());
         m_elevator = new Elevator(new ElevatorIOTalonFX());    
         m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator,m_robotDrive); 
-        
         break;
 
       case SIM:
@@ -145,7 +144,7 @@ public class RobotContainer {
         break;
     }
 
-    // Set up named commands5
+    // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Front Intake", IntakeCommands.frontIntake(m_launcher, m_intake, m_robotSystem));
