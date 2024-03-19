@@ -32,7 +32,7 @@ public class SwerveModuleComp implements ModuleIO {
   public static final String CANbusName = "Lucas";
 
   // Gear ratios for Swerve XS, adjust as necessary
-  private static final double DRIVE_GEAR_RATIO = 4.40;
+  private static final double DRIVE_GEAR_RATIO = 4.13;
   private static final double TURN_GEAR_RATIO = 41.25;
 
   // Motor Objects
@@ -65,25 +65,25 @@ public class SwerveModuleComp implements ModuleIO {
         driveTalon = new TalonFX(13, CANbusName);
         turnSparkMax = new CANSparkMax(20, MotorType.kBrushless);
         cancoder = new CANcoder(17, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(0.252441)); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(0.444092));//-0.050537//-1.00927 // MUST BE CALIBRATED
         break;
       case 1: // Front Right
         driveTalon = new TalonFX(10, CANbusName);
         turnSparkMax = new CANSparkMax(21, MotorType.kBrushless);
         cancoder = new CANcoder(15, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.109619)); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.419434));//0.073486//-0.888184 // MUST BE CALIBRATED
         break;
       case 2: // Rear Left
         driveTalon = new TalonFX(11, CANbusName);
         turnSparkMax = new CANSparkMax(22, MotorType.kBrushless);
         cancoder = new CANcoder(16, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(0.189453)); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.490723));//0.007080//-0.999512 // MUST BE CALIBRATED
         break;
       case 3: // Rear Right
         driveTalon = new TalonFX(12, CANbusName);
         turnSparkMax = new CANSparkMax(19, MotorType.kBrushless);
         cancoder = new CANcoder(18, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.047119)); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.003662)); //-0.006836 //-1.496826// MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
