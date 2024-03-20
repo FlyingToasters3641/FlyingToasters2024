@@ -333,8 +333,14 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController != null;
   }
 
-  public double updateAimController() {
-    return aimController.update();
+  public double updateAimController(Limelight m_Limelight) {
+    return aimController.update(m_Limelight);
+  }
+
+  public boolean isAimControllerDone(Limelight m_Limelight) {
+    Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
+      return aimController.threshold(m_Limelight);
+
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator () {
