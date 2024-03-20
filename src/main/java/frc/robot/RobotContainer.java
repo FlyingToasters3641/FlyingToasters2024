@@ -160,6 +160,7 @@ public class RobotContainer {
     autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
     autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
     autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
+    autoChooser.addOption("StealAutos", new PathPlannerAuto("LucasTricksterDemon"));
    
     // Set up SysId routines
 
