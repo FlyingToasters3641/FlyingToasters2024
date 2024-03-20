@@ -54,9 +54,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -191,8 +193,8 @@ public class RobotContainer {
       m_driverController.rightBumper().whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_TAPE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT_TAPE)).until(() -> m_launcher.getLauncherNote() == true).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(0.75)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.x().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)))).onFalse(ElevatorCommands.climb(m_elevator, m_robotSystem));
+      m_driverController.y().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)),Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(0.75)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.AMP_AIM ));
+      m_driverController.x().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)), ElevatorCommands.climb(m_elevator, m_robotSystem), () -> m_robotSystem.getGoalState() != SystemState.CLIMB_EXTEND));
       m_driverController.start().and(m_driverController.leftStick()).onTrue((Commands.run(() -> m_driverController.leftStick().onTrue((ElevatorCommands.unlockElevator(m_elevator, m_launcher, m_robotSystem))))));
   }   
   public Command getAutonomousCommand() {

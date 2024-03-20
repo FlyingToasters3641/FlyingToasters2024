@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import javax.swing.text.html.parser.Element;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -239,7 +240,7 @@ public class RobotSystem extends SubsystemBase{
 
             }
             case CLIMB_RETRACT -> {
-                launcher.setAngleSetpoint(0);
+                launcher.setAngleSetpoint(70);
                 launcher.setFlywheelVelocity(0.0);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
@@ -281,6 +282,10 @@ public class RobotSystem extends SubsystemBase{
 
     public Command moveWrist(Launcher m_Launcher, double AngleSetpoint) {
         return Commands.runOnce(() -> m_Launcher.setAngleSetpoint(AngleSetpoint));
+    }
+
+    public SystemState getGoalState(){
+        return goalState;
     }
 
     
