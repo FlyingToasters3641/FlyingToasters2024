@@ -6,6 +6,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.controllers.ShotController;
+import frc.robot.subsystems.Limelight;
 
 public class Launcher extends SubsystemBase {
 
@@ -62,9 +63,9 @@ public class Launcher extends SubsystemBase {
     io.setAngleSetpoint(angleDegrees);
   }
 
-  public double updateShot() {
+  public double updateShot(Limelight m_Limelight) {
     shotController = new ShotController();
-    return shotController.updateAngle();
+    return shotController.updateAngle(m_Limelight);
   }
 
   public boolean getLauncherNote(){

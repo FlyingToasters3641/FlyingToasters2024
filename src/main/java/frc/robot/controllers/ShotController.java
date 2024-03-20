@@ -17,7 +17,6 @@ import frc.robot.subsystems.Limelight;
 public class ShotController {
     private PIDController headingController;
 
-    Limelight limelight;
 
     InterpolatingDoubleTreeMap distanceAngles;
 
@@ -31,23 +30,24 @@ public class ShotController {
         distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
-        distanceAngles.put((36.0), 45.0);
-        distanceAngles.put((50.0), 40.0);
-        distanceAngles.put((60.0), 49.0);
-        distanceAngles.put((70.0), 35.0);
-        distanceAngles.put((84.0), 28.0);
-        distanceAngles.put((108.0), 21.0);
-        distanceAngles.put((117.0), 19.0);
-        distanceAngles.put((128.0), 17.0);
-        distanceAngles.put((168.0), 14.0);
-        distanceAngles.put((180.0), 11.0);
-        distanceAngles.put((204.0), 9.5);
+        distanceAngles.put((45.0), 45.0);
+        distanceAngles.put((40.0), 40.0);
+        distanceAngles.put((30.0), 49.0);
+        distanceAngles.put((24.0), 35.0);
+        distanceAngles.put((20.0), 28.0);
+        distanceAngles.put((18.0), 21.0);
+        distanceAngles.put((16.0), 19.0);
+        distanceAngles.put((14.0), 17.0);
+        distanceAngles.put((13.0), 14.0);
+        distanceAngles.put((12.0), 12.5);
+        distanceAngles.put((10.0), 11.0);
+        distanceAngles.put((8.0), 10.0);
     }
 
 
 
-    public double updateAngle() {
-        double distance = limelight.getArea();
+    public double updateAngle(Limelight limelight) {
+        double distance = limelight.gettY();
         double output = nearestSetpoint(distanceAngles, distance);
         Logger.recordOutput("AutoAim/DistanceToTarget", distance);
         
