@@ -13,6 +13,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -108,6 +110,8 @@ public class Robot extends LoggedRobot {
     // checkDriverStationUpdate();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_robotContainer.externalIntakeFlip();
+    
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

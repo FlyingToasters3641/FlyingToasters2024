@@ -145,7 +145,7 @@ public class RobotContainer {
         break;
     }
 
-    // Set up named commands5
+    // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Front Intake", IntakeCommands.frontIntake(m_launcher, m_intake, m_robotSystem));
@@ -198,6 +198,14 @@ public class RobotContainer {
      
   public Command getAutonomousCommand() {
       return autoChooser.get();
+  }
+
+  public SequentialCommandGroup externalIntakeFlip() {
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.EXTERNAL_INTAKE)),
+        new WaitCommand(0.1),
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))
+    );
   }
        
   public Command getAutoCommand(String autoName) {

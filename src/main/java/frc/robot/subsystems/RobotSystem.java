@@ -17,6 +17,7 @@ import frc.robot.subsystems.launcher.LauncherConstants;
 public class RobotSystem extends SubsystemBase{
     public enum SystemState {
         IDLE,
+        EXTERNAL_INTAKE,
         AIM,
         SHOOT,
         SUBWOOF_AIM,
@@ -68,6 +69,7 @@ public class RobotSystem extends SubsystemBase{
     public void periodic(){
         switch(goalState) {
             case IDLE -> currentState = SystemState.IDLE;
+            case EXTERNAL_INTAKE -> currentState = SystemState.EXTERNAL_INTAKE;
             case AIM -> currentState = SystemState.AIM;
             case SHOOT -> currentState = SystemState.SHOOT;
             case SUBWOOF_AIM -> currentState = SystemState.SUBWOOF_AIM;
@@ -100,6 +102,14 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.2);
+            }
+            case EXTERNAL_INTAKE -> {
+                launcher.setAngleSetpoint(LauncherConstants.IDLE);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+                intake.stopRear();
+                elevator.setPosition(1.0);
             }
             case AIM -> {
                 launcher.setAngleSetpoint(shotController.updateAngle());
