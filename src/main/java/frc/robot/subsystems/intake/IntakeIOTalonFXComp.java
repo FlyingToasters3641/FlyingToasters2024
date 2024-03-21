@@ -15,7 +15,7 @@ public class IntakeIOTalonFXComp implements IntakeIO {
     public final TalonFX rearTalonFX = new TalonFX(1, CANbusName);
 
     
-    public final CANSparkMax externalCANSpark = new CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushed);
+    public final CANSparkMax externalCANSpark = new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushed);
 
     public final DigitalInput frontSensor = new DigitalInput(2);
     public final DigitalInput rearSensor = new DigitalInput(1);
@@ -25,6 +25,7 @@ public class IntakeIOTalonFXComp implements IntakeIO {
 
     public IntakeIOTalonFXComp() {
        frontTalonFX.setInverted(true);
+       externalCANSpark.setInverted(true);
     }
 
     @Override
@@ -48,7 +49,15 @@ public class IntakeIOTalonFXComp implements IntakeIO {
     @Override
     public void setRearSpeed(double speed){
         rearTalonFX.set(speed);
-        externalCANSpark.set(speed);
+        double extSpeed = speed;
+        if (speed > 0){
+            extSpeed = 1.0;
+        } else if (speed < 0){
+            extSpeed = -1.0;
+        }else{
+            extSpeed = 0.0;
+        }
+        externalCANSpark.set(extSpeed);
     }
 
     @Override
