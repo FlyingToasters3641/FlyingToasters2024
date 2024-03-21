@@ -200,6 +200,14 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
       return autoChooser.get();
   }
+
+  public SequentialCommandGroup externalIntakeFlip() {
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.EXTERNAL_INTAKE)),
+        new WaitCommand(0.1),
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))
+    );
+  }
        
   public Command getAutoCommand(String autoName) {
       return new PathPlannerAuto(autoName);
