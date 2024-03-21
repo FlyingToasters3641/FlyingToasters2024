@@ -104,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Note To Shoot"
+                  "pathName": "Far Side Bottom"
                 }
               },
               {
@@ -147,7 +147,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot to Second Bottom Note"
+                  "pathName": "Far Side Center"
                 }
               },
               {
@@ -166,7 +166,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Second Bottom To Shoot"
+                  "pathName": "Far Side Center Shoot"
                 }
               },
               {
@@ -209,7 +209,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot To Third Bottom"
+                  "pathName": "Far Side Top"
                 }
               },
               {
@@ -228,7 +228,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Third Bottom To Shoot"
+                  "pathName": "Far Side Top Shoot"
                 }
               },
               {
