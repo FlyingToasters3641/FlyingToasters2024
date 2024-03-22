@@ -217,7 +217,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -239,7 +239,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Shot to Middle Outside"
+                  "pathName": "Middle Shoot to Outside Middle"
                 }
               },
               {

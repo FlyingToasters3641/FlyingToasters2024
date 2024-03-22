@@ -93,7 +93,7 @@ public class SwerveModuleComp implements ModuleIO {
     timestampQueue = SparkMaxOdometryThread.getInstance().makeTimestampQueue();
 
     var driveConfig = new TalonFXConfiguration();
-    driveConfig.CurrentLimits.StatorCurrentLimit = 60.0;
+    driveConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     
     driveConfig.Slot0.kS = 0.317;
