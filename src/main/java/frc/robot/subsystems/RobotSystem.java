@@ -266,16 +266,16 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.1);
             }
             case SHOOT_TAPE -> {
-                launcher.setAngleSetpoint(28);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setAngleSetpoint(45);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
             }
             case AIM_TAPE -> {
-                launcher.setAngleSetpoint(28);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setAngleSetpoint(45);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
