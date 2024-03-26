@@ -57,6 +57,11 @@ public class IntakeIOTalonFXComp implements IntakeIO {
         }else{
             extSpeed = 0.0;
         }
+
+        if (rearSensor.get() == false) {
+            extSpeed = 0.0;
+        }
+        
         externalCANSpark.set(extSpeed);
     }
 

@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LauncherIOTalonFXComp implements LauncherIO {
     DigitalInput launchSensor = new DigitalInput(0);
@@ -98,6 +99,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         inputs.flywheelVelocity = topFlywheelTalonFX.getVelocity().getValue();
         inputs.note = launchSensor.get();
         Logger.recordOutput("Launcher/Sensor", launchSensor.get());
+        SmartDashboard.putBoolean("Note", launchSensor.get());
     }
 
     @Override

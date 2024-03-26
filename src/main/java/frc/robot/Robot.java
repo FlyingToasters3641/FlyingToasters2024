@@ -112,9 +112,10 @@ public class Robot extends LoggedRobot {
     // checkDriverStationUpdate();
     
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
     if (DriverStation.getAlliance().get() == Alliance.Red){
       m_robotContainer.m_Limelight.setPipeline(1);
-    } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
+    } else {
       m_robotContainer.m_Limelight.setPipeline(0);
     }
     // schedule the autonomous command (example)
@@ -132,6 +133,13 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    if (DriverStation.getAlliance().get() == Alliance.Red){
+      m_robotContainer.m_Limelight.setPipeline(1);
+    } else {
+      m_robotContainer.m_Limelight.setPipeline(0);
+    }
+    // schedule the autonomous command (example)
 
   }
 

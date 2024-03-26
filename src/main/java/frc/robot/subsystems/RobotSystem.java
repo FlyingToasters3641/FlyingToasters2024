@@ -250,12 +250,12 @@ public class RobotSystem extends SubsystemBase{
 
             }
             case CLIMB_RETRACT -> {
-                launcher.setAngleSetpoint(70);
+                launcher.setAngleSetpoint(80);
                 launcher.setFlywheelVelocity(0.0);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
-                elevator.setPosition(0.2);
+                elevator.setPosition(0.1);
             }
             case CLIMB_LOCK -> {
                 launcher.setAngleSetpoint(100);
@@ -266,7 +266,7 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.1);
             }
             case SHOOT_TAPE -> {
-                launcher.setAngleSetpoint(45);
+                launcher.setAngleSetpoint(35);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
@@ -274,7 +274,7 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.1);
             }
             case AIM_TAPE -> {
-                launcher.setAngleSetpoint(45);
+                launcher.setAngleSetpoint(35);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
