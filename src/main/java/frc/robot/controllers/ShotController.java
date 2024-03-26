@@ -19,6 +19,8 @@ public class ShotController {
 
 
     InterpolatingDoubleTreeMap distanceAngles;
+    double tx = 0.0;
+    double distance;
 
     public ShotController() {
 
@@ -48,7 +50,12 @@ public class ShotController {
 
 
     public double updateAngle(Limelight limelight) {
+        if (limelight.gettY() == 0.0) {
+        double distance = tx;
+        } else {
         double distance = limelight.gettY();
+        tx = distance;
+        }
         double output = nearestSetpoint(distanceAngles, distance);
         Logger.recordOutput("AutoAim/DistanceToTarget", distance);
         

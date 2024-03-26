@@ -242,7 +242,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case CLIMB_EXTEND -> {
                 launcher.setAngleSetpoint(0);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
