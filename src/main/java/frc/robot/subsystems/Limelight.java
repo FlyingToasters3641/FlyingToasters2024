@@ -15,6 +15,8 @@ public class Limelight extends SubsystemBase{
         
         double y = ty.getDouble(0.0);
 
+
+
         public double getArea(){
             return table.getEntry("ta").getDouble(0.0);
         }
@@ -24,11 +26,11 @@ public class Limelight extends SubsystemBase{
             return new Rotation2d(Units.degreesToRadians(x));
         }
 
-        public double gettY(){
+        public double getY(){
             return ty.getDouble(0.0);
         }
 
-        public double gettX() {
+        public double getX() {
             return tx.getDouble(0.0);
         }
 

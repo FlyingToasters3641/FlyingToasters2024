@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import javax.swing.text.html.parser.Element;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -121,6 +123,11 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.runRear();
                 elevator.setPosition(0.2);
+                if(DriverStation.getAlliance().get() == Alliance.Red){
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
             }
             case SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
@@ -129,6 +136,11 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.2);
+                if(DriverStation.getAlliance().get() == Alliance.Red){
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
             }
             case SUBWOOF_AIM -> {
                 launcher.setAngleSetpoint(50);
@@ -193,6 +205,11 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.runRear();
                 elevator.setPosition(0.2);
+                if(Drive1trStation.getAlliance().get() == Alliance.Red){
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
             }
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
@@ -266,21 +283,33 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.1);
             }
             case SHOOT_TAPE -> {
-                launcher.setAngleSetpoint(35);
+                launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
+                if(DriverStation.getAlliance().get() == Alliance.Red){
+                    limelight.setPipeline(3);
+                } else {
+                    limelight.setPipeline(2);
+                }
+                
             }
             case AIM_TAPE -> {
-                launcher.setAngleSetpoint(35);
+                launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
+                if(DriverStation.getAlliance().get() == Alliance.Red){
+                    limelight.setPipeline(3);
+                } else {
+                    limelight.setPipeline(2);
+                }
             }
+
             }
         }
     
@@ -296,6 +325,10 @@ public class RobotSystem extends SubsystemBase{
 
     public SystemState getGoalState(){
         return goalState;
+    }
+
+    public Command setPipeline(Limelight m_Limelight, int pipeline) {
+        return Commands.runOnce(() -> m_Limelight.setPipeline(pipeline));
     }
 
     

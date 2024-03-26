@@ -32,7 +32,7 @@ public class AimController {
     }
 
     public boolean threshold(Limelight limelight) {
-        double output = limelight.gettX();
+        double output = limelight.getX();
         if ((Math.abs(output) <= Threshold)){
             return true;
         } else {

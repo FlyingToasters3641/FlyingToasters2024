@@ -108,7 +108,7 @@ public class DriveCommands {
                                         boolean isFlipped = DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
-                                        double omega = lime.calculate(Units.degreesToRadians(m_Limelight.gettX()), 0); // will get multiplied
+                                        double omega = lime.calculate(Units.degreesToRadians(m_Limelight.getX()), 0); // will get multiplied
                                                                                                // back later
                                         Logger.recordOutput("AutoAim/Omega", omega);
                                         drive.runVelocity(
@@ -120,7 +120,7 @@ public class DriveCommands {
                                                                          ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
 
                                 }
-                                ).until(() -> Math.abs(m_Limelight.gettX()) <= 2.0);
+                                ).until(() -> Math.abs(m_Limelight.getX()) <= 2.0);
         }
 
         public static Command DriveXStop(DriveSubsystem drive) {

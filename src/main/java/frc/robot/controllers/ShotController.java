@@ -20,6 +20,8 @@ public class ShotController {
 
     InterpolatingDoubleTreeMap distanceAngles;
 
+    InterpolatingDoubleTreeMap autoLobAngles;
+
     public ShotController() {
 
 
@@ -28,6 +30,7 @@ public class ShotController {
 
 
         distanceAngles = new InterpolatingDoubleTreeMap();
+        autoLobAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
         distanceAngles.put((45.0), 45.0);
@@ -43,17 +46,32 @@ public class ShotController {
         distanceAngles.put((12.0), 10.0);
         distanceAngles.put((10.0), 9.0);
         distanceAngles.put((8.0), 8.0);
+
+        //Auto Lob Angles - Needs Calibration + More Entries
+        autoLobAngles.put((0.0),0.0);
+
+
+
     }
 
 
 
     public double updateAngle(Limelight limelight) {
-        double distance = limelight.gettY();
+        double distance = limelight.getY();
         double output = nearestSetpoint(distanceAngles, distance);
         Logger.recordOutput("AutoAim/DistanceToTarget", distance);
         
         return output;
     }
+
+    public double updateLobbedAngle(Limelight limelight){
+        double distance = limelight.getY();
+        double output = nearestSetpoint(autoLobAngles, distance);
+        Logger.recordOutput("AutoLobAim/DistanceToTarget", distance);
+
+        return output;
+    }
+
 
     public double nearestSetpoint(InterpolatingDoubleTreeMap distMap, double distance) {
         
