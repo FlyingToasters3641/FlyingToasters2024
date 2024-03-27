@@ -11,8 +11,12 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -106,9 +110,14 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     // checkDriverStationUpdate();
-
+    
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    if (DriverStation.getAlliance().get() == Alliance.Red){
+      m_robotContainer.m_Limelight.setPipeline(1);
+    } else {
+      m_robotContainer.m_Limelight.setPipeline(0);
+    }
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -124,30 +133,20 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    if (DriverStation.getAlliance().get() == Alliance.Red){
+      m_robotContainer.m_Limelight.setPipeline(1);
+    } else {
+      m_robotContainer.m_Limelight.setPipeline(0);
+    }
+    // schedule the autonomous command (example)
 
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    var visionEst = m_robotContainer.m_vision.getEstimatedGlobalPose();
-    visionEst.ifPresent(
-      est -> {
-        var estPose = est.estimatedPose.toPose2d();
-        var estStdDevs = m_robotContainer.m_vision.getEstimationStdDevs(estPose);
-
-        m_robotContainer.m_robotDrive.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-      }
-    );
-    visionEst = m_robotContainer.m_second_vision.getEstimatedGlobalPose();
-    visionEst.ifPresent(
-      est -> {
-        var estPose = est.estimatedPose.toPose2d();
-        var estStdDevs = m_robotContainer.m_second_vision.getEstimationStdDevs(estPose);
-
-        m_robotContainer.m_robotDrive.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-      }
-    );
+    
   }
 
   @Override

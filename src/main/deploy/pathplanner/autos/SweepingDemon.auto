@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left to Shoot.1"
+            "pathName": "Left to Shoot"
           }
         },
         {
@@ -26,19 +26,87 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootAndIntake"
+            "name": "Shoot"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Shoot to Bottom Note"
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Shoot to Bottom Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Bottom Note to Middle Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim"
           }
         },
         {
@@ -48,9 +116,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Bottom Note to Middle Note"
+            "name": "Shoot"
           }
         },
         {
@@ -87,7 +155,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -99,7 +167,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -109,7 +177,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Note to Second Middle"
+                  "pathName": "Top Close to Top Middle"
                 }
               },
               {
@@ -128,7 +196,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle to Shoot"
+                  "pathName": "Middle Close to Center Shoot"
                 }
               },
               {
@@ -141,9 +209,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -155,17 +229,17 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot Back to Middle"
+                  "pathName": "Middle Shoot to Outside Middle"
                 }
               },
               {
@@ -197,6 +271,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
@@ -211,7 +291,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         }
       ]

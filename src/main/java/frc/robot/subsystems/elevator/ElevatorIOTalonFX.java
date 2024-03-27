@@ -36,8 +36,8 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
         TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
 
-        elevatorConfig.Slot0.kP = 400.0;
-        elevatorConfig.Slot0.kD = 15.0;
+        elevatorConfig.Slot0.kP = 500.0;
+        elevatorConfig.Slot0.kD = 30.0;
 
         elevatorConfig.Slot1.kP = 10.0;
 

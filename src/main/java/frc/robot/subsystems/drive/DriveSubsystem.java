@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
+import frc.robot.subsystems.Limelight;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -78,11 +79,13 @@ public class DriveSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
+  private Limelight limelight = new Limelight();
+
   private AimController aimController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-    new PIDConstants(1.0), //Translation
-    new PIDConstants(1.0), //Rotation
+    new PIDConstants(2.0), //Translation
+    new PIDConstants(2.0), //Rotation
             MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig());
 
   public DriveSubsystem(
@@ -318,7 +321,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Enable auto aiming on drive */
   public void setAimGoal() {
-    aimController = new AimController(poseEstimator);
+    aimController = new AimController();
   }
 
   /** Disable auto aiming on drive */
@@ -330,8 +333,14 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController != null;
   }
 
-  public double updateAimController() {
-    return aimController.update();
+  public double updateAimController(Limelight m_Limelight) {
+    return aimController.update(m_Limelight);
+  }
+
+  public boolean isAimControllerDone(Limelight m_Limelight) {
+    Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
+      return aimController.threshold(m_Limelight);
+    
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator () {

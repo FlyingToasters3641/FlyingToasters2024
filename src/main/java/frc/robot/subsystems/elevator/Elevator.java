@@ -30,7 +30,7 @@ public class Elevator extends SubsystemBase{
     }
 
     public boolean withinPosition(double goToPosition){
-        double threshold = 0.05;
+        double threshold = 0.1;
 
         double elevatorPosition = inputs.position;
 

@@ -75,4 +75,5 @@ public class LauncherCommands {
     public static Command pitchJoystick(Launcher m_Launcher, DoubleSupplier joystick){
         return Commands.runOnce(() -> m_Launcher.setAngleSetpoint(joystick.getAsDouble() * 10.0));
     }
+
 }

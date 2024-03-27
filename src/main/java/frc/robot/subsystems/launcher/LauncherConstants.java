@@ -9,7 +9,7 @@ public class LauncherConstants {
         public static Rotation2d minAngle = Rotation2d.fromDegrees(0.0);
         public static Rotation2d maxAngle = Rotation2d.fromDegrees(45.0);
 
-        public static ProfileConstraints profileConstraints = new ProfileConstraints(2 * Math.PI, (4 * Math.PI));
+        public static ProfileConstraints profileConstraints = new ProfileConstraints(2 * Math.PI, (1 * Math.PI));
 
         public record ProfileConstraints(double crusieVelocityRadPerSec, double accelerationRadPerSec2) {};
 
@@ -19,7 +19,8 @@ public class LauncherConstants {
         public static double IDLE = 4.0;
         public static double FLYWHEEL_RPM_IDLE = 15;
         public static double FLYWHEEL_RPM_DEFAULT = 40;
+        public static double FLYWHEEL_RPM_FAR = 23;
         public static double FLYWHEEL_RPM_INTAKE = -1000;
-        public static double FLYWHEEL_RPM_AMP = 30;
+        public static double FLYWHEEL_RPM_AMP = 8;
 
 }

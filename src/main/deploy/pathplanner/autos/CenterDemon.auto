@@ -26,62 +26,44 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootAndIntake"
+            "name": "Shoot"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot to Bottom Note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Bottom Note to Center"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Note To Shoot"
+                  "pathName": "Shoot to Bottom Note"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Aim"
+                  "name": "Intake"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -93,7 +75,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -103,7 +85,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot to Second Bottom Note"
+                  "pathName": "Bottom Note to Center"
                 }
               },
               {
@@ -122,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Second Bottom To Shoot"
+                  "pathName": "Far Side Bottom"
                 }
               },
               {
@@ -135,9 +117,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -149,7 +137,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -159,7 +147,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot To Third Bottom"
+                  "pathName": "Far Side Center"
                 }
               },
               {
@@ -178,7 +166,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Third Bottom To Shoot"
+                  "pathName": "Far Side Center Shoot"
                 }
               },
               {
@@ -191,9 +179,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -205,7 +199,69 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Side Top"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Side Top Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]

@@ -11,7 +11,9 @@ import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeCommands;
 import frc.robot.commands.LauncherCommands;
 import frc.robot.commands.ShootNote;
+import frc.robot.commands.ShootSubwoofer;
 import frc.robot.constants.VisionConstants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotSystem;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.LEDs.LEDSubsystem;
@@ -50,11 +52,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -86,8 +91,7 @@ public class RobotContainer {
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
-    public final Vision m_vision = new Vision(new PhotonCamera(VisionConstants.kCameraName), VisionConstants.kRobotToCam);
-    public final Vision m_second_vision = new Vision(new PhotonCamera(VisionConstants.kSecondCameraName), VisionConstants.kRobotToSecondCam);
+    public final Limelight m_Limelight = new Limelight();
     
     
     // Dashboard inputs
@@ -109,8 +113,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFXComp());   
         m_launcher = new Launcher(new LauncherIOTalonFXComp());
         m_elevator = new Elevator(new ElevatorIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator,m_robotDrive); 
-        
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator,m_robotDrive, m_Limelight); 
         break;
 
       case SIM:
@@ -125,7 +128,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight); 
         break;
 
       default:
@@ -140,7 +143,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive);
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight);
         break;
     }
 
@@ -151,17 +154,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("Rear Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
+    NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
-    autoChooser.addOption("2 Piece Center", new PathPlannerAuto("2 Piece Center"));
-     //3 piece center  
-    autoChooser.addOption("3 Piece Center", new PathPlannerAuto("3 Piece Center"));
-    autoChooser.addOption("4 Piece Center", new PathPlannerAuto("4 Piece Center"));
-    autoChooser.addOption("2 Piece Left", new PathPlannerAuto("2 Piece Left"));
-    autoChooser.addOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
+    autoChooser.addDefaultOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
     autoChooser.addOption("4 Piece Left-Far", new PathPlannerAuto("CenterDemon"));
+    autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
+    autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
+    autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
    
     // Set up SysId routines
 
@@ -182,29 +184,32 @@ public class RobotContainer {
                       m_robotDrive,
                       () -> -m_driverController.getLeftY(),
                       () -> -m_driverController.getLeftX(),
-                      () -> -m_driverController.getRightX()));
+                      () -> -m_driverController.getRightX(),
+                      m_Limelight));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
-      m_driverController
-              .b()
-              .onTrue(
-                      Commands.runOnce(
-                              () -> m_robotDrive.setPose(
-                                      new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),
-                              m_robotDrive)
-                              .ignoringDisable(true));
-      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
-      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.rightBumper().whileTrue(IntakeCommands.humanIntakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      m_driverController.y().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(1.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.x().onTrue((Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)))).onFalse(ElevatorCommands.climb(m_elevator, m_robotSystem));
-      m_driverController.start().and(m_driverController.leftStick()).onTrue((Commands.run(() -> m_driverController.leftStick().onTrue((ElevatorCommands.unlockElevator(m_elevator, m_launcher, m_robotSystem))))));
-  }     
 
-     
+      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
+      m_driverController.b().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM))).onFalse(new ShootSubwoofer(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.rightBumper().whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_TAPE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT_TAPE)).until(() -> m_launcher.getLauncherNote() == true).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+
+      m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
+      m_driverController.y().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)),Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(0.75)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.AMP_AIM ));
+      m_driverController.x().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)), ElevatorCommands.climb(m_elevator, m_robotSystem), () -> m_robotSystem.getGoalState() != SystemState.CLIMB_EXTEND));
+      m_driverController.start().onTrue(Commands.runOnce(() -> m_robotDrive.setPose(new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),m_robotDrive)
+                .ignoringDisable(true));
+  }   
   public Command getAutonomousCommand() {
       return autoChooser.get();
+  }
+
+  public SequentialCommandGroup externalIntakeFlip() {
+    return new SequentialCommandGroup(
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.EXTERNAL_INTAKE)),
+        new WaitCommand(0.1),
+        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))
+    );
   }
        
   public Command getAutoCommand(String autoName) {
