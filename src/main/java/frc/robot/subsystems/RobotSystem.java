@@ -39,8 +39,8 @@ public class RobotSystem extends SubsystemBase{
         CLIMB_EXTEND,
         CLIMB_RETRACT,
         CLIMB_LOCK,
-        SHOOT_TAPE,
-        AIM_TAPE,
+        SHOOT_LOB,
+        AIM_LOB,
         AMP_MIDDLE,
         AMP_UP
     }
@@ -93,8 +93,8 @@ public class RobotSystem extends SubsystemBase{
             case CLIMB_EXTEND -> currentState = SystemState.CLIMB_EXTEND;
             case CLIMB_RETRACT -> currentState = SystemState.CLIMB_RETRACT;
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
-            case SHOOT_TAPE -> currentState = SystemState.SHOOT_TAPE;
-            case AIM_TAPE -> currentState = SystemState.AIM_TAPE;
+            case SHOOT_LOB -> currentState = SystemState.SHOOT_LOB;
+            case AIM_LOB -> currentState = SystemState.AIM_LOB;
             case AMP_MIDDLE -> currentState = SystemState.AMP_MIDDLE;
             case AMP_UP -> currentState = SystemState.AMP_UP;
         }
@@ -123,11 +123,6 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.runRear();
                 elevator.setPosition(0.2);
-                if(DriverStation.getAlliance().get() == Alliance.Red){
-                    limelight.setPipeline(1);
-                } else {
-                    limelight.setPipeline(0);
-                }
             }
             case SHOOT -> {
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
@@ -136,11 +131,6 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.2);
-                if(DriverStation.getAlliance().get() == Alliance.Red){
-                    limelight.setPipeline(1);
-                } else {
-                    limelight.setPipeline(0);
-                }
             }
             case SUBWOOF_AIM -> {
                 launcher.setAngleSetpoint(50);
@@ -205,11 +195,6 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopFront();
                 intake.runRear();
                 elevator.setPosition(0.2);
-                if(Drive1trStation.getAlliance().get() == Alliance.Red){
-                    limelight.setPipeline(1);
-                } else {
-                    limelight.setPipeline(0);
-                }
             }
             case HUMAN_PLAYER -> {
                 launcher.setAngleSetpoint(90);
@@ -282,32 +267,22 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
             }
-            case SHOOT_TAPE -> {
+            case SHOOT_LOB -> {
                 launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
-                if(DriverStation.getAlliance().get() == Alliance.Red){
-                    limelight.setPipeline(3);
-                } else {
-                    limelight.setPipeline(2);
-                }
                 
             }
-            case AIM_TAPE -> {
+            case AIM_LOB -> {
                 launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
-                if(DriverStation.getAlliance().get() == Alliance.Red){
-                    limelight.setPipeline(3);
-                } else {
-                    limelight.setPipeline(2);
-                }
             }
 
             }

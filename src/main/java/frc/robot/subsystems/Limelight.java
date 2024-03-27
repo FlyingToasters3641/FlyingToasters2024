@@ -12,6 +12,7 @@ public class Limelight extends SubsystemBase{
     
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
+        int currentPipeline;
         
         double y = ty.getDouble(0.0);
 
@@ -36,6 +37,11 @@ public class Limelight extends SubsystemBase{
 
         public void setPipeline(int pipeline){
             table.getEntry("pipeline").setValue(pipeline);
+            currentPipeline = pipeline;
+        }
+
+        public int getPipeline() {
+            return currentPipeline;
         }
 
 }

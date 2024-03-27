@@ -191,7 +191,7 @@ public class RobotContainer {
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       m_driverController.b().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM))).onFalse(new ShootSubwoofer(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      m_driverController.rightBumper().whileTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_TAPE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT_TAPE)).until(() -> m_launcher.getLauncherNote() == true).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.rightBumper().onTrue(LauncherCommands.Lob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive).andThen(LauncherCommands.EndLob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive)));
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
 
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));

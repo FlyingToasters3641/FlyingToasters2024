@@ -337,6 +337,10 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController.update(m_Limelight);
   }
 
+  public double updateAimControllerLob(Limelight m_Limelight) {
+    return aimController.updateLob(m_Limelight);
+  }
+
   public boolean isAimControllerDone(Limelight m_Limelight) {
     Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
       return aimController.threshold(m_Limelight);
