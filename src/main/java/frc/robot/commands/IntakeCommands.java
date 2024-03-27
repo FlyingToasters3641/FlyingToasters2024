@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.RobotSystem;
+import frc.robot.subsystems.LEDs.LEDSubsystem;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.launcher.Launcher;
@@ -63,13 +64,17 @@ public class IntakeCommands {
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 
-    public static Command frontIntakeFeed(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
+    public static Command frontIntakeFeed(Launcher m_launcher, Intake m_intake, RobotSystem m_System, LEDSubsystem m_LedSubsystem) {
         return Commands.run(() -> {
             m_System.setGoalState(RobotSystem.SystemState.FRONT_INTAKE_FEED);
         }).until(() -> m_launcher.getLauncherNote() == false).andThen(
             new SequentialCommandGroup(
                 Commands.runOnce(()->m_System.setGoalState(RobotSystem.SystemState.REVERSE_INTAKE)),
-                Commands.waitSeconds(0.05))).andThen(
+                Commands.waitSeconds(0.05))).andThen(new SequentialCommandGroup(
+                  Commands.runOnce(()-> m_LedSubsystem.setLEDSGoalState(LEDSubsystem.LedStates.FLOWING_COLORS)), 
+                    Commands.waitSeconds(0.05), 
+                     Commands.runOnce(()-> m_LedSubsystem.setLEDSGoalState(LEDSubsystem.LedStates.IDLE))
+                ),
                     Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.IDLE)));
     }
 
@@ -91,13 +96,13 @@ public class IntakeCommands {
     }
   
 
-  public static Command frontIntake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem){
+  public static Command frontIntake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem, LEDSubsystem m_LedSubsystem ){
     return Commands.run(() -> m_robotSystem.setGoalState(SystemState.FRONT_INTAKE))
-    .until(() -> m_intake.getRearNote() == false).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))).andThen(frontIntakeFeed(m_launcher, m_intake, m_robotSystem));
+    .until(() -> m_intake.getRearNote() == false).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))).andThen(frontIntakeFeed(m_launcher, m_intake, m_robotSystem, m_LedSubsystem));
   }
     
-  public static Command intake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem){
-    return Commands.run(() -> m_robotSystem.setGoalState(SystemState.INTAKE)).until(() -> (m_intake.getFrontNote() == false || m_intake.getRearNote() == false)).andThen(new ConditionalCommand(frontIntake(m_launcher, m_intake, m_robotSystem), rearIntakeNote(m_launcher, m_intake, m_robotSystem), () -> m_intake.getFrontNote() == false));
+  public static Command intake(Launcher m_launcher, Intake m_intake, RobotSystem m_robotSystem, LEDSubsystem m_LedSubsystem){
+    return Commands.run(() -> m_robotSystem.setGoalState(SystemState.INTAKE)).until(() -> (m_intake.getFrontNote() == false || m_intake.getRearNote() == false)).andThen(new ConditionalCommand(frontIntake(m_launcher, m_intake, m_robotSystem, m_LedSubsystem), rearIntakeNote(m_launcher, m_intake, m_robotSystem), () -> m_intake.getFrontNote() == false));
   }
 
 }
