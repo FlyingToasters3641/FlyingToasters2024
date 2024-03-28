@@ -76,13 +76,9 @@ public class DriveCommands {
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
                                         if (drive.getAimController()) {
-                                                if (m_Limelight.getPipeline() == 2 || m_Limelight.getPipeline() == 3) {
-                                                omega = drive.updateAimControllerLob(m_Limelight) 
-                                                                / drive.getMaxAngularSpeedRadPerSec();// will get multiplied later
-                                                } else {
-                                                omega = drive.updateAimController(m_Limelight) 
-                                                                / drive.getMaxAngularSpeedRadPerSec();
-                                                }
+                                                omega = drive.updateAimController(m_Limelight)
+                                                        / drive.getMaxAngularSpeedRadPerSec();
+                                                
 
                                         }
                                         drive.runVelocity(

@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class IntakeIOTalonFXComp implements IntakeIO {
@@ -36,6 +37,8 @@ public class IntakeIOTalonFXComp implements IntakeIO {
 
         Logger.recordOutput("Intake/frontSensor", frontSensor.get());
         Logger.recordOutput("Intake/rearSensor", rearSensor.get());
+        SmartDashboard.putBoolean("IntakeFront", frontSensor.get());
+        SmartDashboard.putBoolean("IntakeRear", rearSensor.get());
 
     }
 

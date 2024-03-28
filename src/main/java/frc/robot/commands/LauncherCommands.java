@@ -89,8 +89,9 @@ public class LauncherCommands {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> m_limelight.setPipeline(2)),
             Commands.runOnce(() -> drive.setAimGoal()),
+            new WaitCommand(0.3),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),
-            new WaitCommand(0.5),
+            new WaitCommand(1.00),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
             new WaitCommand(0.5)
             );
@@ -100,8 +101,9 @@ public class LauncherCommands {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> m_limelight.setPipeline(3)),
             Commands.runOnce(() -> drive.setAimGoal()),
+            new WaitCommand(0.3),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),
-            new WaitCommand(0.5),
+            new WaitCommand(1.00),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
             new WaitCommand(0.5)
             );

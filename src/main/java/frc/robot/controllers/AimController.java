@@ -31,13 +31,24 @@ public class AimController {
         return output;
     }
 
-    public double updateLob(Limelight limelight) {
+    public double updateLobBlue(Limelight limelight) {
         double output = headingController.calculate(
-            limelight.getAngleOffset().getRadians() - 2,
+            limelight.getAngleOffset().getRadians() - Units.degreesToRadians(15),
                         0);
 
         return output;
     }
+    
+    public double updateLobRed(Limelight limelight) {
+        double output = headingController.calculate(
+            limelight.getAngleOffset().getRadians() - Units.degreesToRadians(15),
+                        0);
+
+        return output;
+    }
+    
+
+
 
     public boolean threshold(Limelight limelight) {
         double output = limelight.getX();

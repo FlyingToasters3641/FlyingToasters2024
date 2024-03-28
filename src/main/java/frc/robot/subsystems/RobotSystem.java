@@ -42,7 +42,10 @@ public class RobotSystem extends SubsystemBase{
         SHOOT_LOB,
         AIM_LOB,
         AMP_MIDDLE,
-        AMP_UP
+        AMP_UP,
+        TRAP_AIM,
+        TRAP_SHOOT,
+        TRAP_UP
     }
 
     public enum GamepieceState {
@@ -97,6 +100,9 @@ public class RobotSystem extends SubsystemBase{
             case AIM_LOB -> currentState = SystemState.AIM_LOB;
             case AMP_MIDDLE -> currentState = SystemState.AMP_MIDDLE;
             case AMP_UP -> currentState = SystemState.AMP_UP;
+            case TRAP_AIM -> currentState = SystemState.TRAP_AIM;
+            case TRAP_SHOOT -> currentState = SystemState.TRAP_SHOOT;
+            case TRAP_UP -> currentState = SystemState.TRAP_UP;
         }
 
         switch (currentState){
@@ -269,7 +275,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case SHOOT_LOB -> {
                 launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
+                launcher.setFlywheelVelocity(shotController.updateLobbedRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
@@ -278,13 +284,36 @@ public class RobotSystem extends SubsystemBase{
             }
             case AIM_LOB -> {
                 launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
+                launcher.setFlywheelVelocity(shotController.updateLobbedRollers(limelight));
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
             }
-
+            case TRAP_AIM -> {
+                elevator.setPosition(4.5);
+                launcher.setAngleSetpoint(50);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+            }
+            case TRAP_SHOOT -> {
+                elevator.setPosition(4.5);
+                launcher.setAngleSetpoint(50);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(1.0);
+                intake.stopFront();
+            } 
+            case TRAP_UP -> {
+                elevator.setPosition(4.5);
+                launcher.setAngleSetpoint(0);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+            }
             }
         }
     

@@ -337,8 +337,12 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController.update(m_Limelight);
   }
 
-  public double updateAimControllerLob(Limelight m_Limelight) {
-    return aimController.updateLob(m_Limelight);
+  public double updateAimControllerLobRed(Limelight m_Limelight) {
+    return aimController.updateLobRed(m_Limelight);
+  }
+
+  public double updateAimControllerLobBlue(Limelight m_Limelight) {
+    return aimController.updateLobBlue(m_Limelight);
   }
 
   public boolean isAimControllerDone(Limelight m_Limelight) {
