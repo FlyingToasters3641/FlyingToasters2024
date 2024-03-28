@@ -45,7 +45,8 @@ public class RobotSystem extends SubsystemBase{
         AMP_UP,
         TRAP_AIM,
         TRAP_SHOOT,
-        TRAP_UP
+        TRAP_UP,
+        TRAP_DOWN
     }
 
     public enum GamepieceState {
@@ -103,6 +104,7 @@ public class RobotSystem extends SubsystemBase{
             case TRAP_AIM -> currentState = SystemState.TRAP_AIM;
             case TRAP_SHOOT -> currentState = SystemState.TRAP_SHOOT;
             case TRAP_UP -> currentState = SystemState.TRAP_UP;
+            case TRAP_DOWN -> currentState = SystemState.TRAP_DOWN;
         }
 
         switch (currentState){
@@ -311,6 +313,13 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setAngleSetpoint(0);
                 launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
                 launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+            }
+            case TRAP_DOWN -> {
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(50);
+                launcher.setFlywheelVelocity(LauncherConstants.IDLE);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
             }
