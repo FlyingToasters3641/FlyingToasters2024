@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ShootAndIntake"
           }
         },
         {
@@ -44,32 +44,8 @@
                 "data": {
                   "pathName": "Center to Middle Note Close"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -104,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Close to Center Shoot"
+                  "pathName": "SweepingDemon Sixth"
                 }
               },
               {
@@ -135,7 +111,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Shoot to Outside Middle"
+                  "pathName": "SweepingDemon Seventh"
                 }
               },
               {

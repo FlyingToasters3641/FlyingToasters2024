@@ -43,8 +43,8 @@ public class ShotController {
         distanceAngles.put((30.0), 40.0);
         distanceAngles.put((24.0), 36.0);
         distanceAngles.put((20.0), 30.0);
-        distanceAngles.put((18.0), 22.0);
-        distanceAngles.put((16.0), 21.0);
+        distanceAngles.put((18.0), 21.0);
+        distanceAngles.put((16.0), 20.0);
         distanceAngles.put((14.0), 19.0);
         distanceAngles.put((13.0), 18.0);
         distanceAngles.put((12.5), 17.0);
