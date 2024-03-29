@@ -11267,7 +11267,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LTD Second": {
             "waypoints": [
@@ -11824,40 +11824,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Marker",
-                    "target": 1,
-                    "targetTimestamp": 1.745252521874018,
-                    "offset": 0,
-                    "command": {
-                        "type": "sequential",
-                        "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Aim"
-                                    }
-                                },
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Shoot"
-                                    }
-                                },
-                                {
-                                    "type": "wait",
-                                    "data": {
-                                        "waitTime": 0.5
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "LTD Third": {
             "waypoints": [
@@ -12369,40 +12337,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Marker",
-                    "target": 1,
-                    "targetTimestamp": 1.6686754213649335,
-                    "offset": 0,
-                    "command": {
-                        "type": "sequential",
-                        "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Aim"
-                                    }
-                                },
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Shoot"
-                                    }
-                                },
-                                {
-                                    "type": "wait",
-                                    "data": {
-                                        "waitTime": 0.5
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "LTD Fourth": {
             "waypoints": [
@@ -13015,40 +12951,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Marker",
-                    "target": 1,
-                    "targetTimestamp": 1.2013474957983263,
-                    "offset": 0,
-                    "command": {
-                        "type": "sequential",
-                        "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Aim"
-                                    }
-                                },
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Shoot"
-                                    }
-                                },
-                                {
-                                    "type": "wait",
-                                    "data": {
-                                        "waitTime": 0.5
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "LTD Fifth": {
             "waypoints": [
@@ -13423,40 +13327,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Marker",
-                    "target": 1,
-                    "targetTimestamp": 1.31937876531616,
-                    "offset": 0,
-                    "command": {
-                        "type": "sequential",
-                        "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Aim"
-                                    }
-                                },
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Shoot"
-                                    }
-                                },
-                                {
-                                    "type": "wait",
-                                    "data": {
-                                        "waitTime": 0.5
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "LTD Sixth": {
             "waypoints": [
@@ -13676,40 +13548,8 @@
             "defaultControlIntervalCount": 40,
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
-            "eventMarkers": [
-                {
-                    "name": "Marker",
-                    "target": 1,
-                    "targetTimestamp": 1.482214245904345,
-                    "offset": 0,
-                    "command": {
-                        "type": "sequential",
-                        "data": {
-                            "commands": [
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Aim"
-                                    }
-                                },
-                                {
-                                    "type": "named",
-                                    "data": {
-                                        "name": "Shoot"
-                                    }
-                                },
-                                {
-                                    "type": "wait",
-                                    "data": {
-                                        "waitTime": 0.5
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            ],
-            "isTrajectoryStale": false
+            "eventMarkers": [],
+            "isTrajectoryStale": true
         },
         "TD Start": {
             "waypoints": [
@@ -14101,7 +13941,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "TD Second": {
             "waypoints": [
@@ -14385,7 +14225,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LAD Third": {
             "waypoints": [
@@ -14761,7 +14601,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LAD Fourth": {
             "waypoints": [
@@ -14937,7 +14777,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LAD Fifth": {
             "waypoints": [
@@ -15313,7 +15153,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Second": {
             "waypoints": [
@@ -15570,7 +15410,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Third": {
             "waypoints": [
@@ -15919,7 +15759,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Fourth": {
             "waypoints": [
@@ -16167,7 +16007,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Fifth": {
             "waypoints": [
@@ -16507,7 +16347,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Sixth": {
             "waypoints": [
@@ -16728,7 +16568,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Seventh": {
             "waypoints": [
@@ -16940,7 +16780,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         },
         "LSD Eight": {
             "waypoints": [
@@ -17179,7 +17019,7 @@
             "usesDefaultFieldObstacles": true,
             "circleObstacles": [],
             "eventMarkers": [],
-            "isTrajectoryStale": false
+            "isTrajectoryStale": true
         }
     },
     "splitTrajectoriesAtStopPoints": true,
