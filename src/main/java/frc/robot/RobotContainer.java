@@ -155,6 +155,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
     NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
+    NamedCommands.registerCommand("Steal", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.STEAL)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.468574285507202,
+      "y": 1.9807747602462769
+    },
+    "rotation": 179.99997496922057
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTD Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LSD Second "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LSD Third"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
