@@ -35,6 +35,9 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+
 public class DriveCommands {
         private static final double DEADBAND = 0.1;
 
@@ -128,5 +131,17 @@ public class DriveCommands {
                         drive.stopWithX();
                 });
         }
+
+        Pose2d targetPose = new Pose2d(6.07, 4.12, Rotation2d.fromDegrees(180));
+
+        PathConstraints constraints = new PathConstraints(
+                3.0, 4.0,
+                Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        Command BlueTrap = AutoBuilder.pathfindToPose(
+                targetPose,
+                constraints,
+                0.0,
+                0.0);
 
 }
