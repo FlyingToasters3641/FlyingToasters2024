@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.controllers.AimController;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.DriveSubsystem;
+
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.function.DoubleSupplier;
 
@@ -132,16 +134,9 @@ public class DriveCommands {
                 });
         }
 
-        Pose2d targetPose = new Pose2d(6.07, 4.12, Rotation2d.fromDegrees(180));
-
-        PathConstraints constraints = new PathConstraints(
-                3.0, 4.0,
-                Units.degreesToRadians(540), Units.degreesToRadians(720));
-
-        Command BlueTrap = AutoBuilder.pathfindToPose(
-                targetPose,
-                constraints,
-                0.0,
-                0.0);
-
+        public static Command drivetoTrap(DriveSubsystem drive) {
+                return Commands.run(() -> {
+                        drive.driveTrap();
+                });
+        }
 }

@@ -205,6 +205,7 @@ public class RobotContainer {
       m_driverController.povDown().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.TRAP_DOWN)).andThen(new WaitCommand(0.25)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       m_driverController.start().onTrue(Commands.runOnce(() -> m_robotDrive.setPose(new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),m_robotDrive)
                 .ignoringDisable(true));
+        m_driverController.povLeft().onTrue(Commands.runOnce(() -> m_robotDrive.driveTrap().asProxy()));
 
         
   }   

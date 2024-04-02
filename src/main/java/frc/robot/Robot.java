@@ -41,8 +41,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
 
-    Pathfinding.setPathfinder(new LocalADStar());
-
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);

@@ -15,6 +15,8 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,6 +24,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -357,5 +360,46 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command driveAmp() {
     return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
+  }
+  
+  //TrapPathFollowing
+  Pose2d BlueCenterStage = new Pose2d(6.07, 4.12, Rotation2d.fromDegrees(0));
+  Pose2d BlueLeftStage = new Pose2d(4.34, 5.03, Rotation2d.fromDegrees(120));
+  Pose2d BlueRightStage = new Pose2d(4.34, 3.15, Rotation2d.fromDegrees(-120));
+
+  Pose2d RedCenterStage = GeometryUtil.flipFieldPose(BlueCenterStage);
+  Pose2d RedLeftStage = GeometryUtil.flipFieldPose(BlueLeftStage);
+  Pose2d RedRightStage = GeometryUtil.flipFieldPose(BlueRightStage);
+
+  
+    PathConstraints constraints = new PathConstraints(
+              3.0, 4.0,
+                Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+  public List<Pose2d> getTrapPose() {
+     ArrayList<Pose2d> TrapPoses = new ArrayList<Pose2d>();
+     //BlueCenterStage
+     TrapPoses.add(BlueCenterStage);
+     //BlueLeftStage
+     TrapPoses.add(BlueLeftStage);
+     //BlueRightStage
+     TrapPoses.add(BlueRightStage);
+     //RedCenterStage
+     TrapPoses.add(RedCenterStage);
+     //RedLeftStage
+     TrapPoses.add(RedLeftStage);
+     //RedRightStage
+     TrapPoses.add(RedRightStage);
+     return TrapPoses;
+  }
+  
+  public Command driveTrap() {
+    Pose2d currentPose = getPose();
+    Pose2d targetPose = currentPose.nearest(getTrapPose());
+    return AutoBuilder.pathfindToPose(
+                targetPose,
+                constraints,
+                0.0,
+                0.0);
   }
 }
