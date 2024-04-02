@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4753098487854004,
-      "y": 6.992156028747559
+      "x": 1.4835160970687866,
+      "y": 5.547852039337158
     },
     "rotation": 180.0
   },
@@ -12,13 +12,74 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAndIntake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Middle Note Close"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top to Shoot"
+                  "pathName": "MiddleBottom Second"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Side Top Shoot"
                 }
               },
               {
@@ -39,7 +100,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -61,7 +122,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top to Top Close"
+                  "pathName": "MiddleBottom Fourth"
                 }
               },
               {
@@ -74,27 +135,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "waitTime": 0.25
           }
         },
         {
@@ -104,26 +147,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SweepingDemon Fifth"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SweepingDemon Sixth"
+                  "pathName": "MiddleBottom Fifth"
                 }
               },
               {
@@ -144,7 +168,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -157,68 +181,6 @@
           "type": "wait",
           "data": {
             "waitTime": 0.5
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SweepingDemon Seventh"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SweepingDemon Eighth"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         }
       ]
