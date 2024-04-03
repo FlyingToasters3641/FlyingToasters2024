@@ -9,6 +9,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotState;
 import frc.robot.subsystems.Limelight;
 
@@ -30,7 +32,11 @@ public class AimController {
         Logger.recordOutput("AutoAim/Camera", vision.getLatestResult().hasTargets());
         PhotonTrackedTarget target = null;
         for (int i = 0; i < targets.size(); i++){
-            if (targets.get(i).getFiducialId() == 7){
+            if (targets.get(i).getFiducialId() == 7 && DriverStation.getAlliance().get() == Alliance.Blue){
+                target = targets.get(i);
+                Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
+                break;
+            } else if (targets.get(i).getFiducialId() == 10 && DriverStation.getAlliance().get() == Alliance.Red){
                 target = targets.get(i);
                 Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
                 break;

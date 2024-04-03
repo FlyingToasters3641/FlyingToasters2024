@@ -12,6 +12,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -25,6 +27,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     public static final TalonFX launcherRollerTalonFX = new TalonFX(33, CANbusName);
     public static final TalonFX launcherPitchTalonFX = new TalonFX(34, CANbusName);
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
+    public static final CANSparkMax blower = new CANSparkMax(23, CANSparkLowLevel.MotorType.kBrushed);
 
     /* Start at velocity 0, no feed forward, use slot 0 */
     private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
@@ -172,6 +175,15 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         }
         return false;
 
+    }
+
+    @Override
+    public void setBlower(boolean powered){
+        if (powered){
+            blower.set(1.0);
+        }else{
+            blower.set(0.0);
+        }
     }
 
 }

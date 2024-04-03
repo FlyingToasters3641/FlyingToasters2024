@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
+import frc.robot.controllers.TrapController;
 import frc.robot.subsystems.Limelight;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -83,6 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Limelight limelight = new Limelight();
 
   private AimController aimController = null;
+  private TrapController trapController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
     new PIDConstants(2.0), //Translation
@@ -325,6 +327,18 @@ public class DriveSubsystem extends SubsystemBase {
     aimController = new AimController();
   }
 
+  public void setTrapGoal() {
+    trapController = new TrapController();
+  }
+
+  public void clearTrapGoal() {
+    trapController = null;
+  }
+
+  public boolean getTrapController() {
+    return trapController != null;
+  }
+
   /** Disable auto aiming on drive */
   public void clearAimGoal() {
     aimController = null;
@@ -338,18 +352,13 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController.update(m_Limelight, m_vision);
   }
 
-  public double updateAimControllerLobRed(Limelight m_Limelight) {
-    return aimController.updateLobRed(m_Limelight);
-  }
-
-  public double updateAimControllerLobBlue(Limelight m_Limelight) {
-    return aimController.updateLobBlue(m_Limelight);
-  }
-
   public boolean isAimControllerDone(Limelight m_Limelight) {
     Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
       return aimController.threshold(m_Limelight);
-    
+  }
+
+  public double updateTrapController(PhotonCamera m_Camera){
+    return trapController.update(m_Camera);
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator () {

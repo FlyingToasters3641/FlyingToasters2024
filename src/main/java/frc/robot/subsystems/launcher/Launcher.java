@@ -68,6 +68,10 @@ public class Launcher extends SubsystemBase {
     io.stop();
   }
 
+  public void setBlower(boolean powered){
+    io.setBlower(powered);
+  }
+
   public void setAngleSetpoint(double angleDegrees) {
     io.setAngleSetpoint(angleDegrees);
   }

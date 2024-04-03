@@ -3,6 +3,8 @@ package frc.robot.commands;
 import java.util.concurrent.locks.Condition;
 import java.util.function.DoubleSupplier;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -100,6 +102,21 @@ public class LauncherCommands {
     public static SequentialCommandGroup RedLob(Launcher m_launcher, RobotSystem m_System, Limelight m_limelight, DriveSubsystem drive) {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> m_limelight.setPipeline(3)),
+            Commands.runOnce(() -> drive.setAimGoal()),
+            new WaitCommand(0.3),
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),
+            new WaitCommand(1.00),
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
+            new WaitCommand(0.5)
+            );
+    }
+
+    public static ConditionalCommand Trap(Launcher m_launcher, RobotSystem m_System, PhotonCamera m_camera, DriveSubsystem drive){
+        return new ConditionalCommand(null, BlueTrap(m_launcher, m_System, m_camera, drive), null);
+    }
+
+    public static SequentialCommandGroup BlueTrap(Launcher m_launcher, RobotSystem m_System, PhotonCamera m_camera, DriveSubsystem drive) {
+        return new SequentialCommandGroup(  
             Commands.runOnce(() -> drive.setAimGoal()),
             new WaitCommand(0.3),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),

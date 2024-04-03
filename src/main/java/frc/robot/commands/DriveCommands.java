@@ -25,12 +25,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.controllers.AimController;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -52,57 +48,49 @@ public class DriveCommands {
                         DoubleSupplier ySupplier,
                         DoubleSupplier omegaSupplier,
                         Limelight m_Limelight,
-                        PhotonCamera m_vision) {
-                return Commands.run(
-                                () -> {
-                                        // Apply deadband
-                                        double linearMagnitude = MathUtil.applyDeadband(
-                                                        Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()),
-                                                        DEADBAND);
-                                        Rotation2d linearDirection = new Rotation2d(xSupplier.getAsDouble(),
-                                                        ySupplier.getAsDouble());
-                                        double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+                        PhotonCamera m_vision,
+                        PhotonCamera m_camera) {
+                return Commands.run(() -> {
+                        // Apply deadband
+                        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()),DEADBAND);
+                        Rotation2d linearDirection = new Rotation2d(xSupplier.getAsDouble(),ySupplier.getAsDouble());
+                        double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
-                                        // Square values
-                                        linearMagnitude = linearMagnitude * linearMagnitude;
-                                        omega = Math.copySign(omega * omega * omega * omega, omega);
+                        // Square values
+                        linearMagnitude = linearMagnitude * linearMagnitude;
+                        omega = Math.copySign(omega * omega * omega * omega, omega);
 
-                                        // Calcaulate new linear velocity
-                                        Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection)
-                                                        .transformBy(new Transform2d(linearMagnitude, 0.0,
-                                                                        new Rotation2d()))
-                                                        .getTranslation();
+                        // Calcaulate new linear velocity
+                        Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection).transformBy(new Transform2d(linearMagnitude, 0.0,new Rotation2d())).getTranslation();
 
-                                        // Convert to field relative speeds & send command
-                                        boolean isFlipped = DriverStation.getAlliance().isPresent()
-                                                        && DriverStation.getAlliance().get() == Alliance.Red;
-                                        // Auto aim steering takeover
-                                        if (drive.getAimController()) {
-                                                omega = drive.updateAimController(m_Limelight, m_vision)
-                                                                / drive.getMaxAngularSpeedRadPerSec(); // will get
-                                                                                                       // multiplied
-                                                                                                       // back later
-                                        }
-                                        drive.runVelocity(
-                                                        ChassisSpeeds.fromFieldRelativeSpeeds(
-                                                                        linearVelocity.getX() * drive
-                                                                                        .getMaxLinearSpeedMetersPerSec(),
-                                                                        linearVelocity.getY() * drive
-                                                                                        .getMaxLinearSpeedMetersPerSec(),
-                                                                        omega * drive.getMaxAngularSpeedRadPerSec(),
-                                                                        isFlipped
-                                                                                        ? drive.getRotation().plus(
-                                                                                                        new Rotation2d(Math.PI))
-                                                                                        : drive.getRotation()));
+                        // Convert to field relative speeds & send command
+                        boolean isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
+                        // Auto aim steering takeover
+                        if (drive.getAimController()) {
+                                omega = drive.updateAimController(m_Limelight, m_vision)
+                                                / drive.getMaxAngularSpeedRadPerSec(); 
+                        } 
+                        if (drive.getTrapController()) {
+                                omega = drive.updateTrapController(m_camera)
+                                                / drive.getMaxAngularSpeedRadPerSec(); 
+                        }
 
-                                },
+                        drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
+                                                        linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                                                        linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                                                        omega * drive.getMaxAngularSpeedRadPerSec(),
+                                                        isFlipped
+                                                                        ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                                                                        : drive.getRotation()));
+
+                },
                                 drive);
         }
 
         public static Command AutoAutoAim(
                         DriveSubsystem drive,
                         Limelight m_Limelight) {
-                
+
                 return Commands.run(
                                 () -> {
                                         // Convert to field relative speeds & send command
@@ -110,19 +98,22 @@ public class DriveCommands {
                                         boolean isFlipped = DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
-                                        double omega = lime.calculate(Units.degreesToRadians(m_Limelight.getX()), 0); // will get multiplied
-                                                                                               // back later
+                                        double omega = lime.calculate(Units.degreesToRadians(m_Limelight.getX()), 0); // will
+                                                                                                                      // get
+                                                                                                                      // multiplied
+                                        // back later
                                         Logger.recordOutput("AutoAim/Omega", omega);
                                         drive.runVelocity(
-                                                ChassisSpeeds.fromFieldRelativeSpeeds(
+                                                        ChassisSpeeds.fromFieldRelativeSpeeds(
                                                                         0.0,
                                                                         0.0,
                                                                         omega,
-                                                                         isFlipped
-                                                                         ? drive.getRotation().plus(new Rotation2d(Math.PI)) : drive.getRotation()));
+                                                                        isFlipped
+                                                                                        ? drive.getRotation().plus(
+                                                                                                        new Rotation2d(Math.PI))
+                                                                                        : drive.getRotation()));
 
-                                }
-                                ).until(() -> Math.abs(m_Limelight.getX()) <= 2.0);
+                                }).until(() -> Math.abs(m_Limelight.getX()) <= 2.0);
         }
 
         public static Command DriveXStop(DriveSubsystem drive) {
