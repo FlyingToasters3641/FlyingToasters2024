@@ -54,9 +54,9 @@ public class IntakeIOTalonFXComp implements IntakeIO {
         rearTalonFX.set(speed);
         double extSpeed = speed;
         if (speed > 0){
-            extSpeed = 0.5;
+            extSpeed = 1.0;
         } else if (speed < 0){
-            extSpeed = -0.5;
+            extSpeed = -1.0;
         }else{
             extSpeed = 0.0;
         }

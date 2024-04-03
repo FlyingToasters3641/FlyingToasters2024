@@ -299,23 +299,23 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.1);
             }
             case TRAP_AIM -> {
-                elevator.setPosition(4.5);
-                launcher.setAngleSetpoint(50);
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(60);
                 launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
                 launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
             }
             case TRAP_SHOOT -> {
-                elevator.setPosition(4.5);
-                launcher.setAngleSetpoint(50);
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(60);
                 launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
                 launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
             } 
             case TRAP_UP -> {
-                elevator.setPosition(4.5);
+                elevator.setPosition(0.2);
                 launcher.setAngleSetpoint(0);
                 launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
                 launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
@@ -324,7 +324,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case TRAP_DOWN -> {
                 elevator.setPosition(0.2);
-                launcher.setAngleSetpoint(50);
+                launcher.setAngleSetpoint(60);
                 launcher.setFlywheelVelocity(LauncherConstants.IDLE);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
