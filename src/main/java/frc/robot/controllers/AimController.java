@@ -51,8 +51,27 @@ public class AimController {
         return output;
     }
 
+    public double updateLobBlue(Limelight limelight) {
+        double output = headingController.calculate(
+            limelight.getAngleOffset().getRadians() - Units.degreesToRadians(15),
+                        0);
+
+        return output;
+    }
+    
+    public double updateLobRed(Limelight limelight) {
+        double output = headingController.calculate(
+            limelight.getAngleOffset().getRadians() - Units.degreesToRadians(15),
+                        0);
+
+        return output;
+    }
+    
+
+
+
     public boolean threshold(Limelight limelight) {
-        double output = limelight.gettX();
+        double output = limelight.getX();
         if ((Math.abs(output) <= Threshold)){
             return true;
         } else {

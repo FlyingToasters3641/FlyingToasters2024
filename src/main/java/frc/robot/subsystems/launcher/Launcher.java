@@ -48,6 +48,14 @@ public class Launcher extends SubsystemBase {
     io.setFlywheelVelocity(rpm);
   }
 
+  public void setTopFlywheelVelocity(double rpm) {
+    io.setTopFlywheelVelocity(rpm);
+  }
+
+  public void setBottomFlywheelVelocity(double rpm) {
+    io.setBottomFlywheelVelocity(rpm);
+  }
+  
   public Rotation2d getSetPoint() {
     return Rotation2d.fromRadians(angleSetpoint);
   }

@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left to Shoot"
+            "pathName": "SweepingDemon Start"
           }
         },
         {
@@ -26,13 +26,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ShootAndIntake"
           }
         },
         {
@@ -48,34 +48,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Shoot to Bottom Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
+                  "pathName": "SweepingDemon Second"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -91,34 +67,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Bottom Note to Middle Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
+                  "pathName": "SweepingDemon Third"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -134,34 +86,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Note to Top Note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
+                  "pathName": "SweepingDemon Fourth"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Aim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -177,7 +105,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Close to Top Middle"
+                  "pathName": "SweepingDemon Fifth"
                 }
               },
               {
@@ -196,7 +124,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Close to Center Shoot"
+                  "pathName": "SweepingDemon Sixth"
                 }
               },
               {
@@ -239,7 +167,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Shoot to Outside Middle"
+                  "pathName": "SweepingDemon Seventh"
                 }
               },
               {
@@ -258,7 +186,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Top To Shoot"
+                  "pathName": "SweepingDemon Eighth"
                 }
               },
               {

@@ -154,6 +154,16 @@ public class LauncherIOTalonFX implements LauncherIO {
     }
 
     @Override
+    public void setTopFlywheelVelocity(double rpm) {
+        topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+    }
+    
+    @Override
+    public void setBottomFlywheelVelocity(double rpm) {
+        bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+    }
+
+    @Override
     public void stop() {
         setFlywheelVelocity(0.0);
         setFeederVoltage(0.0);

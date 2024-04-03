@@ -21,11 +21,17 @@ import frc.robot.subsystems.Limelight;
 
 public class ShotController {
     private PIDController headingController;
+    double tx;
+    double distance;
 
 
     InterpolatingDoubleTreeMap distanceAngles;
     InterpolatingDoubleTreeMap farAngles;
     LinearFilter filter = LinearFilter.movingAverage(5);
+
+    InterpolatingDoubleTreeMap autoLobAngles;
+
+    InterpolatingDoubleTreeMap autoLobRollers;
 
     public ShotController() {
 
@@ -35,6 +41,8 @@ public class ShotController {
 
 
         distanceAngles = new InterpolatingDoubleTreeMap();
+        autoLobAngles = new InterpolatingDoubleTreeMap();
+        autoLobRollers = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
         distanceAngles.put((45.0), 46.0);
@@ -61,6 +69,15 @@ public class ShotController {
         farAngles.put((14.0), 5.5);
         //farAngles.put((15.5), 5.0);
         //farAngles.put((15.0), 4.5);
+
+        autoLobAngles.put((9.0), 40.0);
+        autoLobAngles.put((7.0), 30.0);
+        autoLobAngles.put((5.0), 27.5);
+        //AutoLobRollers
+
+        autoLobRollers.put((9.0), 23.0);
+        autoLobRollers.put((7.0), 24.0);
+        autoLobRollers.put((5.0), 25.0);
         
     }
 
@@ -82,13 +99,30 @@ public class ShotController {
             output = nearestSetpoint(farAngles, distance);
             Logger.recordOutput("AutoAim/FarTarget", distance);
         }else{
-            distance = limelight.gettY();
+            distance = limelight.getY();
             output = nearestSetpoint(distanceAngles, distance);
             Logger.recordOutput("AutoAim/CloseTarget", distance);
         }
         
         return output;
     }
+
+    public double updateLobbedAngle(Limelight limelight){
+        double distance = limelight.getY();
+        double output = nearestSetpoint(autoLobAngles, distance);
+        Logger.recordOutput("AutoLobAim/DistanceToTarget", distance);
+
+        return output;
+    }
+
+    public double updateLobbedRollers(Limelight limelight) {
+        double distance = limelight.getY();
+        double output = nearestSetpoint(autoLobRollers, distance);
+
+        return output;
+
+    }
+
 
     public double nearestSetpoint(InterpolatingDoubleTreeMap distMap, double distance) {
         

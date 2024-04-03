@@ -12,8 +12,11 @@ public class Limelight extends SubsystemBase{
     
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
+        int currentPipeline;
         
         double y = ty.getDouble(0.0);
+
+
 
         public double getArea(){
             return table.getEntry("ta").getDouble(0.0);
@@ -24,16 +27,21 @@ public class Limelight extends SubsystemBase{
             return new Rotation2d(Units.degreesToRadians(x));
         }
 
-        public double gettY(){
+        public double getY(){
             return ty.getDouble(0.0);
         }
 
-        public double gettX() {
+        public double getX() {
             return tx.getDouble(0.0);
         }
 
         public void setPipeline(int pipeline){
             table.getEntry("pipeline").setValue(pipeline);
+            currentPipeline = pipeline;
+        }
+
+        public int getPipeline() {
+            return currentPipeline;
         }
 
 }
