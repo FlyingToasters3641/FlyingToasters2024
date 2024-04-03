@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.553167462348938,
+      "y": 1.5071022510528564
+    },
+    "rotation": 178.9860218526867
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Steal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TD Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TD Second"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

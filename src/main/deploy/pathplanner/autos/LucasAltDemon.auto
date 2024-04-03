@@ -1,0 +1,81 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.468574285507202,
+      "y": 1.9807747602462769
+    },
+    "rotation": 179.99997496922057
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LTD Start"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LTD Second"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Steal"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LAD Third"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LAD Fourth"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LAD Fifth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}

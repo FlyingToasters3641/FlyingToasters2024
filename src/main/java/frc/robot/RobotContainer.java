@@ -155,6 +155,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
     NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
+    NamedCommands.registerCommand("Steal", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.STEAL)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -164,7 +165,20 @@ public class RobotContainer {
     autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
     autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
     autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
-   
+
+    autoChooser.addOption("Lucas Steal Auto", new PathPlannerAuto("LucasTricksterDemon"));
+    
+    autoChooser.addOption("Steal Auto", new PathPlannerAuto("TricksterDemon"));
+
+    
+    autoChooser.addOption("Lucas Half Steal Auto", new PathPlannerAuto("LucasAltDemon"));
+
+    
+    autoChooser.addOption("4 Piece Up-Far", new PathPlannerAuto("RightOutsideDemon"));
+
+    
+    autoChooser.addOption("4 Piece Up-Close Updated", new PathPlannerAuto("RightInsideDemon"));
+
     // Set up SysId routines
 
     // Configure the button bindings
