@@ -1,12 +1,17 @@
 package frc.robot.controllers;
 
+import java.util.List;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
 
@@ -19,6 +24,8 @@ public class ShotController {
 
 
     InterpolatingDoubleTreeMap distanceAngles;
+    InterpolatingDoubleTreeMap farAngles;
+    LinearFilter filter = LinearFilter.movingAverage(5);
 
     public ShotController() {
 
@@ -30,27 +37,55 @@ public class ShotController {
         distanceAngles = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
-        distanceAngles.put((45.0), 45.0);
-        distanceAngles.put((40.0), 40.0);
-        distanceAngles.put((30.0), 49.0);
-        distanceAngles.put((24.0), 35.0);
-        distanceAngles.put((20.0), 28.0);
-        distanceAngles.put((18.0), 21.0);
-        distanceAngles.put((16.0), 19.0);
-        distanceAngles.put((14.0), 17.0);
-        distanceAngles.put((13.0), 13.0);
-        distanceAngles.put((12.5), 11.0);
-        distanceAngles.put((12.0), 10.0);
-        distanceAngles.put((10.0), 9.0);
-        distanceAngles.put((8.0), 8.0);
+        distanceAngles.put((45.0), 46.0);
+        distanceAngles.put((40.0), 42.0);
+        distanceAngles.put((30.0), 40.0);
+        distanceAngles.put((24.0), 36.0);
+        distanceAngles.put((20.0), 30.0);
+        distanceAngles.put((18.0), 25.0);
+        distanceAngles.put((16.0), 20.0);
+        distanceAngles.put((14.0), 19.0);
+        distanceAngles.put((13.0), 18.0);
+        distanceAngles.put((12.5), 17.0);
+        distanceAngles.put((12.0), 16.0);
+        distanceAngles.put((10.0), 14.0);
+        distanceAngles.put((8.0), 9.0);
+
+        //For Photon Camera
+        farAngles = new InterpolatingDoubleTreeMap();
+        farAngles.put((17.0), 7.8);
+        farAngles.put((16.5), 7.4);
+        farAngles.put((16.0), 7.0);
+        farAngles.put((15.0), 6.5);
+        farAngles.put((14.5), 6.0);
+        farAngles.put((14.0), 5.5);
+        //farAngles.put((15.5), 5.0);
+        //farAngles.put((15.0), 4.5);
+        
     }
 
 
 
-    public double updateAngle(Limelight limelight) {
-        double distance = limelight.gettY();
-        double output = nearestSetpoint(distanceAngles, distance);
-        Logger.recordOutput("AutoAim/DistanceToTarget", distance);
+    public double updateAngle(Limelight limelight, PhotonCamera m_vision) {
+        double output = 0.0;
+        double distance = 0.0;
+        List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
+        PhotonTrackedTarget target = null;
+        for (int i = 0; i < targets.size(); i++){
+            if (targets.get(i).getFiducialId() == 7){
+                target = targets.get(i);
+                break;
+            }
+        }
+        if (target != null){
+            distance = filter.calculate(target.getPitch());
+            output = nearestSetpoint(farAngles, distance);
+            Logger.recordOutput("AutoAim/FarTarget", distance);
+        }else{
+            distance = limelight.gettY();
+            output = nearestSetpoint(distanceAngles, distance);
+            Logger.recordOutput("AutoAim/CloseTarget", distance);
+        }
         
         return output;
     }

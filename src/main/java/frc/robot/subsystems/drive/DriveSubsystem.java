@@ -50,6 +50,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
 
 public class DriveSubsystem extends SubsystemBase {
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(17.0);
@@ -333,8 +334,8 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController != null;
   }
 
-  public double updateAimController(Limelight m_Limelight) {
-    return aimController.update(m_Limelight);
+  public double updateAimController(Limelight m_Limelight, PhotonCamera m_vision) {
+    return aimController.update(m_Limelight, m_vision);
   }
 
   public boolean isAimControllerDone(Limelight m_Limelight) {

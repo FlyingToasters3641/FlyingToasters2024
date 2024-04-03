@@ -1,6 +1,7 @@
 package frc.robot.subsystems.launcher;
 
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -63,9 +64,9 @@ public class Launcher extends SubsystemBase {
     io.setAngleSetpoint(angleDegrees);
   }
 
-  public double updateShot(Limelight m_Limelight) {
+  public double updateShot(Limelight m_Limelight, PhotonCamera m_vision) {
     shotController = new ShotController();
-    return shotController.updateAngle(m_Limelight);
+    return shotController.updateAngle(m_Limelight, m_vision);
   }
 
   public boolean getLauncherNote(){

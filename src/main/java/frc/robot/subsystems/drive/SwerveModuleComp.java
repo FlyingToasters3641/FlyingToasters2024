@@ -77,7 +77,7 @@ public class SwerveModuleComp implements ModuleIO {
         driveTalon = new TalonFX(11, CANbusName);
         turnSparkMax = new CANSparkMax(22, MotorType.kBrushless);
         cancoder = new CANcoder(16, CANbusName);
-        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.490723));//0.007080//-0.999512 // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(Units.rotationsToRadians(-0.122559));//0.007080//-0.999512 // MUST BE CALIBRATED
         break;
       case 3: // Rear Right
         driveTalon = new TalonFX(12, CANbusName);
