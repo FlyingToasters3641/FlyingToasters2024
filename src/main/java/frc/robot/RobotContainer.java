@@ -169,7 +169,7 @@ public class RobotContainer {
     autoChooser.addOption("Lucas Steal Auto", new PathPlannerAuto("LucasTricksterDemon"));
     
     autoChooser.addOption("Steal Auto", new PathPlannerAuto("TricksterDemon"));
-
+    autoChooser.addOption("Top Inside Far Auto", new PathPlannerAuto("TopInsideFarDemon"));
     
     autoChooser.addOption("Lucas Half Steal Auto", new PathPlannerAuto("LucasAltDemon"));
 
