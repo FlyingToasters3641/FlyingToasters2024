@@ -36,7 +36,7 @@ public class AimController {
                 target = targets.get(i);
                 Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
                 break;
-            } else if (targets.get(i).getFiducialId() == 10 && DriverStation.getAlliance().get() == Alliance.Red){
+            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red) {
                 target = targets.get(i);
                 Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
                 break;
