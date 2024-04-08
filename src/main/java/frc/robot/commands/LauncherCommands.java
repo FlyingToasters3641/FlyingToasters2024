@@ -91,11 +91,7 @@ public class LauncherCommands {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> m_limelight.setPipeline(2)),
             Commands.runOnce(() -> drive.setAimGoal()),
-            new WaitCommand(0.3),
-            Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),
-            new WaitCommand(1.00),
-            Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
-            new WaitCommand(0.5)
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB))
             );
     }
     
@@ -103,11 +99,7 @@ public class LauncherCommands {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> m_limelight.setPipeline(3)),
             Commands.runOnce(() -> drive.setAimGoal()),
-            new WaitCommand(0.3),
-            Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB)),
-            new WaitCommand(1.00),
-            Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
-            new WaitCommand(0.5)
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.AIM_LOB))
             );
     }
 
@@ -132,6 +124,8 @@ public class LauncherCommands {
     
     public static SequentialCommandGroup BlueLobEnd(Launcher m_launcher, RobotSystem m_System, Limelight m_limelight, DriveSubsystem drive) {
         return new SequentialCommandGroup(  
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
+            new WaitCommand(0.25),
             Commands.runOnce(() -> drive.clearAimGoal()),
             Commands.runOnce(() -> m_limelight.setPipeline(0)),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.IDLE))
@@ -140,6 +134,8 @@ public class LauncherCommands {
     
     public static SequentialCommandGroup RedLobEnd(Launcher m_launcher, RobotSystem m_System, Limelight m_limelight, DriveSubsystem drive) {
         return new SequentialCommandGroup(  
+            Commands.runOnce(() -> m_System.setGoalState(SystemState.SHOOT_LOB)),
+            new WaitCommand(0.25),
             Commands.runOnce(() -> drive.clearAimGoal()),
             Commands.runOnce(() -> m_limelight.setPipeline(1)),
             Commands.runOnce(() -> m_System.setGoalState(SystemState.IDLE))

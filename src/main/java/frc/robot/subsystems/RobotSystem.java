@@ -29,6 +29,7 @@ public class RobotSystem extends SubsystemBase{
         AMP_SCORE,
         HUMAN_PLAYER,
         OUTTAKE,
+        FRONT_OUTTAKE,
         CLIMB_EXTEND,
         CLIMB_RETRACT,
         CLIMB_LOCK,
@@ -86,6 +87,7 @@ public class RobotSystem extends SubsystemBase{
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
             case OUTTAKE -> currentState = SystemState.OUTTAKE;
+            case FRONT_OUTTAKE -> currentState = SystemState.FRONT_OUTTAKE;
             case CLIMB_EXTEND -> currentState = SystemState.CLIMB_EXTEND;
             case CLIMB_RETRACT -> currentState = SystemState.CLIMB_RETRACT;
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
@@ -241,6 +243,13 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.reverseRear();
+                elevator.setPosition(0.2);
+            } case FRONT_OUTTAKE -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.5);
+                intake.reverseFront();
+                intake.stopRear();
                 elevator.setPosition(0.2);
             }
             case CLIMB_EXTEND -> {

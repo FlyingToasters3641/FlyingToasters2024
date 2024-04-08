@@ -27,7 +27,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     public static final TalonFX launcherRollerTalonFX = new TalonFX(33, CANbusName);
     public static final TalonFX launcherPitchTalonFX = new TalonFX(34, CANbusName);
     public static final CANcoder launcherPitchCANCoder = new CANcoder(35, CANbusName);
-    public static final CANSparkMax blower = new CANSparkMax(23, CANSparkLowLevel.MotorType.kBrushed);
+    public static final CANSparkMax blower = new CANSparkMax(7, CANSparkLowLevel.MotorType.kBrushed);
 
     /* Start at velocity 0, no feed forward, use slot 0 */
     private final VelocityVoltage m_Velocity = new VelocityVoltage(0.0);
@@ -47,6 +47,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
         bottomFlywheelTalonFX.setInverted(true);
         launcherRollerTalonFX.setInverted(false);
         launcherPitchTalonFX.setInverted(true);
+        blower.setInverted(false);
 
         topFlywheelTalonFX.setControl(new Follower(bottomFlywheelTalonFX.getDeviceID(), false));
 

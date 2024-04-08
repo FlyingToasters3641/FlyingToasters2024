@@ -133,6 +133,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
     NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
+    NamedCommands.registerCommand("Outtake", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -142,6 +143,7 @@ public class RobotContainer {
     autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
     autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
     autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
+    autoChooser.addOption("2 Piece Fast Center", new PathPlannerAuto("StrykeDemon"));
    
     // Set up SysId routines
 
@@ -172,7 +174,7 @@ public class RobotContainer {
       //shoot
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       //lob
-      m_driverController.rightBumper().onTrue(LauncherCommands.Lob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive).andThen(LauncherCommands.EndLob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive)));
+      m_driverController.rightBumper().onTrue(LauncherCommands.Lob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive)).onFalse(LauncherCommands.EndLob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive));
       //intake
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
       //outtake

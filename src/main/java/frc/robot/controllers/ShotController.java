@@ -54,8 +54,8 @@ public class ShotController {
         distanceAngles.put((18.0), 25.0);
         distanceAngles.put((16.0), 22.0);
         distanceAngles.put((14.0), 19.0);
-        distanceAngles.put((13.0), 18.0);
-        distanceAngles.put((12.5), 16.5);
+        distanceAngles.put((13.0), 17.0);
+        distanceAngles.put((12.5), 15.5);
         distanceAngles.put((12.0), 15.0);
         distanceAngles.put((11.0), 11.0);
         distanceAngles.put((10.0), 9.0);
@@ -86,7 +86,7 @@ public class ShotController {
 
 
     public double updateAngle(Limelight limelight, PhotonCamera m_vision) {
-        double output = 0.0;
+        double output = 1.0;
         double distance = 0.0;
         List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
         PhotonTrackedTarget target = null;

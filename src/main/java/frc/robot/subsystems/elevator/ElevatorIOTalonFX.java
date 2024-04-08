@@ -22,7 +22,7 @@ public class ElevatorIOTalonFX implements ElevatorIO{
 
     public static double setpoint = 0.0;
 
-    public static final double absoluteEncoderOffset = 0.147705; //Calibrate
+    public static final double absoluteEncoderOffset = -0.834; //Calibrate
 
     public static final double ELEVATOR_RATIO = 6.34375;
     public static final double ENCODER_RATIO = 1;

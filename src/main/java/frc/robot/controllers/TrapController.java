@@ -55,7 +55,7 @@ public class TrapController {
         }
         if (target != null){
             output = headingController.calculate(
-                Units.degreesToRadians(target.getYaw()), 0);
+                Units.degreesToRadians(target.getYaw()),  0);
         }     
         
         return output;

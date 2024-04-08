@@ -70,6 +70,7 @@ public class DriveCommands {
                                 omega = drive.updateAimController(m_Limelight, m_vision)
                                                 / drive.getMaxAngularSpeedRadPerSec(); 
                         } 
+                        
                         if (drive.getTrapController()) {
                                 omega = drive.updateTrapController(m_camera)
                                                 / drive.getMaxAngularSpeedRadPerSec(); 
