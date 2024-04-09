@@ -26,7 +26,7 @@ public class IntakeIOTalonFXComp implements IntakeIO {
 
     public IntakeIOTalonFXComp() {
        frontTalonFX.setInverted(true);
-       externalCANSpark.setInverted(true);
+       externalCANSpark.setInverted(false);
     }
 
     @Override

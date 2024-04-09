@@ -144,6 +144,7 @@ public class RobotContainer {
     autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
     autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
     autoChooser.addOption("2 Piece Fast Center", new PathPlannerAuto("StrykeDemon"));
+    autoChooser.addOption("2 Piece Fast Center - Middle Note", new PathPlannerAuto("StrykeDemonV2"));
    
     // Set up SysId routines
 
@@ -186,6 +187,7 @@ public class RobotContainer {
       m_driverController.povDown().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.TRAP_DOWN)).andThen(new WaitCommand(0.25)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)).andThen(m_robotDrive::clearTrapGoal)));
       m_driverController.start().onTrue(Commands.runOnce(() -> m_robotDrive.setPose(new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),m_robotDrive)
                 .ignoringDisable(true));
+     m_driverController.povLeft().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
 
         
   }   
