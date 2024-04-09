@@ -134,7 +134,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
     NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
     NamedCommands.registerCommand("Outtake", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE)));
-
+    NamedCommands.registerCommand("ConditionalPath", Commands.runOnce(() -> new ConditionalCommand(getAutoCommand("SweepingDemonPath"), getAutoCommand("DifferentSweepingDemon"), () -> m_intake.getRearNote() == true || m_intake.getFrontNote() == true)));
+    //the actual paths need to be made and I'm not sure if this will break the entire auto
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
