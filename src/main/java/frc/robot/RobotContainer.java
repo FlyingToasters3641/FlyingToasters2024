@@ -69,8 +69,8 @@ public class RobotContainer {
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     public final Limelight m_Limelight = new Limelight();
-    public final PhotonCamera m_vision = new PhotonCamera("Maximocam");
-    public final PhotonCamera m_trapcam = new PhotonCamera("Aadithcam");    
+    public final PhotonCamera m_vision = new PhotonCamera("Aadithcam");
+    public final PhotonCamera m_trapcam = new PhotonCamera("Maximocam");    
     
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -132,19 +132,25 @@ public class RobotContainer {
     NamedCommands.registerCommand("Rear Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM)));
     NamedCommands.registerCommand("ShootAndIntake", Commands.runOnce(() ->  m_robotSystem.setGoalState(SystemState.INTAKE_AND_SHOOT)));
-    NamedCommands.registerCommand("AutoAim", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
     NamedCommands.registerCommand("Outtake", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE)));
+    NamedCommands.registerCommand("AutoAim", LauncherCommands.AutoAutoAim(m_launcher, m_Limelight, m_robotDrive));
+    NamedCommands.registerCommand("AimDrive", DriveCommands.AutoAutoAim(m_robotDrive, m_Limelight));
+    NamedCommands.registerCommand("SubwoofAim", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM)));
+    NamedCommands.registerCommand("SubwoofShoot", LauncherCommands.autoShootSubwoofer(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Shoot8", LauncherCommands.autoShoot8(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("Aim8", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_8)));
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
     autoChooser.addDefaultOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
     autoChooser.addOption("4 Piece Left-Far", new PathPlannerAuto("CenterDemon"));
-    autoChooser.addOption("4 Piece Middle-Close", new PathPlannerAuto("MiddleCenterDemon"));
+    autoChooser.addOption("6 Piece Middle", new PathPlannerAuto("MiddleCenterDemon"));
     autoChooser.addOption("4 Piece Top-Close", new PathPlannerAuto("TopDemon"));
     autoChooser.addOption("Electro", new PathPlannerAuto("Electro"));
     autoChooser.addOption("2 Piece Fast Center", new PathPlannerAuto("StrykeDemon"));
     autoChooser.addOption("2 Piece Fast Center - Middle Note", new PathPlannerAuto("StrykeDemonV2"));
+    autoChooser.addOption("6 Piece Top", new PathPlannerAuto("TopGodDemon"));
    
     // Set up SysId routines
 
@@ -171,7 +177,7 @@ public class RobotContainer {
 
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
       //subwoofer
-      m_driverController.b().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM))).onFalse(new ShootSubwoofer(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      m_driverController.b().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM)), Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_SHOOT)).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.SUBWOOF_AIM));
       //shoot
       m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
       //lob

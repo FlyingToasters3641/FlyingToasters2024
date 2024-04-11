@@ -60,6 +60,10 @@ public class Intake extends SubsystemBase{
         io.setFrontSpeed(-0.5);
     }
 
+    public void runRearMax() {
+        io.setRearSpeed(1.0);
+    }
+
 
 
     public boolean frontCurrentSpike() {

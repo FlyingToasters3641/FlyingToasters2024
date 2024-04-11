@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.459911584854126,
-      "y": 7.348333358764648
+      "x": 1.4753098487854004,
+      "y": 6.992156028747559
     },
     "rotation": 180.0
   },
@@ -12,57 +12,13 @@
     "data": {
       "commands": [
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Stryke First"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Outtake"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.1
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Stryke Second"
+                  "pathName": "Top to Shoot"
                 }
               },
               {
@@ -75,22 +31,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Aim"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoAim"
-                }
-              }
-            ]
+            "name": "Aim"
           }
         },
         {
@@ -102,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "ShootAndIntake"
           }
         },
         {
@@ -118,7 +61,20 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Stryke ThirdV2"
+                  "pathName": "Top to Top Close"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TopGodDemon Third"
                 }
               },
               {
@@ -131,19 +87,13 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Stryke FourthV2"
+                  "pathName": "TopGodDemon Fourth"
                 }
               },
               {
@@ -176,7 +126,81 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TopGodDemon Fifth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TopGodDemon Sixth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Aim"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Aim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAndIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopGodDemon Seventh"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopGodDemon Eighth"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
           }
         }
       ]

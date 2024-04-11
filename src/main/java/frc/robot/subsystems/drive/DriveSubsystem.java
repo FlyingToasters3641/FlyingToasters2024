@@ -15,10 +15,12 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -68,6 +70,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
+  
+  private boolean autoAutoAim = false;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -116,7 +120,7 @@ public class DriveSubsystem extends SubsystemBase {
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
         this);
-    
+    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -368,4 +372,25 @@ public class DriveSubsystem extends SubsystemBase {
   public Command driveAmp() {
     return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
   }
+
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    // Some condition that should decide if we want to override rotation
+    if(autoAutoAim == true) {
+      Logger.recordOutput("AutoAutoAim/RobotSetRotation", limelight.getTargetRotation(getRotation()));
+        // Return an optional containing the rotation override (this should be a field relative rotation)
+        return Optional.of(limelight.getTargetRotation(getRotation()));
+    } else {
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
+}
+
+  public void setAutoAutoAim(boolean setter) {
+    if (setter == true) {
+      autoAutoAim = true;
+    } else {
+      autoAutoAim = false;
+    }
+  }
+
 }

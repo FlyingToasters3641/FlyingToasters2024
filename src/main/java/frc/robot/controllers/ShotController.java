@@ -33,6 +33,7 @@ public class ShotController {
     InterpolatingDoubleTreeMap autoLobAngles;
 
     InterpolatingDoubleTreeMap autoLobRollers;
+    InterpolatingDoubleTreeMap distanceRollers;
 
     public ShotController() {
 
@@ -59,6 +60,7 @@ public class ShotController {
         distanceAngles.put((12.0), 15.0);
         distanceAngles.put((11.0), 11.0);
         distanceAngles.put((10.0), 9.0);
+        distanceAngles.put((9.0), 8.3);
         distanceAngles.put((8.0), 7.0);
 
         //For Photon Camera
@@ -75,12 +77,23 @@ public class ShotController {
         autoLobAngles.put((9.0), 40.0);
         autoLobAngles.put((7.0), 30.0);
         autoLobAngles.put((5.0), 27.5);
-        //AutoLobRollers
 
+        //AutoLobRollers
         autoLobRollers.put((9.0), 23.0);
         autoLobRollers.put((7.0), 24.0);
         autoLobRollers.put((5.0), 25.0);
         
+        //DistanceRollers
+        distanceRollers = new InterpolatingDoubleTreeMap();
+        distanceRollers.put((45.0), 25.0);
+        distanceRollers.put((30.0), 25.0);
+        distanceRollers.put((23.0),  30.0);
+        distanceRollers.put((15.0), 32.0);
+        distanceRollers.put((12.0), 35.0);
+        distanceRollers.put((11.0), 38.0);
+        distanceRollers.put((10.0), 40.0);
+        distanceRollers.put((8.0), 45.0);
+
     }
 
 
@@ -118,6 +131,36 @@ public class ShotController {
             SmartDashboard.putNumber("CloseShotOutput", distance);
         }
         
+        return output;
+    }
+
+    public double updateRollers(Limelight limelight, PhotonCamera m_vision) {
+        double output = 1.0;
+        double distance = 0.0;
+        List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
+        PhotonTrackedTarget target = null;
+        for (int i = 0; i < targets.size(); i++){
+            if (targets.get(i).getFiducialId() == 7  && DriverStation.getAlliance().get() == Alliance.Blue){
+                target = targets.get(i);
+                break;
+            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red){
+                target = targets.get(i);
+                break;
+            }
+        }
+        if (target != null){
+            output = 45;
+        } else {
+            if (limelight.getY() == 0.0) {
+                distance = tx;
+            } else {
+            distance = limelight.getY();
+            tx = distance;
+            }
+            output = nearestSetpoint(distanceRollers, distance);
+        }
+
+        Logger.recordOutput("AutoAim/Rollers", output);
         return output;
     }
 
