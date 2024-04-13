@@ -11,6 +11,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
+import frc.robot.util.LimelightHelpers;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
@@ -94,8 +96,19 @@ public class Robot extends LoggedRobot {
    @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
-
-    
+    boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight", m_robotContainer.m_robotDrive.getPoseEstimator().getEstimatedPosition().getRotation().getDegrees(),0,0,0,0,0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if(Math.abs(m_robotContainer.m_robotDrive.getGyroRate()) >= 720){
+      doRejectUpdate = true;
+    }
+    if(mt2.tagCount == 0){
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate){
+      m_robotContainer.m_robotDrive.getPoseEstimator().setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      m_robotContainer.m_robotDrive.getPoseEstimator().addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
