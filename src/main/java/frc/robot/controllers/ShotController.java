@@ -28,19 +28,20 @@ public class ShotController {
 
     InterpolatingDoubleTreeMap distanceAngles;
     InterpolatingDoubleTreeMap farAngles;
-    LinearFilter filter = LinearFilter.movingAverage(5);
+    LinearFilter filter = LinearFilter.movingAverage(10);
 
     InterpolatingDoubleTreeMap autoLobAngles;
-
     InterpolatingDoubleTreeMap autoLobRollers;
     InterpolatingDoubleTreeMap distanceRollers;
 
-    public ShotController() {
+    SwerveDrivePoseEstimator drivePoseEstimator;
+
+    public ShotController(SwerveDrivePoseEstimator mPoseEstimator) {
 
 
         headingController = new PIDController(1.0, 0, 0, 0.02); // Needs Calibration
         headingController.enableContinuousInput(-Math.PI, Math.PI);
-
+        drivePoseEstimator = mPoseEstimator;
 
         distanceAngles = new InterpolatingDoubleTreeMap();
         autoLobAngles = new InterpolatingDoubleTreeMap();
@@ -53,15 +54,15 @@ public class ShotController {
         distanceAngles.put((24.0), 36.0);
         distanceAngles.put((20.0), 30.0);
         distanceAngles.put((18.0), 25.0);
-        distanceAngles.put((16.0), 22.0);
-        distanceAngles.put((14.0), 19.0);
-        distanceAngles.put((13.0), 17.0);
-        distanceAngles.put((12.5), 15.5);
-        distanceAngles.put((12.0), 15.0);
-        distanceAngles.put((11.0), 11.0);
-        distanceAngles.put((10.0), 9.0);
-        distanceAngles.put((9.0), 8.3);
-        distanceAngles.put((8.0), 7.0);
+        distanceAngles.put((16.0), 21.0);
+        distanceAngles.put((14.0), 17.5);
+        distanceAngles.put((13.0), 14.5);
+        distanceAngles.put((12.5), 13.0);
+        distanceAngles.put((12.0), 12.75);
+        distanceAngles.put((11.0), 10.5);
+        distanceAngles.put((10.0), 8.25);
+        distanceAngles.put((9.0), 5.5);
+        distanceAngles.put((8.0), 5.0);
 
         //For Photon Camera
         farAngles = new InterpolatingDoubleTreeMap();
@@ -74,14 +75,14 @@ public class ShotController {
         //farAngles.put((15.5), 5.0);
         //farAngles.put((15.0), 4.5);
 
-        autoLobAngles.put((9.0), 40.0);
+        autoLobAngles.put((9.0), 30.0);
         autoLobAngles.put((7.0), 30.0);
-        autoLobAngles.put((5.0), 27.5);
+        autoLobAngles.put((5.0), 30.0);
 
         //AutoLobRollers
-        autoLobRollers.put((9.0), 23.0);
-        autoLobRollers.put((7.0), 24.0);
-        autoLobRollers.put((5.0), 25.0);
+        autoLobRollers.put((10.0), 25.0);
+        autoLobRollers.put((9.0), 24.0);
+        autoLobRollers.put((8.0), 23.0);
         
         //DistanceRollers
         distanceRollers = new InterpolatingDoubleTreeMap();
@@ -127,6 +128,7 @@ public class ShotController {
             }
             output = nearestSetpoint(distanceAngles, distance);
             Logger.recordOutput("AutoAim/CloseTarget", distance);
+            Logger.recordOutput("AutoAim/CloseOutput", output);
             SmartDashboard.putNumber("CloseShotDistance", distance);
             SmartDashboard.putNumber("CloseShotOutput", distance);
         }
@@ -165,7 +167,7 @@ public class ShotController {
     }
 
     public double updateLobbedAngle(Limelight limelight){
-        double distance = limelight.getY();
+        double distance = new RobotState().distanceToTarget(drivePoseEstimator);
         double output = nearestSetpoint(autoLobAngles, distance);
         Logger.recordOutput("AutoLobAim/DistanceToTarget", distance);
 
@@ -173,7 +175,7 @@ public class ShotController {
     }
 
     public double updateLobbedRollers(Limelight limelight) {
-        double distance = limelight.getY();
+        double distance = new RobotState().distanceToTarget(drivePoseEstimator);
         double output = nearestSetpoint(autoLobRollers, distance);
 
         return output;

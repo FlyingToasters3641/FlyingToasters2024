@@ -96,19 +96,7 @@ public class Robot extends LoggedRobot {
    @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run(); 
-    boolean doRejectUpdate = false;
-    LimelightHelpers.SetRobotOrientation("limelight", m_robotContainer.m_robotDrive.getPoseEstimator().getEstimatedPosition().getRotation().getDegrees(),0,0,0,0,0);
-    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-    if(Math.abs(m_robotContainer.m_robotDrive.getGyroRate()) >= 720){
-      doRejectUpdate = true;
-    }
-    if(mt2.tagCount == 0){
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate){
-      m_robotContainer.m_robotDrive.getPoseEstimator().setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-      m_robotContainer.m_robotDrive.getPoseEstimator().addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
-    }
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -125,11 +113,7 @@ public class Robot extends LoggedRobot {
     
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    if (DriverStation.getAlliance().get() == Alliance.Red){
-      m_robotContainer.m_Limelight.setPipeline(1);
-    } else {
-      m_robotContainer.m_Limelight.setPipeline(0);
-    }
+    m_robotContainer.m_Limelight.setPipeline(2);
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -146,11 +130,9 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    if (DriverStation.getAlliance().get() == Alliance.Red){
-      m_robotContainer.m_Limelight.setPipeline(1);
-    } else {
-      m_robotContainer.m_Limelight.setPipeline(0);
-    }
+    
+      m_robotContainer.m_Limelight.setPipeline(2);
+    
     // schedule the autonomous command (example)
 
   }

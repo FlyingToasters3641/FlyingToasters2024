@@ -81,6 +81,13 @@ public class FieldConstants {
     /** Center of the speaker opening (blue alliance) */
     public static Translation3d centerSpeakerOpening =
       bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
+
+    public static Translation3d LobSpot = 
+      new Translation3d(
+        Units.inchesToMeters(39.3701),
+        Units.inchesToMeters(283.465),
+        Units.inchesToMeters(0.0)
+      );
   }
 
   public static double aprilTagWidth = Units.inchesToMeters(6.50);

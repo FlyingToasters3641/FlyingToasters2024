@@ -78,6 +78,11 @@ public class DriveCommands {
                                                 / drive.getMaxAngularSpeedRadPerSec(); 
                         }
 
+                        if (drive.getLobController()) {
+                                omega = drive.updateLobController()
+                                                / drive.getMaxAngularSpeedRadPerSec();
+                        }
+
                         drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
                                                         linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
                                                         linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),

@@ -30,6 +30,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,8 +49,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
+import frc.robot.controllers.LobController;
 import frc.robot.controllers.TrapController;
 import frc.robot.subsystems.Limelight;
+import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -89,6 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private AimController aimController = null;
   private TrapController trapController = null;
+  private LobController lobController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
     new PIDConstants(2.0), //Translation
@@ -202,6 +206,22 @@ public class DriveSubsystem extends SubsystemBase {
         Twist2d twist = kinematics.toTwist2d(moduleDeltas);
         rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
       }
+
+
+    if (aimController == null) {  
+    boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(),getGyroRate(),0,0,0,0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if(Math.abs(getGyroRate()) >= 720){
+      doRejectUpdate = true;
+    }
+    if(mt2.tagCount == 0){
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate){
+      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.9,.9,9999999));
+      poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }}
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
@@ -335,8 +355,16 @@ public class DriveSubsystem extends SubsystemBase {
     trapController = new TrapController();
   }
 
+  public void setLobGoal() {
+    lobController = new LobController(poseEstimator);
+  }
+
   public void clearTrapGoal() {
     trapController = null;
+  }
+
+  public void clearLobGoal() {
+    lobController = null;
   }
 
   public boolean getTrapController() {
@@ -352,7 +380,12 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController != null;
   }
 
+  public boolean getLobController() {
+    return lobController != null;
+  }
+
   public double updateAimController(Limelight m_Limelight, PhotonCamera m_vision) {
+    m_Limelight.setPipeline(2);
     return aimController.update(m_Limelight, m_vision);
   }
 
@@ -363,6 +396,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double updateTrapController(PhotonCamera m_Camera){
     return trapController.update(m_Camera);
+  }
+
+  public double updateLobController() {
+    
+    return lobController.update();
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator () {
@@ -391,6 +429,10 @@ public class DriveSubsystem extends SubsystemBase {
     } else {
       autoAutoAim = false;
     }
+  }
+
+  public double getGyroRate() {
+    return Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec);
   }
 
 }

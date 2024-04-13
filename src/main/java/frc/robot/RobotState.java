@@ -27,7 +27,7 @@ public class RobotState {
             return lastParamters;
         }
 
-        Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening)
+        Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.LobSpot)
                 .toTranslation2d());
 
         Pose2d fieldToPredictedPose = getPredictedPose(LOOK_AHEAD, ROT_AHEAD, drivePoseEstimator);
@@ -50,7 +50,7 @@ public class RobotState {
                 targetRobotDirection,
                 new Rotation2d(
                         targetDistance - LauncherConstants.launcherOrigin.getX(),
-                        FieldConstants.Speaker.centerSpeakerOpening.getZ()
+                        FieldConstants.Speaker.LobSpot.getZ()
                                 - LauncherConstants.launcherOrigin.getY()
                                 + HEIGHT_COMP),
                 feedVelocity);
@@ -62,7 +62,7 @@ public class RobotState {
 
     public double distanceToTarget(SwerveDrivePoseEstimator drivePoseEstimator) {
         Pose2d fieldToPredictedPose = getPredictedPose(LOOK_AHEAD, LOOK_AHEAD, drivePoseEstimator);
-        Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening)
+        Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.LobSpot)
                 .toTranslation2d());
         Translation2d predictedVehicleToTargetTranslation =
             GeomUtil.inverse(fieldToPredictedPose).transformBy(fieldToTarget).getTranslation();

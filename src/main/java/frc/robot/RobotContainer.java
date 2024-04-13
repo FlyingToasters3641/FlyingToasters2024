@@ -91,7 +91,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFXComp());   
         m_launcher = new Launcher(new LauncherIOTalonFXComp());
         m_elevator = new Elevator(new ElevatorIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision, m_robotDrive); 
         break;
 
       case SIM:
@@ -106,7 +106,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision, m_robotDrive); 
         break;
 
       default:
@@ -121,12 +121,13 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision);
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_vision, m_robotDrive);
         break;
     }
 
     // Set up named commands
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
+    NamedCommands.registerCommand("FastShoot", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT)));
     NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Front Intake", IntakeCommands.frontIntake(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Rear Intake", IntakeCommands.rearIntakeNote(m_launcher, m_intake, m_robotSystem));
@@ -151,6 +152,7 @@ public class RobotContainer {
     autoChooser.addOption("2 Piece Fast Center", new PathPlannerAuto("StrykeDemon"));
     autoChooser.addOption("2 Piece Fast Center - Middle Note", new PathPlannerAuto("StrykeDemonV2"));
     autoChooser.addOption("6 Piece Top", new PathPlannerAuto("TopGodDemon"));
+    autoChooser.addOption("3 Piece Far Side", new PathPlannerAuto("FarDemon"));
    
     // Set up SysId routines
 

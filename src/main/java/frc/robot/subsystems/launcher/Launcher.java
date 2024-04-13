@@ -32,7 +32,7 @@ public class Launcher extends SubsystemBase {
     Logger.recordOutput("Launcher/PitchSensorDegrees", inputs.launcherPositionDegrees);
     Logger.recordOutput("Launcher/PitchMotorDegrees", inputs.pitchMotorSensorDegrees);
     Logger.recordOutput("Launcher/PitchSetpointDegrees", inputs.angleSetpointDegrees);
-    Logger.recordOutput("Launcher/FeederVelocity", inputs.flywheelVelocity);
+    Logger.recordOutput("Launcher/FlywheelVelocity", inputs.flywheelVelocity);
   }
 
   @Override
@@ -76,10 +76,10 @@ public class Launcher extends SubsystemBase {
     io.setAngleSetpoint(angleDegrees);
   }
 
-  public double updateShot(Limelight m_Limelight, PhotonCamera m_vision) {
-    shotController = new ShotController();
-    return shotController.updateAngle(m_Limelight, m_vision);
-  }
+  // public double updateShot(Limelight m_Limelight, PhotonCamera m_vision) {
+  //   shotController = new ShotController();
+  //   return shotController.updateAngle(m_Limelight, m_vision);
+  // } 
 
   public boolean getLauncherNote(){
     return inputs.note;
