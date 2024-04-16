@@ -1,18 +1,13 @@
 package frc.robot.controllers;
 
-import java.util.List;
-
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotState;
-import frc.robot.subsystems.Limelight;
+import frc.robot.constants.FieldConstants;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.GeomUtil;
 
 public class LobController {
 
@@ -28,7 +23,8 @@ public class LobController {
     }
 
     public double update() {
-        var AimingParameters = new RobotState().getAimingParameters(drivePoseEstimator);
+        var AimingParameters = new RobotState().getAimingParameters(drivePoseEstimator, GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.LobSpot)
+                .toTranslation2d()));
         double output = headingController.calculate(
                 drivePoseEstimator.getEstimatedPosition().getRotation().getRadians(),
                 AimingParameters.driveHeading().getRadians());

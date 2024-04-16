@@ -1,21 +1,11 @@
 package frc.robot.controllers;
 
-import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
-
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotState;
 import frc.robot.subsystems.Limelight;
@@ -97,70 +87,35 @@ public class ShotController {
 
     }
 
-
-
-    public double updateAngle(Limelight limelight, PhotonCamera m_vision) {
+    public double updateAngle(Limelight limelight) {
         double output = 1.0;
         double distance = 0.0;
-        List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
-        PhotonTrackedTarget target = null;
-        for (int i = 0; i < targets.size(); i++){
-            if (targets.get(i).getFiducialId() == 7  && DriverStation.getAlliance().get() == Alliance.Blue){
-                target = targets.get(i);
-                break;
-            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red){
-                target = targets.get(i);
-                break;
-            }
+        if (limelight.getY() == 0.0) {
+            distance = tx;
+        } else {
+        distance = limelight.getY();
+        tx = distance;
         }
-        if (target != null){
-            distance = filter.calculate(target.getPitch());
-            output = nearestSetpoint(farAngles, distance);
-            Logger.recordOutput("AutoAim/FarTarget", distance);
-            SmartDashboard.putNumber("FarShotDistance", distance);
-            SmartDashboard.putNumber("FarShotOutput", output);
-        }else{
-            if (limelight.getY() == 0.0) {
-                distance = tx;
-            } else {
-            distance = limelight.getY();
-            tx = distance;
-            }
-            output = nearestSetpoint(distanceAngles, distance);
-            Logger.recordOutput("AutoAim/CloseTarget", distance);
-            Logger.recordOutput("AutoAim/CloseOutput", output);
-            SmartDashboard.putNumber("CloseShotDistance", distance);
-            SmartDashboard.putNumber("CloseShotOutput", distance);
-        }
+        output = nearestSetpoint(distanceAngles, distance);
+        Logger.recordOutput("AutoAim/CloseTarget", distance);
+        Logger.recordOutput("AutoAim/CloseOutput", output);
+        SmartDashboard.putNumber("CloseShotDistance", distance);
+        SmartDashboard.putNumber("CloseShotOutput", distance);
+        
         
         return output;
     }
 
-    public double updateRollers(Limelight limelight, PhotonCamera m_vision) {
+    public double updateRollers(Limelight limelight) {
         double output = 1.0;
         double distance = 0.0;
-        List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
-        PhotonTrackedTarget target = null;
-        for (int i = 0; i < targets.size(); i++){
-            if (targets.get(i).getFiducialId() == 7  && DriverStation.getAlliance().get() == Alliance.Blue){
-                target = targets.get(i);
-                break;
-            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red){
-                target = targets.get(i);
-                break;
-            }
-        }
-        if (target != null){
-            output = 45;
+        if (limelight.getY() == 0.0) {
+            distance = tx;
         } else {
-            if (limelight.getY() == 0.0) {
-                distance = tx;
-            } else {
-            distance = limelight.getY();
-            tx = distance;
-            }
-            output = nearestSetpoint(distanceRollers, distance);
+        distance = limelight.getY();
+        tx = distance;
         }
+        output = nearestSetpoint(distanceRollers, distance);
 
         Logger.recordOutput("AutoAim/Rollers", output);
         return output;
@@ -181,7 +136,6 @@ public class ShotController {
         return output;
 
     }
-
 
     public double nearestSetpoint(InterpolatingDoubleTreeMap distMap, double distance) {
         

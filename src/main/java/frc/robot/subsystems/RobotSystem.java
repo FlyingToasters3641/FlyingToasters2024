@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -60,17 +58,15 @@ public class RobotSystem extends SubsystemBase{
     private final Intake intake;
     private final Elevator elevator;
     private final Limelight limelight;
-    private final PhotonCamera vision;
     private final DriveSubsystem drive;
 
     private final ShotController shotController;
 
-    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, Limelight m_Limelight, PhotonCamera m_vision, DriveSubsystem m_drive) {
+    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, Limelight m_Limelight, DriveSubsystem m_drive) {
         launcher = m_launcher;
         intake = m_intake;
         elevator = m_elevator;
         limelight = m_Limelight;
-        vision = m_vision;
         drive = m_drive;
         shotController = new ShotController(m_drive.getPoseEstimator());
     }
@@ -135,8 +131,8 @@ public class RobotSystem extends SubsystemBase{
                 } else {
                     limelight.setPipeline(0);
                 }
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.runRear();
@@ -148,8 +144,8 @@ public class RobotSystem extends SubsystemBase{
                 } else {
                     limelight.setPipeline(0);
                 }
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
@@ -218,8 +214,8 @@ public class RobotSystem extends SubsystemBase{
                 } else {
                     limelight.setPipeline(0);
                 }
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.runRear();

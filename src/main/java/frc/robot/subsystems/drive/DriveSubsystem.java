@@ -50,13 +50,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
 import frc.robot.controllers.LobController;
-import frc.robot.controllers.TrapController;
 import frc.robot.subsystems.Limelight;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
 
 public class DriveSubsystem extends SubsystemBase {
   private static final double MAX_LINEAR_SPEED = Units.feetToMeters(17.0);
@@ -91,7 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
   private Limelight limelight = new Limelight();
 
   private AimController aimController = null;
-  private TrapController trapController = null;
   private LobController lobController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
@@ -348,27 +345,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Enable auto aiming on drive */
   public void setAimGoal() {
-    aimController = new AimController();
-  }
-
-  public void setTrapGoal() {
-    trapController = new TrapController();
+    aimController = new AimController(poseEstimator);
   }
 
   public void setLobGoal() {
     lobController = new LobController(poseEstimator);
   }
 
-  public void clearTrapGoal() {
-    trapController = null;
-  }
-
   public void clearLobGoal() {
     lobController = null;
-  }
-
-  public boolean getTrapController() {
-    return trapController != null;
   }
 
   /** Disable auto aiming on drive */
@@ -384,18 +369,14 @@ public class DriveSubsystem extends SubsystemBase {
     return lobController != null;
   }
 
-  public double updateAimController(Limelight m_Limelight, PhotonCamera m_vision) {
+  public double updateAimController(Limelight m_Limelight) {
     m_Limelight.setPipeline(2);
-    return aimController.update(m_Limelight, m_vision);
+    return aimController.update(m_Limelight);
   }
 
   public boolean isAimControllerDone(Limelight m_Limelight) {
     Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
       return aimController.threshold(m_Limelight);
-  }
-
-  public double updateTrapController(PhotonCamera m_Camera){
-    return trapController.update(m_Camera);
   }
 
   public double updateLobController() {

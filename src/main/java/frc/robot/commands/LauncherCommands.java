@@ -1,19 +1,14 @@
 package frc.robot.commands;
 
-import java.util.concurrent.locks.Condition;
 import java.util.function.DoubleSupplier;
-
-import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.RobotSystem.SystemState;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.intake.Intake;
@@ -117,11 +112,11 @@ public class LauncherCommands {
             );
     }
 
-    public static ConditionalCommand Trap(Launcher m_launcher, RobotSystem m_System, PhotonCamera m_camera, DriveSubsystem drive){
-        return new ConditionalCommand(null, BlueTrap(m_launcher, m_System, m_camera, drive), null);
+    public static ConditionalCommand Trap(Launcher m_launcher, RobotSystem m_System, DriveSubsystem drive){
+        return new ConditionalCommand(null, BlueTrap(m_launcher, m_System, drive), null);
     }
 
-    public static SequentialCommandGroup BlueTrap(Launcher m_launcher, RobotSystem m_System, PhotonCamera m_camera, DriveSubsystem drive) {
+    public static SequentialCommandGroup BlueTrap(Launcher m_launcher, RobotSystem m_System, DriveSubsystem drive) {
         return new SequentialCommandGroup(  
             Commands.runOnce(() -> drive.setAimGoal()),
             new WaitCommand(0.3),
