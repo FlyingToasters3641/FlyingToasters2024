@@ -87,20 +87,14 @@ public class DriveCommands {
         public static Command AutoAutoAim(
                         DriveSubsystem drive,
                         Limelight m_Limelight) {
-
                 return Commands.run(
                                 () -> {
                                         double omega = 0.0;
                                         // Convert to field relative speeds & send command
-                                        
                                         boolean isFlipped = DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
-                                        omega = lime.calculate(m_Limelight.getAngleOffset().getRadians(), 0); // will
-                                                                                                                      // get
-                                                                                                                      // multiplied
-                                        // back later
-                                        
+                                        omega = lime.calculate(m_Limelight.getAngleOffset().getRadians(), 0); 
                                         Logger.recordOutput("AutoAim/Omega", omega);
                                         drive.runVelocity(
                                                         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -110,7 +104,6 @@ public class DriveCommands {
                                                                         isFlipped
                                                                                         ? drive.getRotation().plus(new Rotation2d(Math.PI))
                                                                                         : drive.getRotation()));
-
                                 });
         }
 

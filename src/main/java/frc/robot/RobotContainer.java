@@ -38,42 +38,28 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherIO;
 import frc.robot.subsystems.launcher.LauncherIOTalonFXComp;
 
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
-    // Subsystems
-    
+    //Subsystems Intitalization
     private final RobotSystem m_robotSystem;
     public final DriveSubsystem m_robotDrive;
     private final Intake m_intake;
     private final Launcher m_launcher;
     private final Elevator m_elevator;
     
-    //private final LEDSubsystem m_LEDSubsystem;
-    // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     public final Limelight m_Limelight = new Limelight();
     
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
   
-    /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
-        //Hardware or SIM?
+        //Hardware or SIM? Switch the case in Constants class
         switch (Constants.currentMode) {
         case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -121,7 +107,7 @@ public class RobotContainer {
         break;
     }
 
-    // Set up named commands
+    //NamedCommands - used in pathplanner
     NamedCommands.registerCommand("Shoot", LauncherCommands.autoShootNote(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("FastShoot", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SHOOT)));
     NamedCommands.registerCommand("Intake", IntakeCommands.intake(m_launcher, m_intake, m_robotSystem));
@@ -137,7 +123,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot8", LauncherCommands.autoShoot8(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim8", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_8)));
 
-    // Set up auto routines
+    //AutoRoutines 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
     autoChooser.addDefaultOption("4 Piece Left-Closer", new PathPlannerAuto("SweepingDemon"));
@@ -149,12 +135,8 @@ public class RobotContainer {
     autoChooser.addOption("2 Piece Fast Center - Middle Note", new PathPlannerAuto("StrykeDemonV2"));
     autoChooser.addOption("6 Piece Top", new PathPlannerAuto("TopGodDemon"));
     autoChooser.addOption("3 Piece Far Side", new PathPlannerAuto("FarDemon"));
-   
-    // Set up SysId routines
 
-    // Configure the button bindings
     configureButtonBindings();
-        // Configure the trigger bindings
     }
 
     /**
@@ -171,24 +153,27 @@ public class RobotContainer {
                       () -> -m_driverController.getLeftX(),
                       () -> -m_driverController.getRightX(),
                       m_Limelight));
-      m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
 
+      //AutoAim - While holding A, drive will orient itself automatically to the speaker
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
-      //subwoofer
+      //SubwooferShot - Will toggle a fast shot while the robot is up against the subwoofer
       m_driverController.b().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM)), Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_SHOOT)).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.SUBWOOF_AIM));
-      //shoot
-      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_launcher, m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
-      //lob
+      //Shoot - Hold to start aiming, let go to release the shot
+      m_driverController.rightTrigger().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM))).onFalse(new ShootNote(m_robotSystem).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))));
+      //Lob - Robot will orient itself and lob occurding to the field pose estimator
       m_driverController.rightBumper().onTrue(LauncherCommands.Lob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive)).onFalse(LauncherCommands.EndLob(m_launcher, m_robotSystem, m_Limelight, m_robotDrive));
-      //intake
+      //Intake - Hold to run both intakes, release to stop intake
       m_driverController.leftTrigger().whileTrue(IntakeCommands.intake(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      //outtake
+      //Outtake - Outtakes the note out to the rear
       m_driverController.leftBumper().whileTrue(IntakeCommands.rearOutakeNote(m_launcher, m_intake, m_robotSystem)).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
-      //amp
+      //AmplifierScore - Press to allow the climber to deposit a note into the amplifier. Robot will return to base state once the action is finished
       m_driverController.y().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_AIM)),Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AMP_SCORE)).andThen(new WaitCommand(0.75)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.AMP_AIM ));
+      //Climb - Hold to extend climb, let go to release the climer and lock the climbing mechanism 
       m_driverController.x().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.CLIMB_EXTEND)), ElevatorCommands.climb(m_elevator, m_robotSystem), () -> m_robotSystem.getGoalState() != SystemState.CLIMB_EXTEND));
+      //Resets the robot's degree in field pose estimation
       m_driverController.start().onTrue(Commands.runOnce(() -> m_robotDrive.setPose(new Pose2d(m_robotDrive.getPose().getTranslation(), new Rotation2d())),m_robotDrive)
                 .ignoringDisable(true));
+     //Front Outtake - Outtakes the note out to the front if it gets stuck
      m_driverController.povLeft().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
 
         
@@ -197,15 +182,4 @@ public class RobotContainer {
       return autoChooser.get();
   }
 
-  public SequentialCommandGroup externalIntakeFlip() {
-    return new SequentialCommandGroup(
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.EXTERNAL_INTAKE)),
-        new WaitCommand(0.1),
-        Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))
-    );
-  }
-       
-  public Command getAutoCommand(String autoName) {
-      return new PathPlannerAuto(autoName);
-  }
 }

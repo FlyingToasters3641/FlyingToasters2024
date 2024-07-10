@@ -4,14 +4,11 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.controllers.ShotController;
 
 public class Launcher extends SubsystemBase {
 
   private LauncherIO io;
   private final LauncherIOInputsAutoLogged inputs = new LauncherIOInputsAutoLogged();
-
-  private ShotController shotController;
   
 
   private double angleSetpoint = 0.0;
