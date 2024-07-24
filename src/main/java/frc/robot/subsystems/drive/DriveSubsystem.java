@@ -218,11 +218,14 @@ public class DriveSubsystem extends SubsystemBase {
     if(!doRejectUpdate){
       poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.9,.9,9999999));
       poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
-    }}
-
+    }
+  
+  }
+  
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
+
   }
 
   /**
@@ -370,7 +373,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double updateAimController(Limelight m_Limelight) {
-    m_Limelight.setPipeline(2);
     return aimController.update(m_Limelight);
   }
 

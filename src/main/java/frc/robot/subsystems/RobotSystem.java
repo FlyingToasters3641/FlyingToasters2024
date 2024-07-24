@@ -108,7 +108,6 @@ public class RobotSystem extends SubsystemBase{
 
         switch (currentState){
             case IDLE -> {
-                limelight.setPipeline(2);
                 launcher.setAngleSetpoint(LauncherConstants.IDLE);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.0);
@@ -168,7 +167,9 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             }
             case INTAKE -> {
+                if (DriverStation.isTeleop()) {
                 limelight.setPipeline(2);
+                }
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.0);
@@ -195,7 +196,7 @@ public class RobotSystem extends SubsystemBase{
             case FRONT_INTAKE_FEED -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.15); //Only difference between REAR_INTAKE
+                launcher.setFeederVoltage(0.2); //Only difference between REAR_INTAKE
                 intake.stopFront();
                 intake.runRearRollers(0.2);
                 elevator.setPosition(0.2);

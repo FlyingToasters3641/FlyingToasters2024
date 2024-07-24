@@ -11,6 +11,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -109,7 +111,11 @@ public class Robot extends LoggedRobot {
     
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_robotContainer.m_Limelight.setPipeline(2);
+    if (DriverStation.getAlliance().get() == Alliance.Red){
+    m_robotContainer.m_Limelight.setPipeline(1);
+    } else {
+      m_robotContainer.m_Limelight.setPipeline(0);
+    }
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

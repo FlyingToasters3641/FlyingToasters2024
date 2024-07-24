@@ -280,15 +280,5 @@
       "timestamp": 1.7442467230239072
     }
   ],
-  "eventMarkers": [
-    {
-      "timestamp": 0.8896856178771002,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "AutoAim"
-        }
-      }
-    }
-  ]
+  "eventMarkers": []
 }

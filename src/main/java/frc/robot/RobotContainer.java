@@ -33,6 +33,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -149,6 +151,7 @@ public class RobotContainer {
     autoChooser.addOption("2 Piece Fast Center - Middle Note", new PathPlannerAuto("StrykeDemonV2"));
     autoChooser.addOption("6 Piece Top", new PathPlannerAuto("TopGodDemon"));
     autoChooser.addOption("3 Piece Far Side", new PathPlannerAuto("FarDemon"));
+    autoChooser.addOption("5.5 Piece Middle", new PathPlannerAuto("SweepingDemonMiddle"));
    
     // Set up SysId routines
 
@@ -173,7 +176,7 @@ public class RobotContainer {
                       m_Limelight));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
 
-      m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));
+      m_driverController.a().onTrue(new ConditionalCommand(Commands.runOnce(() -> m_Limelight.setPipeline(1)), Commands.runOnce(() -> m_Limelight.setPipeline(0)), () -> DriverStation.getAlliance().get() == Alliance.Red).andThen(Commands.runOnce(m_robotDrive::setAimGoal))).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal).andThen(Commands.runOnce(() -> m_Limelight.setPipeline(2))));
       //subwoofer
       m_driverController.b().toggleOnTrue(new ConditionalCommand(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_AIM)), Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.SUBWOOF_SHOOT)).andThen(new WaitCommand(0.5)).andThen(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))), ()-> m_robotSystem.getGoalState() != SystemState.SUBWOOF_AIM));
       //shoot
