@@ -34,6 +34,8 @@ public class ShotController {
 
     InterpolatingDoubleTreeMap autoLobRollers;
 
+    InterpolatingDoubleTreeMap distanceRollers;
+
     public ShotController() {
 
 
@@ -52,14 +54,15 @@ public class ShotController {
         distanceAngles.put((24.0), 36.0);
         distanceAngles.put((20.0), 30.0);
         distanceAngles.put((18.0), 25.0);
-        distanceAngles.put((16.0), 22.0);
-        distanceAngles.put((14.0), 19.0);
-        distanceAngles.put((13.0), 18.0);
-        distanceAngles.put((12.5), 16.5);
-        distanceAngles.put((12.0), 15.0);
-        distanceAngles.put((11.0), 11.0);
-        distanceAngles.put((10.0), 9.0);
-        distanceAngles.put((8.0), 7.0);
+        distanceAngles.put((16.0), 21.0);
+        distanceAngles.put((14.0), 17.5);
+        distanceAngles.put((13.0), 14.5);
+        distanceAngles.put((12.5), 13.0);
+        distanceAngles.put((12.0), 12.75);
+        distanceAngles.put((11.0), 10.5);
+        distanceAngles.put((10.0), 8.25);
+        distanceAngles.put((9.0), 5.5);
+        distanceAngles.put((8.0), 5.0);
 
         //For Photon Camera
         farAngles = new InterpolatingDoubleTreeMap();
@@ -80,6 +83,17 @@ public class ShotController {
         autoLobRollers.put((9.0), 23.0);
         autoLobRollers.put((7.0), 24.0);
         autoLobRollers.put((5.0), 25.0);
+
+        distanceRollers = new InterpolatingDoubleTreeMap();
+        distanceRollers.put((45.0), 25.0);
+        distanceRollers.put((30.0), 25.0);
+        distanceRollers.put((23.0), 30.0);
+        distanceRollers.put((15.0), 32.0);
+        distanceRollers.put((12.0), 35.0);
+        distanceRollers.put((11.0), 38.0);
+        distanceRollers.put((10.0), 40.0);
+        distanceRollers.put((8.0), 45.0);
+
         
     }
 
@@ -126,6 +140,21 @@ public class ShotController {
         double output = nearestSetpoint(autoLobAngles, distance);
         Logger.recordOutput("AutoLobAim/DistanceToTarget", distance);
 
+        return output;
+    }
+
+    public double updateRollers(Limelight limelight){
+        double output = 1.0;
+        double distance = 0.0;
+        if (limelight.getY() == 0.0) {
+            distance = tx;
+        } else {
+            distance = limelight.getY();
+            tx = distance;
+        }
+        output = nearestSetpoint(distanceRollers, distance);
+
+        Logger.recordOutput("AutoAim/Rollers", output);
         return output;
     }
 
