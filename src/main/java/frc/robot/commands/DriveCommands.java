@@ -39,6 +39,9 @@ import org.photonvision.PhotonCamera;
 public class DriveCommands {
         private static final double DEADBAND = 0.1;
 
+        
+        static PIDController lime = new PIDController(5.0, 0, 0);
+
         private DriveCommands() {
         }
 
@@ -106,7 +109,6 @@ public class DriveCommands {
                 return Commands.run(
                                 () -> {
                                         // Convert to field relative speeds & send command
-                                        PIDController lime = new PIDController(5.0, 0, 0);
                                         boolean isFlipped = DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover

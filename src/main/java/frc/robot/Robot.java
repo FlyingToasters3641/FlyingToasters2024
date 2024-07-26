@@ -13,10 +13,10 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import frc.robot.constants.BuildConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -75,6 +75,8 @@ public class Robot extends LoggedRobot {
         break;
     }
 
+
+    RobotController.setBrownoutVoltage(6.0);
 // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page // Start logging! No more data receivers, replay sources, or metadata values may be added.
     // Start AdvantageKit logger
     Logger.start();
