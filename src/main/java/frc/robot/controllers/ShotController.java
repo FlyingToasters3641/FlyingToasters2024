@@ -5,9 +5,6 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -99,38 +96,21 @@ public class ShotController {
 
 
 
-    public double updateAngle(Limelight limelight, PhotonCamera m_vision) {
-        double output = 0.0;
+    public double updateAngle(Limelight limelight) {
+        double output = 1.0;
         double distance = 0.0;
-        List<PhotonTrackedTarget> targets = m_vision.getLatestResult().getTargets();
-        PhotonTrackedTarget target = null;
-        for (int i = 0; i < targets.size(); i++){
-            if (targets.get(i).getFiducialId() == 7  && DriverStation.getAlliance().get() == Alliance.Blue){
-                target = targets.get(i);
-                break;
-            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red){
-                target = targets.get(i);
-                break;
-            }
+        if (limelight.getY() == 0.0) {
+            distance = tx;
+        } else {
+        distance = limelight.getY();
+        tx = distance;
         }
-        if (target != null){
-            distance = filter.calculate(target.getPitch());
-            output = nearestSetpoint(farAngles, distance);
-            Logger.recordOutput("AutoAim/FarTarget", distance);
-            SmartDashboard.putNumber("FarShotDistance", distance);
-            SmartDashboard.putNumber("FarShotOutput", output);
-        }else{
-            if (limelight.getY() == 0.0) {
-                distance = tx;
-            } else {
-            distance = limelight.getY();
-            tx = distance;
-            }
-            output = nearestSetpoint(distanceAngles, distance);
-            Logger.recordOutput("AutoAim/CloseTarget", distance);
-            SmartDashboard.putNumber("CloseShotDistance", distance);
-            SmartDashboard.putNumber("CloseShotOutput", distance);
-        }
+        output = nearestSetpoint(distanceAngles, distance);
+        Logger.recordOutput("AutoAim/CloseTarget", distance);
+        Logger.recordOutput("AutoAim/CloseOutput", output);
+        SmartDashboard.putNumber("CloseShotDistance", distance);
+        SmartDashboard.putNumber("CloseShotOutput", distance);
+        
         
         return output;
     }

@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
 
 public class DriveCommands {
         private static final double DEADBAND = 0.1;
@@ -54,8 +53,8 @@ public class DriveCommands {
                         DoubleSupplier xSupplier,
                         DoubleSupplier ySupplier,
                         DoubleSupplier omegaSupplier,
-                        Limelight m_Limelight,
-                        PhotonCamera m_vision) {
+                        Limelight m_Limelight
+                        ) {
                 return Commands.run(
                                 () -> {
                                         // Apply deadband
@@ -81,7 +80,7 @@ public class DriveCommands {
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
                                         if (drive.getAimController()) {
-                                                omega = drive.updateAimController(m_Limelight, m_vision)
+                                                omega = drive.updateAimController(m_Limelight)
                                                                 / drive.getMaxAngularSpeedRadPerSec(); // will get
                                                                                                        // multiplied
                                                                                                        // back later

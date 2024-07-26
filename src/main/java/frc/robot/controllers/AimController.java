@@ -3,8 +3,7 @@ package frc.robot.controllers;
 import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -12,7 +11,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotState;
+import frc.robot.constants.FieldConstants;
 import frc.robot.subsystems.Limelight;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.GeomUtil;
 
 public class AimController {
 
@@ -26,34 +28,15 @@ public class AimController {
         
     }
 
-    public double update(Limelight limelight, PhotonCamera vision) {
+    public double update(Limelight limelight) {
         double output = 0.0;
-        List<PhotonTrackedTarget> targets = vision.getLatestResult().getTargets();
-        Logger.recordOutput("AutoAim/Camera", vision.getLatestResult().hasTargets());
-        PhotonTrackedTarget target = null;
-        for (int i = 0; i < targets.size(); i++){
-            if (targets.get(i).getFiducialId() == 7 && DriverStation.getAlliance().get() == Alliance.Blue){
-                target = targets.get(i);
-                Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
-                break;
-            } else if (targets.get(i).getFiducialId() == 4 && DriverStation.getAlliance().get() == Alliance.Red) {
-                target = targets.get(i);
-                Logger.recordOutput("AutoAim/Target", targets.get(i).getYaw());
-                break;
-            }
-        }
-        if (target != null){
-            output = headingController.calculate(
-                Units.degreesToRadians(target.getYaw()), 0);
-            Logger.recordOutput("AutoAim/HeadingError", headingController.getPositionError());
-            Logger.recordOutput("AutoAim/HeadingDegrees", Units.radiansToDegrees(output));
+        if (limelight.getAngleOffset().getDegrees() == 0.0){
+            return output;
         }else{
         output = headingController.calculate(
                 limelight.getAngleOffset().getRadians(),
                 0);
-        }        
-        
-        
+        }
         return output;
     }
 

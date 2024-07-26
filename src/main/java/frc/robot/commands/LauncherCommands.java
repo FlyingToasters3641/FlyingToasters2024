@@ -134,11 +134,6 @@ public class LauncherCommands {
                 new WaitCommand(0.5));
     }
 
-    public static SequentialCommandGroup autoShoot8(Launcher m_launcher, Intake m_intake, RobotSystem m_System) {
-        return new SequentialCommandGroup(
-                Commands.runOnce(() -> m_System.setGoalState(RobotSystem.SystemState.SHOOT_8)),
-                new WaitCommand(0.5));
-    }
 
 
 }

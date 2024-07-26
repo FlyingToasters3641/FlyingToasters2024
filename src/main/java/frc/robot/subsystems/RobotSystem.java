@@ -2,9 +2,7 @@ package frc.robot.subsystems;
 
 import javax.swing.text.html.parser.Element;
 
-import org.photonvision.PhotonCamera;
 
-import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -66,17 +64,15 @@ public class RobotSystem extends SubsystemBase{
     private final Elevator elevator;
     private final DriveSubsystem drive;
     private final Limelight limelight;
-    private final PhotonCamera vision;
 
     private final ShotController shotController;
 
-    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, DriveSubsystem m_drive, Limelight m_Limelight, PhotonCamera m_vision) {
+    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, DriveSubsystem m_drive, Limelight m_Limelight) {
         launcher = m_launcher;
         intake = m_intake;
         elevator = m_elevator;
         drive = m_drive;
         limelight = m_Limelight;
-        vision = m_vision;
         shotController = new ShotController();
     }
 
@@ -131,7 +127,7 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(1.0);
             }
             case AIM -> {
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
@@ -139,7 +135,7 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             }
             case SHOOT -> {
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
@@ -203,7 +199,7 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             } 
             case INTAKE_AND_SHOOT -> {
-                launcher.setAngleSetpoint(shotController.updateAngle(limelight, vision));
+                launcher.setAngleSetpoint(shotController.updateAngle(limelight));
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();

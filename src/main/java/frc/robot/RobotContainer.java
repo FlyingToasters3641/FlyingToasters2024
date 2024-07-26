@@ -29,7 +29,7 @@ import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOTalonFXComp;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.photonvision.PhotonCamera;
+
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -70,7 +70,7 @@ public class RobotContainer {
     // Controller
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
     public final Limelight m_Limelight = new Limelight();
-    public final PhotonCamera m_vision = new PhotonCamera("Maximocam");
+
     
     
     
@@ -94,7 +94,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFXComp());   
         m_launcher = new Launcher(new LauncherIOTalonFXComp());
         m_elevator = new Elevator(new ElevatorIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator,m_robotDrive, m_Limelight, m_vision); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator,m_robotDrive, m_Limelight); 
         break;
 
       case SIM:
@@ -109,7 +109,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight, m_vision); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight); 
         break;
 
       default:
@@ -124,7 +124,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight, m_vision);
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_robotDrive, m_Limelight);
         break;
     }
 
@@ -166,7 +166,7 @@ public class RobotContainer {
                       () -> -m_driverController.getLeftY(),
                       () -> -m_driverController.getLeftX(),
                       () -> -m_driverController.getRightX(),
-                      m_Limelight, m_vision));
+                      m_Limelight));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
 
       m_driverController.a().onTrue(Commands.runOnce(m_robotDrive::setAimGoal)).onFalse(Commands.runOnce(m_robotDrive::clearAimGoal));

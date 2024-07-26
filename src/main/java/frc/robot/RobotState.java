@@ -21,14 +21,11 @@ public class RobotState {
     private final double ROT_AHEAD = 0.25 * Math.PI;
     private final double HEIGHT_COMP = 0.0; //Tune to compensate for robot shot height
 
-    public AimingParameters getAimingParameters(SwerveDrivePoseEstimator drivePoseEstimator) {
+    public AimingParameters getAimingParameters(SwerveDrivePoseEstimator drivePoseEstimator, Transform2d fieldToTarget) {
         
         if (lastParamters != null) {
             return lastParamters;
         }
-
-        Transform2d fieldToTarget = GeomUtil.toTransform2d(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening)
-                .toTranslation2d());
 
         Pose2d fieldToPredictedPose = getPredictedPose(LOOK_AHEAD, ROT_AHEAD, drivePoseEstimator);
         Pose2d fieldToPredictedPoseFixed = new Pose2d(fieldToPredictedPose.getTranslation(), new Rotation2d());
@@ -50,7 +47,7 @@ public class RobotState {
                 targetRobotDirection,
                 new Rotation2d(
                         targetDistance - LauncherConstants.launcherOrigin.getX(),
-                        FieldConstants.Speaker.centerSpeakerOpening.getZ()
+                        FieldConstants.Speaker.LobSpot.getZ()
                                 - LauncherConstants.launcherOrigin.getY()
                                 + HEIGHT_COMP),
                 feedVelocity);
