@@ -178,6 +178,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     }
 
+    
     @Override
     public void setBlower(boolean powered){
         if (powered){
