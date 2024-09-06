@@ -34,13 +34,10 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     public static final double PIVOT_RATIO = 50.625;
     private final double absoluteEncoderOffset = -0.0688477;// need to calibrate!
-    private double lastSetpoint = 0.0;
 
     private double launcherSetpointDegrees = 0.0;
     private double flywheelSpeed = 0.0;
     private double launcherThreshold = 4.0;
-    private double flywheelThreshold = 4.0;
-    private double realFlywheelSpeed = 42.0;
 
     public LauncherIOTalonFXComp() {
         bottomFlywheelTalonFX.setInverted(true);
