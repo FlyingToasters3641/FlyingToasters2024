@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -21,7 +20,8 @@ public class LauncherCommands {
     private LauncherCommands() {
     }
 
-    /** Runs the Flywheel at a high speed for testing */
+    /** Runs the Flywheel at a high speed for testing  
+    */
     public static Command runFlywheelSpeed(Launcher m_launcher) {
         return Commands.runOnce(() -> {
             m_launcher.setFlywheelVelocity(1000);

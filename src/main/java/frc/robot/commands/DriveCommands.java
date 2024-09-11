@@ -40,6 +40,14 @@ public class DriveCommands {
         /**
          * Field relative drive command using two joysticks (controlling linear and
          * angular velocities).
+         * 
+         * @param drive Drivetrain Subsystem
+         * @param xSupplier the left and right of the left joystick
+         * @param ySupplier the up and down of the left joystick
+         * @param omegaSupplier the right joystick for rotation
+         * @param m_Limelight Limelight Subsystem
+         * @return the command that drives the robot
+         * 
          */
         public static Command joystickDrive(
                         DriveSubsystem drive,
@@ -49,8 +57,9 @@ public class DriveCommands {
                         Limelight m_Limelight) {
                 return Commands.run(() -> {
                         // Apply deadband
-                        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()),DEADBAND);
-                        Rotation2d linearDirection = new Rotation2d(xSupplier.getAsDouble(),ySupplier.getAsDouble());
+                        double linearMagnitude = MathUtil.applyDeadband(
+                                        Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
+                        Rotation2d linearDirection = new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
                         double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
                         // Square values
@@ -58,32 +67,44 @@ public class DriveCommands {
                         omega = Math.copySign(omega * omega * omega * omega, omega);
 
                         // Calcaulate new linear velocity
-                        Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection).transformBy(new Transform2d(linearMagnitude, 0.0,new Rotation2d())).getTranslation();
+                        Translation2d linearVelocity = new Pose2d(new Translation2d(), linearDirection)
+                                        .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+                                        .getTranslation();
 
                         // Convert to field relative speeds & send command
-                        boolean isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red;
+                        boolean isFlipped = DriverStation.getAlliance().isPresent()
+                                        && DriverStation.getAlliance().get() == Alliance.Red;
                         // Auto aim steering takeover
                         if (drive.getAimController()) {
                                 omega = drive.updateAimController(m_Limelight)
-                                                / drive.getMaxAngularSpeedRadPerSec(); 
-                        } 
+                                                / drive.getMaxAngularSpeedRadPerSec();
+                        }
                         if (drive.getLobController()) {
                                 omega = drive.updateLobController()
                                                 / drive.getMaxAngularSpeedRadPerSec();
                         }
 
                         drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
-                                                        linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                                                        linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                                                        omega * drive.getMaxAngularSpeedRadPerSec(),
-                                                        isFlipped
-                                                                        ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                                                                        : drive.getRotation()));
+                                        linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
+                                        linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                                        omega * drive.getMaxAngularSpeedRadPerSec(),
+                                        isFlipped
+                                                        ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                                                        : drive.getRotation()));
 
                 },
                                 drive);
         }
 
+        /**
+         * 
+         * Old WIP rotation autoaim for autonomous mode
+         * 
+         * 
+         * @param drive Drivetrain subsystem
+         * @param m_Limelight Limelight Subsystem
+         * 
+         */
         public static Command AutoAutoAim(
                         DriveSubsystem drive,
                         Limelight m_Limelight) {
@@ -92,15 +113,15 @@ public class DriveCommands {
                                 () -> {
                                         double omega = 0.0;
                                         // Convert to field relative speeds & send command
-                                        
+
                                         boolean isFlipped = DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get() == Alliance.Red;
                                         // Auto aim steering takeover
                                         omega = lime.calculate(m_Limelight.getAngleOffset().getRadians(), 0); // will
-                                                                                                                      // get
-                                                                                                                      // multiplied
+                                                                                                              // get
+                                                                                                              // multiplied
                                         // back later
-                                        
+
                                         Logger.recordOutput("AutoAim/Omega", omega);
                                         drive.runVelocity(
                                                         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -108,12 +129,19 @@ public class DriveCommands {
                                                                         0.0,
                                                                         omega,
                                                                         isFlipped
-                                                                                        ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                                                                                        ? drive.getRotation().plus(
+                                                                                                        new Rotation2d(Math.PI))
                                                                                         : drive.getRotation()));
 
                                 });
         }
 
+
+    /** Attempts to stop the drive by putting the wheels in an x formation
+     * 
+     * @param drive Drivetrain Subsystme
+     * @return the method in drive subsystem that stops the drive
+     */
         public static Command DriveXStop(DriveSubsystem drive) {
                 return Commands.run(() -> {
                         drive.stopWithX();
