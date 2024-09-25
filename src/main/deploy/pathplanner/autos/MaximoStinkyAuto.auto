@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 7.556210994720459,
+      "y": 5.1935133934021
+    },
+    "rotation": -1.1625469239061968e-22
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Taylor's Awesome Path 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Taylor's Awesome Path 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
