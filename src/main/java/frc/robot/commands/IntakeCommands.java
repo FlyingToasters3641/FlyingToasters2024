@@ -42,7 +42,7 @@ public class IntakeCommands {
 
     
     /** Stops the front intake rollers */
-    public static Command stopFront(Intake m_intake) {
+    public static Command IN_StopFront(Intake m_intake) {
       return Commands.run(() -> {
         m_intake.stopFront();
       });
