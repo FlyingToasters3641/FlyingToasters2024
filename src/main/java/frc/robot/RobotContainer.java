@@ -57,6 +57,11 @@ import frc.robot.subsystems.launcher.LauncherIOTalonFXComp;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+    //slowmode variable
+    private final double slowValue = .25;
+
+
     // Subsystems
     
     private final RobotSystem m_robotSystem;
@@ -170,9 +175,9 @@ public class RobotContainer {
       m_robotDrive.setDefaultCommand(
               DriveCommands.joystickDrive(
                       m_robotDrive,
-                      () -> -m_driverController.getLeftY(),
-                      () -> -m_driverController.getLeftX(),
-                      () -> -m_driverController.getRightX(),
+                      () -> -m_driverController.getLeftY() * slowValue,
+                      () -> -m_driverController.getLeftX() * slowValue,
+                      () -> -m_driverController.getRightX() * slowValue,
                       m_Limelight));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
 
