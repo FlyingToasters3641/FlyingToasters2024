@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
-import javax.swing.text.html.parser.Element;
-
-import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.controllers.ShotController;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.elevator.Elevator;
@@ -29,18 +26,24 @@ public class RobotSystem extends SubsystemBase{
         FRONT_INTAKE_FEED,
         REVERSE_INTAKE,
         INTAKE_AND_SHOOT,
-        STATION_INTAKE,
         AMP_AIM,
         AMP_SCORE,
         HUMAN_PLAYER,
         OUTTAKE,
+        FRONT_OUTTAKE,
         CLIMB_EXTEND,
         CLIMB_RETRACT,
         CLIMB_LOCK,
-        SHOOT_TAPE,
-        AIM_TAPE,
+        SHOOT_LOB,
+        AIM_LOB,
         AMP_MIDDLE,
-        AMP_UP
+        AMP_UP,
+        TRAP_AIM,
+        TRAP_SHOOT,
+        TRAP_UP,
+        TRAP_DOWN,
+        SHOOT_8,
+        AIM_8
     }
 
     public enum GamepieceState {
@@ -54,18 +57,18 @@ public class RobotSystem extends SubsystemBase{
     private final Launcher launcher;
     private final Intake intake;
     private final Elevator elevator;
-    private final DriveSubsystem drive;
     private final Limelight limelight;
+    private final DriveSubsystem drive;
 
     private final ShotController shotController;
 
-    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, DriveSubsystem m_drive, Limelight m_Limelight) {
+    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, Limelight m_Limelight, DriveSubsystem m_drive) {
         launcher = m_launcher;
         intake = m_intake;
         elevator = m_elevator;
-        drive = m_drive;
         limelight = m_Limelight;
-        shotController = new ShotController();
+        drive = m_drive;
+        shotController = new ShotController(m_drive.getPoseEstimator());
     }
 
     @Override 
@@ -83,18 +86,24 @@ public class RobotSystem extends SubsystemBase{
             case FRONT_INTAKE_FEED -> currentState = SystemState.FRONT_INTAKE_FEED;
             case REVERSE_INTAKE -> currentState = SystemState.REVERSE_INTAKE;
             case INTAKE_AND_SHOOT -> currentState = SystemState.INTAKE_AND_SHOOT;
-            case STATION_INTAKE -> currentState = SystemState.STATION_INTAKE;
             case AMP_AIM -> currentState = SystemState.AMP_AIM;
             case AMP_SCORE -> currentState = SystemState.AMP_SCORE;
             case HUMAN_PLAYER -> currentState = SystemState.HUMAN_PLAYER;
             case OUTTAKE -> currentState = SystemState.OUTTAKE;
+            case FRONT_OUTTAKE -> currentState = SystemState.FRONT_OUTTAKE;
             case CLIMB_EXTEND -> currentState = SystemState.CLIMB_EXTEND;
             case CLIMB_RETRACT -> currentState = SystemState.CLIMB_RETRACT;
             case CLIMB_LOCK -> currentState = SystemState.CLIMB_LOCK;
-            case SHOOT_TAPE -> currentState = SystemState.SHOOT_TAPE;
-            case AIM_TAPE -> currentState = SystemState.AIM_TAPE;
+            case SHOOT_LOB -> currentState = SystemState.SHOOT_LOB;
+            case AIM_LOB -> currentState = SystemState.AIM_LOB;
             case AMP_MIDDLE -> currentState = SystemState.AMP_MIDDLE;
             case AMP_UP -> currentState = SystemState.AMP_UP;
+            case TRAP_AIM -> currentState = SystemState.TRAP_AIM;
+            case TRAP_SHOOT -> currentState = SystemState.TRAP_SHOOT;
+            case TRAP_UP -> currentState = SystemState.TRAP_UP;
+            case TRAP_DOWN -> currentState = SystemState.TRAP_DOWN;
+            case SHOOT_8 -> currentState = SystemState.SHOOT_8;
+            case AIM_8 -> currentState = SystemState.AIM_8;
         }
 
         switch (currentState){
@@ -102,6 +111,7 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setAngleSetpoint(LauncherConstants.IDLE);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.0);
+                launcher.setBlower(false);
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.2);
@@ -115,16 +125,26 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(1.0);
             }
             case AIM -> {
+                if (DriverStation.getAlliance().get() == Alliance.Red) {
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.runRear();
                 elevator.setPosition(0.2);
             }
             case SHOOT -> {
+                if (DriverStation.getAlliance().get() == Alliance.Red) {
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
@@ -132,7 +152,7 @@ public class RobotSystem extends SubsystemBase{
             }
             case SUBWOOF_AIM -> {
                 launcher.setAngleSetpoint(50);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_SUBWOOFER);
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.stopRear();
@@ -140,13 +160,16 @@ public class RobotSystem extends SubsystemBase{
             }
             case SUBWOOF_SHOOT -> {
                 launcher.setAngleSetpoint(50);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_SUBWOOFER);
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
                 elevator.setPosition(0.2);
             }
             case INTAKE -> {
+                if (DriverStation.isTeleop()) {
+                limelight.setPipeline(2);
+                }
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
                 launcher.setFeederVoltage(0.0);
@@ -173,7 +196,7 @@ public class RobotSystem extends SubsystemBase{
             case FRONT_INTAKE_FEED -> {
                 launcher.setAngleSetpoint(0);
                 launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
-                launcher.setFeederVoltage(0.15); //Only difference between REAR_INTAKE
+                launcher.setFeederVoltage(0.2); //Only difference between REAR_INTAKE
                 intake.stopFront();
                 intake.runRearRollers(0.2);
                 elevator.setPosition(0.2);
@@ -187,8 +210,13 @@ public class RobotSystem extends SubsystemBase{
                 elevator.setPosition(0.2);
             } 
             case INTAKE_AND_SHOOT -> {
+                if (DriverStation.getAlliance().get() == Alliance.Red) {
+                    limelight.setPipeline(1);
+                } else {
+                    limelight.setPipeline(0);
+                }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.runRear();
@@ -226,11 +254,11 @@ public class RobotSystem extends SubsystemBase{
             }
             case AMP_UP -> {
                 elevator.setPosition(3);
-                    launcher.setAngleSetpoint(0.0);
-                    launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
-                    launcher.setFeederVoltage(0.3);
-                    intake.stopFront();
-                    intake.stopRear();
+                launcher.setAngleSetpoint(0.0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_AMP);
+                launcher.setFeederVoltage(0.3);
+                intake.stopFront();
+                intake.stopRear();
             }
             case OUTTAKE -> {
                 launcher.setAngleSetpoint(0);
@@ -238,6 +266,13 @@ public class RobotSystem extends SubsystemBase{
                 launcher.setFeederVoltage(-0.2);
                 intake.stopFront();
                 intake.reverseRear();
+                elevator.setPosition(0.2);
+            } case FRONT_OUTTAKE -> {
+                launcher.setAngleSetpoint(0);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_IDLE);
+                launcher.setFeederVoltage(0.5);
+                intake.reverseFront();
+                intake.stopRear();
                 elevator.setPosition(0.2);
             }
             case CLIMB_EXTEND -> {
@@ -265,21 +300,75 @@ public class RobotSystem extends SubsystemBase{
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
             }
-            case SHOOT_TAPE -> {
-                launcher.setAngleSetpoint(35);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
+            case SHOOT_LOB -> {
+                limelight.setPipeline(2);
+                launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
+                launcher.setFlywheelVelocity(shotController.updateLobbedRollers(limelight));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
+                
             }
-            case AIM_TAPE -> {
-                launcher.setAngleSetpoint(35);
-                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_FAR);
+            case AIM_LOB -> {
+                limelight.setPipeline(2);
+                launcher.setAngleSetpoint(shotController.updateLobbedAngle(limelight));
+                launcher.setFlywheelVelocity(shotController.updateLobbedRollers(limelight));
                 launcher.setFeederVoltage(0);
                 intake.stopFront();
                 intake.stopRear(); 
                 elevator.setPosition(0.1);
+            }
+            case TRAP_AIM -> {
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(60);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(0.0);
+                launcher.setBlower(true);
+                intake.stopFront();
+            }
+            case TRAP_SHOOT -> {
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(60);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(1.0);
+                launcher.setBlower(true);
+                intake.stopFront();
+            } 
+            case TRAP_UP -> {
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(0);
+                launcher.setTopFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_TOP_TRAP);
+                launcher.setBottomFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_BOTTOM_TRAP);
+                launcher.setFeederVoltage(0.0);
+                launcher.setBlower(true);
+                intake.stopFront();
+            }
+            case TRAP_DOWN -> {
+                elevator.setPosition(0.2);
+                launcher.setAngleSetpoint(60);
+                launcher.setFlywheelVelocity(LauncherConstants.IDLE);
+                launcher.setFeederVoltage(0.0);
+                launcher.setBlower(false);
+                intake.stopFront();
+            }
+            case SHOOT_8 -> {
+                launcher.setAngleSetpoint(8);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(1.0);
+                intake.stopFront();
+                intake.stopRear();
+                elevator.setPosition(0.2);
+            }
+            case AIM_8 -> {
+                launcher.setAngleSetpoint(8);
+                launcher.setFlywheelVelocity(LauncherConstants.FLYWHEEL_RPM_DEFAULT);
+                launcher.setFeederVoltage(0.0);
+                intake.stopFront();
+                intake.runRear();
+                elevator.setPosition(0.2);
             }
             }
         }
@@ -296,6 +385,10 @@ public class RobotSystem extends SubsystemBase{
 
     public SystemState getGoalState(){
         return goalState;
+    }
+
+    public Command setPipeline(Limelight m_Limelight, int pipeline) {
+        return Commands.runOnce(() -> m_Limelight.setPipeline(pipeline));
     }
 
     

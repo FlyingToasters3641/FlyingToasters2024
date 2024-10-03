@@ -15,10 +15,12 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
@@ -28,6 +30,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,7 +49,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
+import frc.robot.controllers.LobController;
 import frc.robot.subsystems.Limelight;
+import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -66,6 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
+  
+  private boolean autoAutoAim = false;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
@@ -82,6 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Limelight limelight = new Limelight();
 
   private AimController aimController = null;
+  private LobController lobController = null;
 
   private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
     new PIDConstants(2.0), //Translation
@@ -113,7 +121,7 @@ public class DriveSubsystem extends SubsystemBase {
             DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get() == Alliance.Red,
         this);
-    
+    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -196,9 +204,28 @@ public class DriveSubsystem extends SubsystemBase {
         rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
       }
 
+
+    if (aimController == null) {  
+    boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(),getGyroRate(),0,0,0,0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if(Math.abs(getGyroRate()) >= 720){
+      doRejectUpdate = true;
+    }
+    if(mt2.tagCount == 0){
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate){
+      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.9,.9,9999999));
+      poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }
+  
+  }
+  
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
+
   }
 
   /**
@@ -321,7 +348,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Enable auto aiming on drive */
   public void setAimGoal() {
-    aimController = new AimController();
+    aimController = new AimController(poseEstimator);
+  }
+
+  public void setLobGoal() {
+    lobController = new LobController(poseEstimator);
+  }
+
+  public void clearLobGoal() {
+    lobController = null;
   }
 
   /** Disable auto aiming on drive */
@@ -333,6 +368,10 @@ public class DriveSubsystem extends SubsystemBase {
     return aimController != null;
   }
 
+  public boolean getLobController() {
+    return lobController != null;
+  }
+
   public double updateAimController(Limelight m_Limelight) {
     return aimController.update(m_Limelight);
   }
@@ -340,7 +379,11 @@ public class DriveSubsystem extends SubsystemBase {
   public boolean isAimControllerDone(Limelight m_Limelight) {
     Logger.recordOutput("aimController/threshold", aimController.threshold(m_Limelight));
       return aimController.threshold(m_Limelight);
+  }
+
+  public double updateLobController() {
     
+    return lobController.update();
   }
 
   public SwerveDrivePoseEstimator getPoseEstimator () {
@@ -350,4 +393,29 @@ public class DriveSubsystem extends SubsystemBase {
   public Command driveAmp() {
     return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
   }
+
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    // Some condition that should decide if we want to override rotation
+    if(autoAutoAim == true) {
+      Logger.recordOutput("AutoAutoAim/RobotSetRotation", limelight.getTargetRotation(getRotation()));
+        // Return an optional containing the rotation override (this should be a field relative rotation)
+        return Optional.of(limelight.getTargetRotation(getRotation()));
+    } else {
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
+}
+
+  public void setAutoAutoAim(boolean setter) {
+    if (setter == true) {
+      autoAutoAim = true;
+    } else {
+      autoAutoAim = false;
+    }
+  }
+
+  public double getGyroRate() {
+    return Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec);
+  }
+
 }

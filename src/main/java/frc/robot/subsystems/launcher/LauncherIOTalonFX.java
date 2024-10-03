@@ -32,7 +32,6 @@ public class LauncherIOTalonFX implements LauncherIO {
     private final double absoluteEncoderOffset = 0.2855;// need to calibrate!
 
     private double launcherSetpointDegrees = 0.0;
-    private double flywheelSpeed = 0.0;
     private double launcherThreshold = 4.0;
     private double flywheelThreshold = 2.0;
     private double realFlywheelSpeed = 42.0;
@@ -150,7 +149,16 @@ public class LauncherIOTalonFX implements LauncherIO {
         topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
         bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
 
-        flywheelSpeed = rpm;
+    }
+
+    @Override
+    public void setTopFlywheelVelocity(double rpm) {
+        topFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
+    }
+    
+    @Override
+    public void setBottomFlywheelVelocity(double rpm) {
+        bottomFlywheelTalonFX.setControl(m_Velocity.withVelocity(-rpm));
     }
 
     @Override

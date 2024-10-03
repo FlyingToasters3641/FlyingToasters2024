@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class IntakeIOTalonFXComp implements IntakeIO {
@@ -25,7 +26,7 @@ public class IntakeIOTalonFXComp implements IntakeIO {
 
     public IntakeIOTalonFXComp() {
        frontTalonFX.setInverted(true);
-       externalCANSpark.setInverted(true);
+       externalCANSpark.setInverted(false);
     }
 
     @Override
@@ -36,6 +37,8 @@ public class IntakeIOTalonFXComp implements IntakeIO {
 
         Logger.recordOutput("Intake/frontSensor", frontSensor.get());
         Logger.recordOutput("Intake/rearSensor", rearSensor.get());
+        SmartDashboard.putBoolean("IntakeFront", frontSensor.get());
+        SmartDashboard.putBoolean("IntakeRear", rearSensor.get());
 
     }
 
@@ -51,9 +54,9 @@ public class IntakeIOTalonFXComp implements IntakeIO {
         rearTalonFX.set(speed);
         double extSpeed = speed;
         if (speed > 0){
-            extSpeed = 0.5;
+            extSpeed = 1.0;
         } else if (speed < 0){
-            extSpeed = -0.5;
+            extSpeed = -1.0;
         }else{
             extSpeed = 0.0;
         }

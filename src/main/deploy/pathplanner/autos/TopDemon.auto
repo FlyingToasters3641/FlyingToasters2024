@@ -39,7 +39,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -82,7 +82,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -104,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Close to Top Middle"
+                  "pathName": "SweepingDemon Fifth"
                 }
               },
               {
@@ -123,7 +123,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Close to Center Shoot"
+                  "pathName": "SweepingDemon Sixth"
                 }
               },
               {
@@ -144,7 +144,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -166,7 +166,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Shoot to Outside Middle"
+                  "pathName": "SweepingDemon Seventh"
                 }
               },
               {
@@ -185,7 +185,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle Outside to Close Shoot"
+                  "pathName": "SweepingDemon Eighth"
                 }
               },
               {

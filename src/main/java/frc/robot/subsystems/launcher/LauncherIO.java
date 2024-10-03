@@ -42,6 +42,10 @@ public interface LauncherIO {
 
     public default void setFlywheelVelocity(double rpm) {}
 
+    public default void setTopFlywheelVelocity(double rpm) {}
+
+    public default void setBottomFlywheelVelocity(double rpm) {}
+
     public default void getAngle() {}
 
     public default void getLauncherNote() {}
@@ -49,5 +53,7 @@ public interface LauncherIO {
     public default boolean atShooterThreshold() {return true;}
 
     public default boolean atThreshold() {return true;}
+
+    public default void setBlower(boolean Powered) {};
 }
 

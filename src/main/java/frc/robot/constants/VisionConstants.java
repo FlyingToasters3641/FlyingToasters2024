@@ -16,9 +16,9 @@ public class VisionConstants {
         public static final String kSecondCameraName = "Aadithcam";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(Units.inchesToMeters(10.16), -Units.inchesToMeters(10.1), Units.inchesToMeters(8.532)), new Rotation3d(0, Units.degreesToRadians(-30.0), Units.degreesToRadians(-45)));
+                new Transform3d(new Translation3d(Units.inchesToMeters(-11.833), Units.inchesToMeters(6.653), Units.inchesToMeters(21.498)), new Rotation3d(0, Units.degreesToRadians(-10.0), Units.degreesToRadians(-30)));
         public static final Transform3d kRobotToSecondCam =
-                new Transform3d(new Translation3d(Units.inchesToMeters(10.16), Units.inchesToMeters(10.1), Units.inchesToMeters(8.532)), new Rotation3d(0, Units.degreesToRadians(-30.0), Units.degreesToRadians(45)));
+                new Transform3d(new Translation3d(Units.inchesToMeters(-11.833), Units.inchesToMeters(6.653), Units.inchesToMeters(21.498)), new Rotation3d(0, Units.degreesToRadians(-10.0), Units.degreesToRadians(30)));
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
