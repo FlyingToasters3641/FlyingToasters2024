@@ -62,7 +62,7 @@ public class RobotSystem extends SubsystemBase{
 
     private final ShotController shotController;
 
-    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, Limelight m_Limelight, DriveSubsystem m_drive) {
+    public RobotSystem(Launcher m_launcher, Intake m_intake, Elevator m_elevator, Limelight m_Limelight, DriveSubsystem m_drive, boolean demo) {
         launcher = m_launcher;
         intake = m_intake;
         elevator = m_elevator;
@@ -131,7 +131,7 @@ public class RobotSystem extends SubsystemBase{
                     limelight.setPipeline(0);
                 }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, demo));
                 launcher.setFeederVoltage(0.0);
                 intake.stopFront();
                 intake.runRear();
@@ -144,7 +144,7 @@ public class RobotSystem extends SubsystemBase{
                     limelight.setPipeline(0);
                 }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, demo));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.stopRear();
@@ -216,7 +216,7 @@ public class RobotSystem extends SubsystemBase{
                     limelight.setPipeline(0);
                 }
                 launcher.setAngleSetpoint(shotController.updateAngle(limelight));
-                launcher.setFlywheelVelocity(shotController.updateRollers(limelight));
+                launcher.setFlywheelVelocity(shotController.updateRollers(limelight, demo));
                 launcher.setFeederVoltage(1.0);
                 intake.stopFront();
                 intake.runRear();

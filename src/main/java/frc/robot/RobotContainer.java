@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.launcher.Launcher;
 import frc.robot.subsystems.launcher.LauncherIO;
 import frc.robot.subsystems.launcher.LauncherIOTalonFXComp;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,7 +61,7 @@ public class RobotContainer {
 
     //slowmode variable
     private final double slowValue = .25;
-
+    private boolean demoSwitch = false;
 
     // Subsystems
     
@@ -94,7 +95,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOTalonFXComp());   
         m_launcher = new Launcher(new LauncherIOTalonFXComp());
         m_elevator = new Elevator(new ElevatorIOTalonFX());    
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive, demoSwitch); 
         break;
 
       case SIM:
@@ -109,7 +110,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive); 
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive, demoSwitch); 
         break;
 
       default:
@@ -124,7 +125,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_launcher = new Launcher(new LauncherIO() {});
         m_elevator = new Elevator(new ElevatorIO() {});
-        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive);
+        m_robotSystem = new RobotSystem(m_launcher, m_intake, m_elevator, m_Limelight, m_robotDrive, demoSwitch);
         break;
     }
 
@@ -202,6 +203,8 @@ public class RobotContainer {
      m_driverController.povLeft().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
 
         
+     SmartDashboard.putBoolean("DemoSwitch", demoSwitch);
+
   }   
   public Command getAutonomousCommand() {
       return autoChooser.get();

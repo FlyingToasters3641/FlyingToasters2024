@@ -23,6 +23,7 @@ public class ShotController {
     InterpolatingDoubleTreeMap autoLobAngles;
     InterpolatingDoubleTreeMap autoLobRollers;
     InterpolatingDoubleTreeMap distanceRollers;
+    InterpolatingDoubleTreeMap distanceDemoRollers;
 
     SwerveDrivePoseEstimator drivePoseEstimator;
 
@@ -36,8 +37,10 @@ public class ShotController {
         distanceAngles = new InterpolatingDoubleTreeMap();
         autoLobAngles = new InterpolatingDoubleTreeMap();
         autoLobRollers = new InterpolatingDoubleTreeMap();
+        distanceDemoRollers = new InterpolatingDoubleTreeMap();
         
         //Angle distance pairs - Needs Calibration
+        //Input: Robot Angle to April Tag *** Output: Angle of the End Effector to Shoot
         distanceAngles.put((45.0), 46.0);
         distanceAngles.put((40.0), 42.0);
         distanceAngles.put((30.0), 40.0);
@@ -106,7 +109,7 @@ public class ShotController {
         return output;
     }
 
-    public double updateRollers(Limelight limelight) {
+    public double updateRollers(Limelight limelight, boolean demo) {
         double output = 1.0;
         double distance = 0.0;
         if (limelight.getY() == 0.0) {
@@ -114,10 +117,13 @@ public class ShotController {
         } else {
         distance = limelight.getY();
         tx = distance;
-        }
+        }   
+        if (demo) {
+            output = (20);
+        } else {
         output = nearestSetpoint(distanceRollers, distance);
-
         Logger.recordOutput("AutoAim/Rollers", output);
+        }
         return output;
     }
 
