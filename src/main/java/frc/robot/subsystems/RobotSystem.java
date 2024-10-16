@@ -53,6 +53,7 @@ public class RobotSystem extends SubsystemBase{
 
     private SystemState currentState = SystemState.IDLE;
     private SystemState goalState = SystemState.IDLE;
+    private boolean demo = true;
 
     private final Launcher launcher;
     private final Intake intake;
