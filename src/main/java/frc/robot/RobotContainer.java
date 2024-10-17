@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -60,7 +61,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotContainer {
 
     //slowmode variable
-    private final double slowValue = .25;
+    private double speedmultiplier = 1;
     private boolean demoSwitch = false;
 
     // Subsystems
@@ -78,6 +79,7 @@ public class RobotContainer {
     
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
+    private final LoggedDashboardChooser<Command> demoChooser;
   
     /** The container for the robot. Contains subsystems, OI devices, and commands.*/
     public RobotContainer() {
@@ -145,6 +147,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot8", LauncherCommands.autoShoot8(m_launcher, m_intake, m_robotSystem));
     NamedCommands.registerCommand("Aim8", Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.AIM_8)));
 
+    //Choose demo
+    demoChooser = new LoggedDashboardChooser<>("Demo Chooser", AutoBuilder.buildAutoChooser());
+    
+    demoChooser.addDefaultOption("Competition", setCompetitionSwitch());
+    demoChooser.addOption("Demo", setDemoSwitch());
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     
@@ -176,9 +184,9 @@ public class RobotContainer {
       m_robotDrive.setDefaultCommand(
               DriveCommands.joystickDrive(
                       m_robotDrive,
-                      () -> -m_driverController.getLeftY() * slowValue,
-                      () -> -m_driverController.getLeftX() * slowValue,
-                      () -> -m_driverController.getRightX() * slowValue,
+                      () -> -m_driverController.getLeftY() * speedmultiplier,
+                      () -> -m_driverController.getLeftX() * speedmultiplier,
+                      () -> -m_driverController.getRightX() * speedmultiplier,
                       m_Limelight));
       m_driverController.x().onTrue(Commands.runOnce(m_robotDrive::stopWithX, m_robotDrive));
 
@@ -203,7 +211,7 @@ public class RobotContainer {
      m_driverController.povLeft().onTrue(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.FRONT_OUTTAKE))).onFalse(Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE)));
 
         
-     SmartDashboard.putBoolean("DemoSwitch", demoSwitch);
+     
 
   }   
   public Command getAutonomousCommand() {
@@ -217,8 +225,19 @@ public class RobotContainer {
         Commands.runOnce(() -> m_robotSystem.setGoalState(SystemState.IDLE))
     );
   }
+
+  public void setSpeedDemo (double newSpeedMultiplier){
+
+    speedmultiplier = newSpeedMultiplier;
+
+  };
        
-  public Command getAutoCommand(String autoName) {
-      return new PathPlannerAuto(autoName);
+  public Command setDemoSwitch() {
+    return new InstantCommand(()-> Commands.runOnce(() -> setSpeedDemo(.5)));
   }
+
+  public Command setCompetitionSwitch() {
+    return new InstantCommand(()-> Commands.runOnce(() -> setSpeedDemo(1)));
+  }
+  
 }
