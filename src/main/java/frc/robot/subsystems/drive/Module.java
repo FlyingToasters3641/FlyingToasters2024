@@ -20,7 +20,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.subsystems.drive.ModuleIO.ModuleIOInputs;
+
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class Module {
   private static final double WHEEL_RADIUS = Units.inchesToMeters(1.4);
@@ -28,7 +31,7 @@ public class Module {
   static final double ODOMETRY_FREQUENCY = 250.0;
 
   private final ModuleIO io;
-  private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+  private final ModuleIOInputs inputs = new ModuleIOInputs();
   private final int index;
 
   private final SimpleMotorFeedforward driveFeedforward;
@@ -81,7 +84,6 @@ public class Module {
   }
 
   public void periodic() {
-    Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
     // On first cycle, reset relative turn encoder
     // Wait until absolute angle is nonzero in case it wasn't initialized yet

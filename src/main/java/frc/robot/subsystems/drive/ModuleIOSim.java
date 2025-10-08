@@ -14,7 +14,11 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Num;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -28,9 +32,31 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
  */
 public class ModuleIOSim implements ModuleIO {
   private static final double LOOP_PERIOD_SECS = 0.02;
+  //DCMotorSim(LinearSystem<N2, N1, N2> plant, DCMotor gearbox, double... measurementStdDevs)
+  /**
+ * This class helps simulate linear systems. To use this class, do the following in the {@link
+ * edu.wpi.first.wpilibj.IterativeRobotBase#simulationPeriodic} method.
+ *
+ * <p>Call {@link #setInput(double...)} with the inputs to the system (usually voltage).
+ *
+ * <p>Call {@link #update} to update the simulation.
+ *
+ * <p>Set simulated sensor readings with the simulated positions in {@link #getOutput()}
+ *
+ * @param <States> Number of states of the system.
+ * @param <Inputs> Number of inputs to the system.
+ * @param <Outputs> Number of outputs of the system.
+ */
+  // (DCMotor.getNEO(1), 6.75, 0.025);
+  // (DCMotor.getNEO(1), 150.0 / 7.0, 0.004)
 
-  private DCMotorSim driveSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
-  private DCMotorSim turnSim = new DCMotorSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
+  // in our case, driveSim LinearSystem's number of states is: 2 (angular position, angular velocity)
+  // then its inputs is: 1 (voltage)
+  // then its outputs is: 2 (angular position, angular velocity)
+  // so it would be LinearSystem<2, 1, 2>
+
+  private DCMotorSim driveSim = new DCMotorSim(new LinearSystem<N2, N1, N2>(null, null, null, null), DCMotor.getNEO(1), 6.75, 0.025);
+  private DCMotorSim turnSim = new DCMotorSim(new LinearSystem<N2, N1, N2>(null, null, null, null), DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
 
   private final Rotation2d turnAbsoluteInitPosition = new Rotation2d(Math.random() * 2.0 * Math.PI);
   private double driveAppliedVolts = 0.0;

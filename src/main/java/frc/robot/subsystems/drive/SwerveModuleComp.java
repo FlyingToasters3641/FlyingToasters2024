@@ -10,6 +10,12 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
+
+import static edu.wpi.first.units.Units.Degrees;
 
 import java.util.Queue;
 
@@ -44,11 +50,11 @@ public class SwerveModuleComp implements ModuleIO {
   private final CANcoder cancoder;
 
   // Position/Velocity
-  private final StatusSignal<Double> drivePosition;
-  private final StatusSignal<Double> driveVelocity;
-  private final StatusSignal<Double> driveAppliedVolts;
-  private final StatusSignal<Double> driveCurrent;
-  private final StatusSignal<Double> turnAbsolutePosition;
+  private final StatusSignal<Angle> drivePosition;
+  private final StatusSignal<AngularVelocity> driveVelocity;
+  private final StatusSignal<Voltage> driveAppliedVolts;
+  private final StatusSignal<Current> driveCurrent;
+  private final StatusSignal<Angle> turnAbsolutePosition;
   
   private final Queue<Double> timestampQueue;
   private final Queue<Double> drivePositionQueue;
@@ -133,7 +139,7 @@ public class SwerveModuleComp implements ModuleIO {
     
 
     drivePositionQueue =
-        SparkMaxOdometryThread.getInstance().registerSignal(() -> driveTalon.getPosition().getValue());
+        SparkMaxOdometryThread.getInstance().registerSignal(() -> driveTalon.getPosition().getValue().in(Degrees));
     turnPositionQueue =
         SparkMaxOdometryThread.getInstance().registerSignal(turnRelativeEncoder::getPosition);
     BaseStatusSignal.setUpdateFrequencyForAll(
@@ -190,7 +196,7 @@ public class SwerveModuleComp implements ModuleIO {
 
   @Override
   public void setDriveVoltage(double volts) {
-    driveTalon.setControl(new VoltageOut(volts, true, false, false, false));
+    driveTalon.setControl(new VoltageOut(volts));
   }
 
   @Override

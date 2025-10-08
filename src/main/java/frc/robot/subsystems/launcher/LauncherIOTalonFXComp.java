@@ -1,5 +1,9 @@
 package frc.robot.subsystems.launcher;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -93,11 +97,11 @@ public class LauncherIOTalonFXComp implements LauncherIO {
 
     @Override
     public void updateInputs(LauncherIOInputs inputs) {
-        inputs.launcherPosition = (launcherPitchCANCoder.getAbsolutePosition().getValue());
-        inputs.launcherPositionDegrees = (Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
-        inputs.pitchMotorSensorDegrees = Units.rotationsToDegrees(launcherPitchTalonFX.getPosition().getValue());
+        inputs.launcherPosition = (launcherPitchCANCoder.getAbsolutePosition().getValue().in(Degrees));
+        inputs.launcherPositionDegrees = (Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue().in(Rotations)));
+        inputs.pitchMotorSensorDegrees = Units.rotationsToDegrees(launcherPitchTalonFX.getPosition().getValue().in(Rotations));
         inputs.angleSetpointDegrees = launcherSetpointDegrees;
-        inputs.flywheelVelocity = topFlywheelTalonFX.getVelocity().getValue();
+        inputs.flywheelVelocity = topFlywheelTalonFX.getVelocity().getValue().in(DegreesPerSecond);
         inputs.note = launchSensor.get();
         Logger.recordOutput("Launcher/Sensor", launchSensor.get());
         SmartDashboard.putBoolean("Note", launchSensor.get());
@@ -148,10 +152,8 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     @Override
     public boolean atShooterThreshold() {
 
-        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
-        double currentFlywheelVelocity = -topFlywheelTalonFX.getVelocity().getValue();
+        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue().in(Degrees)));
         Logger.recordOutput("Launcher/currentDegrees", currentDegrees);
-        Logger.recordOutput("Launcher/currentFlywheelVelocity", currentFlywheelVelocity);
 
         if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold)
                 && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)) {
@@ -165,7 +167,7 @@ public class LauncherIOTalonFXComp implements LauncherIO {
     @Override
     public boolean atThreshold() {
 
-        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue()));
+        double currentDegrees = -(Units.rotationsToDegrees(launcherPitchCANCoder.getPosition().getValue().in(Rotations)));
 
         if (currentDegrees >= (launcherSetpointDegrees - launcherThreshold)
                 && currentDegrees <= (launcherSetpointDegrees + launcherThreshold)) {

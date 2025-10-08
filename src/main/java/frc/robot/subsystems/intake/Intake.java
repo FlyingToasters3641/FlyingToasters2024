@@ -1,12 +1,17 @@
 package frc.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.Amps;
+
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.units.CurrentUnit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
+import frc.robot.subsystems.intake.IntakeIO.IntakeIOInputs;
 
 public class Intake extends SubsystemBase{
     private IntakeIO io;
-    private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    private final IntakeIOInputs inputs = new IntakeIOInputs();
     /*
      * private static boolean isFrontRunning = false;
      * private static boolean isRearRunning = false;
@@ -67,7 +72,7 @@ public class Intake extends SubsystemBase{
 
 
     public boolean frontCurrentSpike() {
-        return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue() > 2.0);
+        return (IntakeTalonFX.frontTalonFX.getSupplyCurrent().getValue().in(Amps) > 2.0);
     }
 
     public void stopFront() {

@@ -24,13 +24,11 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -51,6 +49,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.controllers.AimController;
 import frc.robot.controllers.LobController;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.drive.GyroIO.GyroIOInputs;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -68,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
-  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+  private final GyroIOInputs gyroInputs = new GyroIOInputs();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   private final SysIdRoutine sysId;
   
@@ -91,11 +90,6 @@ public class DriveSubsystem extends SubsystemBase {
   private AimController aimController = null;
   private LobController lobController = null;
 
-  private HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-    new PIDConstants(2.0), //Translation
-    new PIDConstants(2.0), //Rotation
-            MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new ReplanningConfig());
-
   public DriveSubsystem(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -110,17 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Start threads (no-op for each if no signals have been created)
     SparkMaxOdometryThread.getInstance().start();
-    // Configure AutoBuilder for PathPlanner
-    AutoBuilder.configureHolonomic(
-        this::getPose,
-        this::setPose,
-        () -> kinematics.toChassisSpeeds(getModuleStates()),
-        this::runVelocity,
-        pathFollowerConfig,
-        () ->
-            DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get() == Alliance.Red,
-        this);
+
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     Pathfinding.setPathfinder(new LocalADStarAK());
     PathPlannerLogging.setLogActivePathCallback(
@@ -159,7 +143,7 @@ public class DriveSubsystem extends SubsystemBase {
       module.updateInputs();
     }
     odometryLock.unlock();
-    Logger.processInputs("Drive/Gyro", gyroInputs);
+
     for (var module : modules) {
       module.periodic();
     }
@@ -391,7 +375,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command driveAmp() {
-    return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints, 0.0);
+    try
+    {
+      return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("Amp Path"), m_Constraints);
+    }
+    catch (Exception e)
+    {
+      return null;
+    }
   }
 
   public Optional<Rotation2d> getRotationTargetOverride(){

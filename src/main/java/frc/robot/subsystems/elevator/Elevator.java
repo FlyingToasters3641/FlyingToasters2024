@@ -1,10 +1,11 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.elevator.ElevatorIO.ElevatorIOInputs;
 
 public class Elevator extends SubsystemBase{
     private ElevatorIO io;
-    private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
+    private final ElevatorIOInputs inputs = new ElevatorIOInputs();
     private final double threshold = 0.1;
 
     public Elevator(ElevatorIO io){
